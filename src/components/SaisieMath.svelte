@@ -1,27 +1,68 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import Katex from 'svelte-katex';
+	import { parse } from 'mathjs';
 
+	// Style
 	export let classes = '';
+	// Valeur par défaut de l'input (txt et katex)
 	export let value = '';
+	// Placeholder de la zone de saisie (valeur par défaut)
 	export let placeholder = value;
+	// Longueur maximale de la zone de saisie
 	export let maxLength = 255;
+	// Est-ce que l'utilisateur peut changer la formule ?
 	export let isDisabled = false;
-	export let isEditing = false;
+	// Le nom de l'event associé à l'envoie de la nouvelle formule
+	export let eventName = '';
 
-	let ref: HTMLInputElement;
+	// Est-ce que l'utilisateur est en train d'éditer la formule ?
+	let isEditing = false;
+
+	// Prevent de trigger l'event associé à l'envoie de la nouvelle
+	// saisie de l'utilisateur.
+	let hasFormulaInputChanged = false;
+
+	// La formule saisie par l'utilisateur mais au format Katex
+	let katexFormula: string = value;
+
+	// Est-ce que la formule saisie par l'utilisateur est valide ?
+	let isFormulaValid: boolean = true;
+
+	// Ref de la textarea faisant office de saisie pour la formule
+	let ref: HTMLTextAreaElement;
+
+	// A chaque fois que l'utilisateur entre une nouvelle saisie,
+	// on vérifie si elle est valide en la transformant en Katex.
+	// Si non, alors le texte est mis en rouge.
+	$: try {
+		// Converti la saisie en format Katex
+		katexFormula = !isDisabled ? parse(value).toTex({ parenthesis: 'auto' }) : value;
+		isFormulaValid = true;
+	} catch {
+		// La formule entrée est incorrecte
+		isFormulaValid = false;
+	}
 
 	const dispatch = createEventDispatcher();
 
 	/**
-	 * Affiche la saisie en format Katex
-	 * Vérifie si la saisie est vide; dans ce cas
-	 * on laisse la saisie éditable pour avoir le placeholder
+	 * Affiche la saisie Katex après validation
+	 * Vérifie si la saisie est vide et que la formule entrée est correcte; le
+	 * cas échéant on laisse la saisie éditable pour avoir le placeholder
 	 */
-	const validateInput = () => {
-		if (ref.value.length !== 0) {
+	const validateInput = (e: FocusEvent | KeyboardEvent) => {
+		// Permet de ne pas faire de saut de ligne
+		e.preventDefault();
+
+		// Si la saisie n'est pas vide et que la formule entrée est correcte
+		if (ref.value.trim().length !== 0 && isFormulaValid) {
 			isEditing = false;
-			dispatch('valueChanged', value);
+
+			// Pas la peine d'envoyer la même saisie deux fois
+			if (hasFormulaInputChanged) {
+				dispatch(eventName, value);
+			}
 		}
 		// else : le placeholder est affiché vu qu'il n'y a pas de texte
 		// dans l'input
@@ -29,9 +70,10 @@
 </script>
 
 {#if isEditing}
-	<input
-		class={`"h-full flex-grow text-xl outline-none placeholder:text-opacity-50 ${classes} "`}
-		type="text"
+	<textarea
+		class={`text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${
+			!isFormulaValid ? 'text-red-500' : ''
+		}`}
 		spellcheck="false"
 		bind:value
 		maxlength={maxLength}
@@ -42,18 +84,23 @@
 			ref.focus();
 		}}
 		on:focusin={() => {
-			// Permet de sélectionner le contenue l'input si elle ne contient
+			// Permet de sélectionner le contenu de l'input si elle ne contient
 			// qu'une variable ou un nom de fonction
 			if (maxLength <= 3) {
 				ref.setSelectionRange(0, 1);
 			}
 		}}
-		on:blur={() => {
-			validateInput();
+		on:blur={(e) => {
+			validateInput(e);
 		}}
 		on:keydown={(e) => {
+			// Valide l'entrée de l'utilisateur
 			if (e.key === 'Enter') {
-				validateInput();
+				validateInput(e);
+			}
+			// Indique que l'utilisateur a changé la formule
+			else {
+				hasFormulaInputChanged = true;
 			}
 		}}
 		bind:this={ref}
@@ -65,11 +112,20 @@
 		on:mousedown={() => {
 			if (!isDisabled) {
 				isEditing = true;
+				// reset la variable hasFormulaInputChanged
+				// dès qu'elle passera en true ça voudrait dire que
+				// l'utilisateur a changé la formule
+				hasFormulaInputChanged = false;
+
+				// Attend 20ms le temps que l'input se créé, puis lui bring le focus
+				setTimeout(() => {
+					if (ref) ref.focus();
+				}, 20);
 			}
 		}}
 		role="button"
 		tabindex="0"
 	>
-		<Katex>{value}</Katex>
+		<Katex>{katexFormula}</Katex>
 	</div>
 {/if}
