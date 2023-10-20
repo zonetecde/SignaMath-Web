@@ -10,7 +10,7 @@
 		<div
 			class="absolute left-0 right-0 px-40 py-1 h-full flex flex-row items-center justify-center gap-4 bg-gradient-to-r from-[#c3adc500] via-[#c3adc5] to-[#c3adc500]"
 		>
-			<img src={Icon} alt="Website logo" class="h-full" />
+			<img src={Icon} alt="Website logo" class="h-full object-contain" />
 			<p class="text-black font-bold text-3xl select-none">SignaMath</p>
 		</div>
 	</nav>

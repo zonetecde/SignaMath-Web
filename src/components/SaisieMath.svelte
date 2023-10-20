@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import Katex from 'svelte-katex';
 	import { parse } from 'mathjs';
 
@@ -44,13 +44,21 @@
 		isFormulaValid = false;
 	}
 
-	const dispatch = createEventDispatcher();
+	/**
+	 * Envoie une première fois la formule
+	 * Afin de dresser le tableau de signe de la formule
+	 * mis par défaut
+	 */
+	onMount(() => {
+		dispatch(eventName, value);
+	});
 
 	/**
 	 * Affiche la saisie Katex après validation
 	 * Vérifie si la saisie est vide et que la formule entrée est correcte; le
 	 * cas échéant on laisse la saisie éditable pour avoir le placeholder
 	 */
+	const dispatch = createEventDispatcher();
 	const validateInput = (e: FocusEvent | KeyboardEvent) => {
 		// Permet de ne pas faire de saut de ligne
 		e.preventDefault();
