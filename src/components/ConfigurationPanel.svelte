@@ -1,6 +1,5 @@
 <script lang="ts">
 	import SaisieFonction from './SaisieFonction.svelte';
-	import SaisieMath from './SaisieMath.svelte';
 	import TableauDeSigne from './TableauDeSigne.svelte';
 
 	let formula: string;

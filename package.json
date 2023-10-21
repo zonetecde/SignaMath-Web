@@ -35,6 +35,9 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@types/algebra.js": "^0.2.3",
+		"@types/express": "^4.17.20",
+		"nerdamer": "^1.1.13",
 		"mathjs": "^11.11.2",
 		"svelte-katex": "^0.1.2"
 	}
