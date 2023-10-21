@@ -4,11 +4,13 @@
  * sous sa forme 'math'
  */
 export default class Solution {
-	formula: string;
+	value: string;
 	latex: string;
+	integer: number;
 
-	constructor(formula: string, latex: string) {
-		this.formula = formula;
+	constructor(formula: string, latex: string, integer: number) {
+		this.value = formula;
 		this.latex = latex;
+		this.integer = integer;
 	}
 }

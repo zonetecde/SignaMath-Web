@@ -79,7 +79,7 @@
 
 {#if isEditing}
 	<textarea
-		class={`text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${
+		class={`bg-transparent text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${
 			!isFormulaValid ? 'text-red-500' : ''
 		}`}
 		spellcheck="false"

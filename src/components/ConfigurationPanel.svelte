@@ -5,6 +5,29 @@
 	let formula: string;
 	let functionName: string;
 	let variableName: string;
+
+	let borneMin: string = '-inf';
+	let borneMax: string = '+inf';
+
+	const variableNameChanged = (e: CustomEvent<any>) => {
+		variableName = e.detail;
+	};
+
+	const functionChanged = (e: CustomEvent<any>) => {
+		formula = e.detail;
+	};
+
+	const functionNameChanged = (e: CustomEvent<any>) => {
+		functionName = e.detail;
+	};
+
+	const borneMaxChanged = (e: CustomEvent<any>) => {
+		borneMax = e.detail;
+	};
+
+	const borneMinChanged = (e: CustomEvent<any>) => {
+		borneMin = e.detail;
+	};
 </script>
 
 <div class="flex flex-col md:flex-row h-full w-full">
@@ -12,19 +35,25 @@
 		<p class="text-md md:text-xl">Étude des variations d'une fonction :</p>
 
 		<SaisieFonction
-			on:handleFunctionNameChanged={(e) => {
-				functionName = e.detail;
-			}}
-			on:handleVariableNameChanged={(e) => {
-				variableName = e.detail;
-			}}
-			on:handleFunctionChanged={(e) => {
-				formula = e.detail;
-			}}
+			on:handleFunctionNameChanged={functionNameChanged}
+			on:handleVariableNameChanged={variableNameChanged}
+			on:handleFunctionChanged={functionChanged}
+			{variableName}
+			{functionName}
+			{formula}
 		/>
 	</div>
 
 	<div class="w-full h-full">
-		<TableauDeSigne {functionName} {variableName} {formula} />
+		<TableauDeSigne
+			{functionName}
+			{variableName}
+			{formula}
+			{borneMin}
+			{borneMax}
+			on:handleVariableNameChanged={variableNameChanged}
+			on:handleBorneMaxChanged={borneMaxChanged}
+			on:handleBorneMinChanged={borneMinChanged}
+		/>
 	</div>
 </div>
