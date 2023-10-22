@@ -1,6 +1,7 @@
 // @ts-ignore
 import nerdamer from 'nerdamer/all';
 import Solution from '../models/solution';
+import type ExpressionElement from '../models/expression';
 
 /**
  * Classe Solver
@@ -14,6 +15,10 @@ export default class Solver {
 	 * @returns <Solution[]> Les solutions de l'équation
 	 */
 	static solveEquation(equation: string, variable: string, y: number = 0) {
+		console.log(equation);
+
+		if (equation.includes('x') === false) return [];
+
 		// Trouve les solutions de l'équation
 		var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
 
@@ -48,11 +53,6 @@ export default class Solver {
 			const solution = new Solution(element, latex, integer);
 			solutionArray.push(solution);
 		}
-
-		// Order l'array par valeur
-		solutionArray.sort((a, b) => {
-			return a.integer - b.integer;
-		});
 
 		return solutionArray;
 	}
@@ -92,26 +92,6 @@ export default class Solver {
 		}
 	}
 
-	static decortiquer(expression: string) {
-		// Remove white spaces
-		expression = expression.replaceAll(' ', '');
-		expression = '(' + expression + ')';
-
-		// Récupère déjà le contenu de la première parenthèse
-		let actualFormula = expression;
-		while (actualFormula.includes('(')) {
-			actualFormula = this.getParentheses(actualFormula);
-
-			// La règle est la suivante:
-			// si la formule entre parenthèse se trouvait après ou avant:
-			// - une autre parenthèse -  ex : (5x+3)(4x) -> les deux sont pris séparément
-			// - au numérateur / dénominateur - ex : (5x+3)/(4x) -> les deux sont pris séparément
-			if (expression[expression.indexOf('(' + actualFormula + ')') - 1] === ')') {
-				console.log('w');
-			}
-		}
-	}
-
 	static getParentheses(expression: string) {
 		let ouvert: boolean = false;
 		let ouvertIndex: number = 0;
@@ -136,5 +116,17 @@ export default class Solver {
 		}
 
 		return 'wrong formula';
+	}
+
+	/**
+	 * Calcul d'une formule avec x
+	 * @param formula La formule avec x
+	 * @param variable Le nom de la variable
+	 * @param variableValue La valeur par laquelle la variable doit être remplacé
+	 * @returns Le résultat du calcul
+	 */
+	static formulaToInt(formula: ExpressionElement, variable: string, variableValue: number) {
+		var x = nerdamer(formula.toString()).sub(variable, '(' + variableValue + ')');
+		return this.toInteger(x.toString());
 	}
 }

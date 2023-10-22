@@ -15,6 +15,11 @@
 	export let isDisabled = false;
 	// Le nom de l'event associé à l'envoie de la nouvelle formule
 	export let eventName = '';
+	// Nom de la variable
+
+	export let variableName = 'x';
+	// Est-ce que on rentre une formule ici ? (influence la validité)
+	export let isFormula = false;
 
 	// Est-ce que l'utilisateur est en train d'éditer la formule ?
 	let isEditing = false;
@@ -38,7 +43,12 @@
 	$: try {
 		// Converti la saisie en format Katex
 		katexFormula = !isDisabled ? parse(value).toTex({ parenthesis: 'auto' }) : value;
-		isFormulaValid = true;
+		// Vérifie que la variable est présente
+		if (value.includes(variableName) || !isFormula) {
+			isFormulaValid = true;
+		} else {
+			isFormulaValid = false;
+		}
 	} catch {
 		// La formule entrée est incorrecte
 		isFormulaValid = false;

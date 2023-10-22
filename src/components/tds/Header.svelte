@@ -12,7 +12,7 @@
 <div class="h-12 lg:h-16 w-full bg-white border border-black flex flex-row">
 	<!-- Nom de la variable -->
 	<section
-		class="w-1/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-2xl"
+		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
 		<SaisieMath
 			value={variableName}
@@ -25,9 +25,17 @@
 	</section>
 
 	<!-- Endroit où la formule s'annule en 0 -->
-	<div class="w-full flex items-center justify-evenly relative text-md lg:text-xl">
-		{#each inRangeSolutions as solution}
-			<div class="select-none"><Katex>{solution.latex}</Katex></div>
+	<div class="w-full text-md lg:text-lg flex flex-row relative items-center">
+		<div class="w-full select-none" />
+
+		{#each inRangeSolutions as solution, i (i)}
+			<!-- Conteneur de la solution qui prend toute sa width -->
+			<div class={'select-none w-full'}>
+				<!-- Conteneur de l'afficheur de la solution qui prend que la width dont il a besoin -->
+				<div class="w-fit transform -translate-x-1/2">
+					<Katex>{solution.latex}</Katex>
+				</div>
+			</div>
 		{/each}
 
 		<!-- Borne min & max -->

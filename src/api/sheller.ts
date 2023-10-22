@@ -1,80 +1,171 @@
 // @ts-ignore
 import nerdamer from 'nerdamer/all';
-
-class ExpressionElement {
-	public Expression: string;
-	public Interdite: boolean;
-	public Exposant: string;
-
-	constructor(interdite: boolean, expression: string, exposant: string = '') {
-		this.Expression = expression;
-		this.Interdite = interdite;
-		this.Exposant = exposant;
-	}
-}
+import ExpressionElement from '../models/expression';
 
 export default class Sheller {
 	static ShellFunction(formula: string): ExpressionElement[] {
-		formula = formula.replaceAll(' ', '');
-		const ner = nerdamer(formula);
+		// Enlève les espaces et les signes de multiplication entre deux expressions
+		formula = formula.replaceAll(' ', '').replaceAll(')*(', ')(');
 
-		console.log(ner.symbol);
-		let numerateurs = '';
+		//let expressions = this.DecouperExpression(formula);
+		let lignes = this.DecouperExpression(formula);
+
 		let expressions: ExpressionElement[] = [];
+		if (lignes.length > 0) {
+			for (let i = 0; i < lignes.length; i++) {
+				if (lignes[i].Exposant === '') {
+					let expression = lignes[i].Expression;
 
-		if (formula.includes('/')) {
-			let newFormula = ner.symbol.value;
-			console.log(newFormula);
+					expression = this.SupprimerParentheses(expression);
 
-			// get tout les str avec ^(-1) (= dénominateur)
-			const regex = /(.+?)\^\(-1\)/g;
-			let match;
+					let nouvellesExpressions: ExpressionElement[] = [];
+					let decoupe = this.DecouperExpression(expression);
+					nouvellesExpressions.push(...decoupe);
 
-			while ((match = regex.exec(newFormula)) !== null) {
-				// Enlève un multiplicateur en début de la formule
-				let expr = match[1];
-
-				console.log(expr);
-
-				if (expr.includes(')(') || expr.includes(')*(')) {
-					let el = nerdamer(expr);
-					console.log(el.symbol.symbols);
-					for (var key in el.symbol.symbols) {
-						var value = el.symbol.symbols[key];
-
-						console.log(key);
-						expressions.push(new ExpressionElement(true, this.removeMultiplicateur(key), ''));
-					}
+					nouvellesExpressions.forEach((ligne) => {
+						expressions.push(
+							new ExpressionElement(
+								null,
+								lignes[i].Expression.includes('/'),
+								ligne.Expression.replaceAll('/', '').replaceAll('*', '')
+							)
+						);
+					});
 				} else {
-					expressions.push(new ExpressionElement(true, this.removeMultiplicateur(expr), ''));
+					// s'il y a un exposant on ne shell pas l'expression; on garde l'expression
+					// total avec l'exposant
+					expressions.push(lignes[i]);
 				}
 			}
-
-			// Dans newFormula, on d'abord tout les dénominateurs puis tout les autres
-			let lastDenom = newFormula.lastIndexOf('^(-1)');
-			if (lastDenom === -1) lastDenom = 0;
-			// récupère les numérateurs
-			numerateurs = this.removeMultiplicateur(newFormula.slice(lastDenom + '^(-1)'.length));
-		} else {
-			numerateurs = this.removeMultiplicateur(formula);
 		}
 
-		console.log(numerateurs);
+		for (let i = 0; i < expressions.length; i++) {
+			const expression = expressions[i].Expression.slice(1);
 
-		if (numerateurs.includes(')(') || numerateurs.includes(')*(')) {
-			let el = nerdamer(numerateurs);
-			console.log(el.symbol.symbols);
-			for (var key in el.symbol.symbols) {
-				var value = el.symbol.symbols[key];
-
-				expressions.push(new ExpressionElement(false, this.removeMultiplicateur(key), ''));
+			let decoupe = this.DecouperExpression(expression, true);
+			if (decoupe.length > 1) {
+				expressions.splice(i, 1);
+				expressions.push(
+					...decoupe.map(
+						(x) => new ExpressionElement(null, expressions[i].Interdite, x.Expression, '')
+					)
+				);
+				i = 0;
 			}
-		} else {
-			expressions.push(new ExpressionElement(false, this.removeMultiplicateur(numerateurs), ''));
 		}
 
-		console.log(expressions);
+		// enlève les lignes vides
+		expressions = expressions.filter((x) => x.Expression !== '');
+		// enlève les '+' inutiles
+		expressions.map((x) => {
+			if (x.Expression.startsWith('+')) x.Expression = x.Expression.slice(1);
+		});
 		return expressions;
+	}
+	static DecouperExpression(
+		nouvelleFonction: string,
+		estDeuxieme: boolean = false
+	): ExpressionElement[] {
+		if (estDeuxieme) {
+			nouvelleFonction = this.SupprimerParentheses(nouvelleFonction);
+		}
+
+		let lignes: ExpressionElement[] = [];
+		let compteurParenthesesOuvertes = 0;
+		let indexDebutLigne = 0;
+
+		for (let i = 0; i < nouvelleFonction.length; i++) {
+			if (nouvelleFonction[i] === '(') {
+				compteurParenthesesOuvertes += 1;
+			} else if (nouvelleFonction[i] === ')') {
+				compteurParenthesesOuvertes -= 1;
+
+				if (compteurParenthesesOuvertes === 0 || i == nouvelleFonction.length - 1) {
+					let exposant: string = '';
+					if (nouvelleFonction.length > i + 1) {
+						if (nouvelleFonction[i + 1] === '^') {
+							// Il y a un exposant à l'expression, on la garde en entière
+							// si l'exposant est un chiffre (ex : ^2)
+							if (nouvelleFonction[i + 2] !== '(') {
+								exposant += nouvelleFonction[i + 2];
+							} else {
+								// l'exposant est une expression entre parenthèses
+								let endExp = false;
+								let z = i + 3; // index dans la parenthèse
+								let tempOuverte = 0;
+
+								while (endExp === false) {
+									exposant += nouvelleFonction[z];
+									if (nouvelleFonction[z + 1] === '(') {
+										tempOuverte += 1;
+									} else if (nouvelleFonction[z + 1] === ')' && tempOuverte > 0) {
+										tempOuverte -= 1;
+									} else if (nouvelleFonction[z + 1] === ')') {
+										// fin de l'exposant
+										endExp = true;
+									}
+
+									z += 1;
+								}
+							}
+						}
+					}
+
+					let expression = new ExpressionElement(
+						true,
+						false,
+						nouvelleFonction.substring(indexDebutLigne, i + 1),
+						exposant
+					);
+
+					// enlève l'exposant de la formule s'il y en a une
+					if (expression.Exposant !== '') {
+						i -= ('^' + expression.Exposant).length;
+						nouvelleFonction = nouvelleFonction.replace('^' + expression.Exposant, '');
+					}
+
+					lignes.push(expression);
+					indexDebutLigne = i + 1;
+				}
+			} else if (nouvelleFonction[i] === '/' && compteurParenthesesOuvertes === 0) {
+				let ligneInterdite = nouvelleFonction.substring(indexDebutLigne, i).trim();
+				let expression = new ExpressionElement(true, true, ligneInterdite, '');
+				lignes.push(expression);
+				indexDebutLigne = i;
+			}
+		}
+
+		if (indexDebutLigne < nouvelleFonction.length) {
+			let derniereLigne = nouvelleFonction.substring(indexDebutLigne).trim();
+			let expression = new ExpressionElement(true, false, derniereLigne, '');
+			lignes.push(expression);
+		}
+
+		console.log(lignes);
+
+		// enlève les exposants seul et les formules invalides
+		lignes = lignes.filter((element) => {
+			return !(
+				element.Expression.startsWith('^') &&
+				element.Expression === '' &&
+				element.Expression.count('(') !== element.Expression.count(')')
+			);
+		});
+
+		console.log(lignes);
+
+		return lignes;
+	}
+
+	static SupprimerParentheses(expression: string): string {
+		if (expression.startsWith('/(') || expression.startsWith('*(')) {
+			expression = expression.replaceAll('/(', '').replaceAll('*(', '');
+			expression = expression.slice(0, -1);
+		} else if (expression.startsWith('(')) {
+			expression = expression.slice(1).slice(0, -1);
+		}
+
+		return expression;
 	}
 
 	static removeMultiplicateur(expression: string): string {
@@ -83,3 +174,20 @@ export default class Sheller {
 		} else return expression;
 	}
 }
+
+declare global {
+	interface String {
+		count(c: string): number;
+	}
+}
+
+String.prototype.count = function (c: string): number {
+	let result = 0;
+	for (let i = 0; i < this.length; i++) {
+		if (this[i] === c) {
+			result++;
+		}
+	}
+
+	return result;
+};
