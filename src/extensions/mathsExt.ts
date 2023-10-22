@@ -7,4 +7,12 @@ export default class MathsExt {
 	static roundNumber(num: number) {
 		return Math.round((num + Number.EPSILON) * 100) / 100;
 	}
+
+	static Simplifier(formula: string): string {
+		try {
+			return math.simplify(formula).toString();
+		} catch {
+			return formula;
+		}
+	}
 }

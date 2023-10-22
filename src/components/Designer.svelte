@@ -147,6 +147,16 @@
 						{formula}
 					/>
 
+					{#if formula !== MathsExt.Simplifier(formula)}
+						<div class="mt-2 w-full flex justify-end">
+							<button
+								class=" px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
+								on:click={() => {
+									formula = MathsExt.Simplifier(formula);
+								}}>Simplifier</button
+							>
+						</div>
+					{/if}
 					{#if choix === Choix.Variation}
 						<div class="opacity-70 mt-3">
 							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>

@@ -9,10 +9,10 @@
 	export let borneMin: string = '-inf';
 </script>
 
-<div class="h-12 lg:h-16 w-full bg-white border border-black flex flex-row">
+<div class="h-fit w-full bg-white border border-black flex flex-row">
 	<!-- Nom de la variable -->
 	<section
-		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
+		class="w-2/12 h-auto border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
 		<SaisieMath
 			value={variableName}
@@ -20,7 +20,7 @@
 			placeholder="x"
 			eventName="handleVariableNameChanged"
 			on:handleVariableNameChanged
-			classes="text-center"
+			classes="text-center "
 		/>
 	</section>
 
@@ -32,7 +32,7 @@
 			<!-- Conteneur de la solution qui prend toute sa width -->
 			<div class={'select-none w-full'}>
 				<!-- Conteneur de l'afficheur de la solution qui prend que la width dont il a besoin -->
-				<div class="w-fit transform -translate-x-1/2 text-xs md:text-xs lg:text-lg">
+				<div class="w-fit transform -translate-x-1/2 text-xs md:text-xs lg:text-lg py-3">
 					<Katex>{solution.latex}</Katex>
 				</div>
 			</div>
