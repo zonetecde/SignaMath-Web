@@ -10,7 +10,6 @@
 	export let inRangeSolutions: Solution[];
 
 	const expressionChanged = (e: CustomEvent<any>) => {
-		console.log('t');
 		expression.Expression = e.detail;
 	};
 
