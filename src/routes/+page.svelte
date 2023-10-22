@@ -1,6 +1,9 @@
 <script>
+	// @ts-nocheck
+
 	import Designer from '../components/Designer.svelte';
 	import Icon from '$lib/assets/icon.png';
+	import { identity } from 'mathjs';
 
 	let isInfoShown = false;
 
@@ -19,7 +22,17 @@
 		class={'absolute top-0 left-0 w-full h-full bg-black duration-200 ' +
 			(isInfoShown ? 'scale-100  bg-opacity-60' : 'scale-0  bg-opacity-0')}
 	>
-		<div class="flex justify-center items-center h-full">
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div
+			class="flex justify-center items-center h-full"
+			id="bg"
+			on:mousedown={toggleShowInfo}
+			on:click|preventDefault={(e) => {
+				if (e.target.id !== 'bg') toggleShowInfo();
+			}}
+		>
 			<div
 				class="text-sm md:text-base lg:text-lg max-h-[80%] overflow-y-auto w-11/12 md:w-8/12 bg-white p-3 md:p-10 rounded-2xl border-2 border-gray-700 shadow-2xl shadow-black relative"
 			>
