@@ -4,8 +4,8 @@
 	import Choix from '../models/choix';
 	import SaisieFonction from './SaisieFormule.svelte';
 	import TableauDeSigne from './Tableau.svelte';
-	import html2canvas from 'html2canvas';
-	import { abs } from 'mathjs';
+	//@ts-ignore
+	import DomToImage from 'dom-to-image';
 
 	const dispatch = createEventDispatcher();
 
@@ -61,30 +61,37 @@
 	 * Télécharge le tableau
 	 */
 	function downloadTab() {
-		// Get a reference to the Svelte component's root element
-		const componentElement = document.getElementById('tableau-de-signe')!;
+		var node = document.getElementById('tableau-de-signe')!;
 
-		// Create a new HTML5 Canvas
-		const canvas = document.createElement('canvas');
-		const ctx = canvas.getContext('2d');
+		var scale = 2;
 
-		// Set the canvas dimensions to match the component's dimensions
-		canvas.width = componentElement.offsetWidth;
-		canvas.height = componentElement.offsetHeight;
+		DomToImage.toPng(node, {
+			width: node.clientWidth * scale,
+			height: node.clientHeight * scale,
+			style: {
+				transform: 'scale(' + scale + ')',
+				transformOrigin: 'top left'
+			}
+		})
+			.then(function (dataUrl: string) {
+				// Create an anchor element for downloading the image
+				var a = document.createElement('a');
+				a.href = dataUrl;
+				a.download = 'tableau.png'; // Set the download attribute and specify the file name
+				a.style.display = 'none';
 
-		// Draw the component's content on the canvas
-		html2canvas(componentElement, { scale: 2 }).then(function (canvas) {
-			// Convert the canvas to a data URL
-			const dataURL = canvas.toDataURL('image/png');
+				// Append the anchor element to the document body
+				document.body.appendChild(a);
 
-			// Create a download link
-			const a = document.createElement('a');
-			a.href = dataURL;
-			a.download = 'tableau.png'; // Set the desired file name
+				// Trigger a click event on the anchor to initiate the download
+				a.click();
 
-			// Trigger a click event to prompt the user to download the image
-			a.click();
-		});
+				// Remove the anchor element from the document
+				document.body.removeChild(a);
+			})
+			.catch(function (error: any) {
+				console.error('Oops, something went wrong!', error);
+			});
 	}
 </script>
 
@@ -187,7 +194,7 @@
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="absolute right-1 top-12 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
+		class="absolute right-1 mt-1 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
 		on:mousedown={() => {
 			toggleConfigVisibility = !toggleConfigVisibility;
 		}}
@@ -241,7 +248,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="darkblue"
-			class="w-8 h-8 absolute top-2 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer"
+			class="w-8 h-8 absolute top-0 mt-1 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer"
 			on:click={() => {
 				dispatch('showInfo');
 			}}
