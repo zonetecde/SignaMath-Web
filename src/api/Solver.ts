@@ -13,9 +13,9 @@ export default class Solver {
 	 * @param variable <str> La variable à trouver dans l'équation
 	 * @returns <Solution[]> Les solutions de l'équation
 	 */
-	static solveEquation(equation: string, variable: string) {
+	static solveEquation(equation: string, variable: string, y: number = 0) {
 		// Trouve les solutions de l'équation
-		var rawSolutions = nerdamer.solveEquations(equation + '=0', variable);
+		var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
 
 		// Transforme les solutions en array
 		const solutionsArray = this.stringToArray(rawSolutions.toString());
@@ -93,14 +93,48 @@ export default class Solver {
 	}
 
 	static decortiquer(expression: string) {
-		// Supprime les espaces blancs
+		// Remove white spaces
 		expression = expression.replaceAll(' ', '');
-		var x = nerdamer.convertToLaTeX(nerdamer(expression).evaluate().toString());
-		const exp = nerdamer(expression);
+		expression = '(' + expression + ')';
 
-		for (let index = 0; index < exp.symbol.length; index++) {
-			const element = exp.symbol[index];
-			console.log(element);
+		// Récupère déjà le contenu de la première parenthèse
+		let actualFormula = expression;
+		while (actualFormula.includes('(')) {
+			actualFormula = this.getParentheses(actualFormula);
+
+			// La règle est la suivante:
+			// si la formule entre parenthèse se trouvait après ou avant:
+			// - une autre parenthèse -  ex : (5x+3)(4x) -> les deux sont pris séparément
+			// - au numérateur / dénominateur - ex : (5x+3)/(4x) -> les deux sont pris séparément
+			if (expression[expression.indexOf('(' + actualFormula + ')') - 1] === ')') {
+				console.log('w');
+			}
 		}
+	}
+
+	static getParentheses(expression: string) {
+		let ouvert: boolean = false;
+		let ouvertIndex: number = 0;
+		let offset: number = 0;
+		for (let index = 0; index < expression.length; index++) {
+			const letter = expression[index];
+			switch (letter) {
+				case '(':
+					if (ouvert) offset += 1;
+					else {
+						ouvert = true;
+						ouvertIndex = index;
+					}
+
+					break;
+				case ')':
+					if (ouvert) {
+						if (offset > 0) offset -= 1;
+						else return expression.slice(ouvertIndex + 1, index);
+					}
+			}
+		}
+
+		return 'wrong formula';
 	}
 }

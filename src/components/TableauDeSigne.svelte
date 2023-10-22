@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Sheller from '../api/sheller';
 	import Solver from '../api/solver';
 	import Solution from '../models/solution';
 	import Header from './tds/Header.svelte';
@@ -20,7 +21,7 @@
 		);
 	});
 
-	$: lignes = Solver.decortiquer(formula);
+	$: lignes = Sheller.ShellFunction(formula);
 	$: console.log(lignes);
 </script>
 
