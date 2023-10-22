@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { afterUpdate, createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import MathsExt from '../extensions/mathsExt';
 	import Choix from '../models/choix';
 	import SaisieFonction from './SaisieFormule.svelte';
@@ -20,12 +20,34 @@
 
 	let scale: number;
 
+	function handleResize() {
+		if (window.innerWidth < 768) {
+			toggleConfigVisibility = false;
+		} else {
+			toggleConfigVisibility = true;
+		}
+	}
+
 	onMount(() => {
 		if (window.innerWidth < 768) {
-			scale = 1.5; // Sur mobile
+			scale = 1.5; // On mobile
 		} else {
 			scale = 1;
 		}
+
+		handleResize(); // Call it initially
+	});
+
+	afterUpdate(() => {
+		// This will be called after each update
+		handleResize();
+	});
+
+	window.addEventListener('resize', handleResize); // Listen to window resize events
+
+	// Cleanup the event listener when the component is destroyed
+	onDestroy(() => {
+		window.removeEventListener('resize', handleResize);
 	});
 
 	const variableNameChanged = (e: CustomEvent<any>) => {
@@ -203,6 +225,7 @@
 	</div>
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<!-- Bouton pour toggle la visibilité de la configuration -->
 	<div
 		class="absolute right-1 mt-1 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
 		on:mousedown={() => {
