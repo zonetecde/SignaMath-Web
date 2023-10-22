@@ -72,44 +72,42 @@
 	// Tableau contenant le signe final de la fonction
 	let signs: string[] = [];
 	$: {
-		if (inRangeSolutions.length > 0) {
-			signs = [];
+		signs = [];
 
-			// Signe entre bornMin et la première solution
+		// Signe entre bornMin et la première solution
+		// s'il n'y a pas de solution on prend 0
+		const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 0;
+		const resultat = Solver.formulaToInt(
+			new ExpressionElement(true, false, formula, ''),
+			variableName,
+			compareTo
+		);
+
+		signs.push(resultat < 0 ? '-' : '+');
+
+		// Signe entre chaque autres solution
+		inRangeSolutions.forEach((solution) => {
+			let signe = '';
+
+			// Si c'est une valeur interdite on l'écrit dans le signe
+			// le component FunctionRow va ensuite l'interpreter pour y mettre une double barre
+			if (lignes.some((x) => x.Interdite && solution.associatedEquations.includes(x.Expression))) {
+				signe += '|';
+			}
+
 			const resultat = Solver.formulaToInt(
 				new ExpressionElement(true, false, formula, ''),
 				variableName,
-				inRangeSolutions[0].integer - 0.0000001
+				solution.integer + 0.0000001
 			);
 
-			signs.push(resultat < 0 ? '-' : '+');
-
-			// Signe entre chaque autres solution
-			inRangeSolutions.forEach((solution) => {
-				let signe = '';
-
-				// Si c'est une valeur interdite on l'écrit dans le signe
-				// le component FunctionRow va ensuite l'interpreter pour y mettre une double barre
-				if (
-					lignes.some((x) => x.Interdite && solution.associatedEquations.includes(x.Expression))
-				) {
-					signe += '|';
-				}
-
-				const resultat = Solver.formulaToInt(
-					new ExpressionElement(true, false, formula, ''),
-					variableName,
-					solution.integer + 0.0000001
-				);
-
-				signs.push(resultat < 0 ? signe + '-' : signe + '+');
-			});
-		}
+			signs.push(resultat < 0 ? signe + '-' : signe + '+');
+		});
 	}
 </script>
 
-<div class="w-full h-full flex items-center justify-center">
-	<div class="w-10/12" id="tableau-de-signe">
+<div class="w-full h-full flex items-center justify-center flex-col">
+	<div class="w-11/12 md:w-10/12" id="tableau-de-signe">
 		<Header
 			{variableName}
 			{borneMax}
@@ -129,6 +127,7 @@
 			{functionName}
 			{signs}
 			{variableName}
+			{choix}
 			on:handleFunctionNameChanged
 			on:handleVariableNameChanged
 		/>

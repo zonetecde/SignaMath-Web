@@ -127,8 +127,13 @@
 	/>
 {:else}
 	<div
-		class={`pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
-			(isDisabled ? 'cursor-default' : 'cursor-text hover:font-bold hover:text-blue-700')}
+		class={`  pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
+			(isDisabled ? 'cursor-default ' : 'cursor-text hover:font-bold hover:text-blue-700 ') +
+			(value.length > 10 && value.length < 15
+				? 'lg:text-lg '
+				: value.length > 15
+				? 'lg:text-xs '
+				: '')}
 		on:mousedown={() => {
 			if (!isDisabled) {
 				isEditing = true;

@@ -12,6 +12,8 @@
 	let borneMin: string = '-inf';
 	let borneMax: string = '+inf';
 
+	let toggleConfigVisibility: boolean = true;
+
 	const variableNameChanged = (e: CustomEvent<any>) => {
 		formula = formula.replaceAll(variableName, e.detail);
 
@@ -57,7 +59,7 @@
 		canvas.height = componentElement.offsetHeight;
 
 		// Draw the component's content on the canvas
-		html2canvas(componentElement, { scale: 3 }).then(function (canvas) {
+		html2canvas(componentElement, { scale: 1 }).then(function (canvas) {
 			// Convert the canvas to a data URL
 			const dataURL = canvas.toDataURL('image/png');
 
@@ -73,7 +75,10 @@
 </script>
 
 <div class="flex flex-col md:flex-row h-full w-full">
-	<div class="md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col">
+	<div
+		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative ' +
+			(toggleConfigVisibility ? 'visible' : 'hidden')}
+	>
 		<form class=" p-3 flex flex-col">
 			<fieldset id="group">
 				<div>
@@ -136,13 +141,61 @@
 			</fieldset>
 		</form>
 
+		<p class="mx-5 mt-5 md:visible md:text-sm text-[0px] collapse">
+			Pour ajuster la taille du tableau, maintenez la touche CTRL enfoncée sur votre clavier tout en
+			faisant défiler avec votre sourie
+		</p>
+
+		<section id="credits" class="w-full hidden md:block mt-auto text-center">
+			<a
+				href="https://www.buymeacoffee.com/zonetecde"
+				class="mt-auto self-center flex w-full justify-center"
+				target="_blank"
+				><img
+					src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png"
+					alt="Buy Me A Coffee"
+					style="height: 40px !important;width: 150px !important;"
+				/></a
+			>
+
+			<p class="text-gray-700 self-center underline-offset-2 mt-2">
+				<a href="https://www.rayanestaszewski.fr" target="_blank" class="underline"
+					>Rayane Staszewski</a
+				>
+				-
+				<a target="_blank" href="https://github.com/zonetecde" class="underline">GitHub</a>
+			</p>
+		</section>
 		<button
-			class="self-center w-10/12 mt-auto text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
+			class="self-center w-10/12 -mt-5 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
 			on:click={downloadTab}>Enregistrer en tant qu'image</button
 		>
 	</div>
 
-	<div class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5">
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		class="absolute right-1 top-11 visible md:hidden cursor-pointer"
+		on:mousedown={() => (toggleConfigVisibility = !toggleConfigVisibility)}
+	>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="purple"
+			class="w-8 h-8"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d={toggleConfigVisibility
+					? 'M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+					: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75'}
+			/>
+		</svg>
+	</div>
+
+	<div class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col">
 		<TableauDeSigne
 			{functionName}
 			{variableName}

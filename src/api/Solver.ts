@@ -84,7 +84,8 @@ export default class Solver {
 
 		// Transforme le résultat en entier
 		if (resultat.includes('/')) {
-			return parseInt(resultat.split('/')[0]) / parseInt(resultat.split('/')[1]);
+			const denom = parseInt(resultat.split('/')[1]);
+			return parseInt(resultat.split('/')[0]) / (denom === 0 ? 1 : denom);
 		} else {
 			return parseInt(resultat);
 		}
@@ -127,8 +128,13 @@ export default class Solver {
 		formula: ExpressionElement,
 		variable: string,
 		variableValue: number | string
-	) {
-		var x = nerdamer(formula.toString()).sub(variable, '(' + variableValue + ')');
+	): number {
+		try {
+			var x = nerdamer(formula.toString()).sub(variable, '(' + variableValue + ')');
+		} catch {
+			// division par 0 ?
+			if (variableValue.toString() === '0') return NaN;
+		}
 
 		return this.toInteger(x.toString());
 	}

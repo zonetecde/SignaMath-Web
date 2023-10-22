@@ -39,7 +39,7 @@
 				{#if signs[i + 1].includes('|') === false}
 					<!-- Annulation en 0 -->
 					<p
-						class="absolute -translate-y-1/2 top-1/2 -translate-x-1/2 left-[0.05rem] md:left-[0.02rem] lg:left-[0.01rem] w-fit font-normal text-lg lg:text-3xl"
+						class="absolute select-none -translate-y-1/2 top-1/2 -translate-x-1/2 left-[0.05rem] md:left-[0.02rem] lg:left-[0.01rem] w-fit font-normal text-lg lg:text-3xl"
 					>
 						0
 					</p>
