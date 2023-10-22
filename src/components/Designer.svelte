@@ -229,7 +229,7 @@
 	</div>
 
 	<div
-		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col relative justify-center items-center"
+		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative"
 	>
 		<div
 			class={'h-full '}
@@ -250,6 +250,18 @@
 			/>
 		</div>
 
+		{#if toggleConfigVisibility === false}
+			<div class="w-8/12 absolute -top-1.5 self-center">
+				<SaisieFonction
+					on:handleFunctionNameChanged={functionNameChanged}
+					on:handleVariableNameChanged={variableNameChanged}
+					on:handleFunctionChanged={functionChanged}
+					{variableName}
+					{functionName}
+					{formula}
+				/>
+			</div>
+		{/if}
 		<!-- svelte-ignore a11y-click-events-have-key-events -->
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<svg
@@ -258,7 +270,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="darkblue"
-			class="w-8 h-8 absolute top-0 mt-1 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer"
+			class={'w-8 h-8 absolute top-1.5 mt-1 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer z-50 '}
 			on:click={() => {
 				dispatch('showInfo');
 			}}
