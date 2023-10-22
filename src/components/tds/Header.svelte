@@ -32,7 +32,7 @@
 			<!-- Conteneur de la solution qui prend toute sa width -->
 			<div class={'select-none w-full'}>
 				<!-- Conteneur de l'afficheur de la solution qui prend que la width dont il a besoin -->
-				<div class="w-fit transform -translate-x-1/2">
+				<div class="w-fit transform -translate-x-1/2 text-xs md:text-xs lg:text-lg">
 					<Katex>{solution.latex}</Katex>
 				</div>
 			</div>
