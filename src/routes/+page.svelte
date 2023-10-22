@@ -23,13 +23,13 @@
 			<div
 				class="text-sm md:text-base lg:text-lg max-h-[80%] overflow-y-auto w-11/12 md:w-8/12 bg-white p-3 md:p-10 rounded-2xl border-2 border-gray-700 shadow-2xl shadow-black relative"
 			>
-				<div class="text-3xl font-bold text-center flex flex-row items-center justify-center">
+				<div class="text-3xl font-bold text-center flex flex-row items-center justify-center -mt-2">
 					<img src={Icon} class="w-14 mb-2" alt="Logo du site" /><span class="ml-3 mr-7"
 						>SignaMath</span
 					>
 				</div>
 
-				<h2 class="text-lg text-center">Le générateur de tableaux incontournable</h2>
+				<h2 class="text-lg text-center mt-2">Le générateur de tableaux incontournable</h2>
 				<p class="mt-10 leading-6">
 					SignaMath est un site internet permettant de dresser des tableaux de signes et de
 					variations afin d'étudier les signes ou les variations d'une fonction.<br />
