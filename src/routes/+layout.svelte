@@ -29,7 +29,7 @@
 		</div>
 	</nav>
 
-	<div class="h-full -mt-10 pt-10 md:-mt-20 md:pt-20">
+	<div class="h-full -mt-12 pt-12 md:-mt-20 md:pt-20">
 		<slot />
 	</div>
 </div>

@@ -187,7 +187,7 @@
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="absolute right-1 top-11 visible md:hidden cursor-pointer opacity-60 z-50"
+		class="absolute right-1 top-12 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
 		on:mousedown={() => {
 			toggleConfigVisibility = !toggleConfigVisibility;
 		}}
@@ -208,7 +208,7 @@
 					: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75'}
 			/>
 		</svg>
-		<p class="-mt-1 text-sm ml-0.5">{toggleConfigVisibility ? 'hide' : 'show'}</p>
+		<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
 	</div>
 
 	<div
