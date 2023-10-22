@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { createEventDispatcher, onMount } from 'svelte';
 	import MathsExt from '../extensions/mathsExt';
 	import Choix from '../models/choix';
 	import SaisieFonction from './SaisieFormule.svelte';
 	import TableauDeSigne from './Tableau.svelte';
 	import html2canvas from 'html2canvas';
+	import { abs } from 'mathjs';
+
+	const dispatch = createEventDispatcher();
 
 	let formula: string = 'x^2 - 4x';
 	let functionName: string = 'f';
@@ -13,6 +17,16 @@
 	let borneMax: string = '+inf';
 
 	let toggleConfigVisibility: boolean = true;
+
+	let scale: number;
+
+	onMount(() => {
+		if (window.innerWidth < 768) {
+			scale = 1.5; // Sur mobile
+		} else {
+			scale = 1;
+		}
+	});
 
 	const variableNameChanged = (e: CustomEvent<any>) => {
 		formula = formula.replaceAll(variableName, e.detail);
@@ -59,7 +73,7 @@
 		canvas.height = componentElement.offsetHeight;
 
 		// Draw the component's content on the canvas
-		html2canvas(componentElement, { scale: 1 }).then(function (canvas) {
+		html2canvas(componentElement, { scale: 2 }).then(function (canvas) {
 			// Convert the canvas to a data URL
 			const dataURL = canvas.toDataURL('image/png');
 
@@ -93,7 +107,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="variations"
-							class="text-md md:text-xl"
+							class="text-md md:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('variations')?.click();
 							}}>Étude des variations d'une fonction</label
@@ -141,10 +155,9 @@
 			</fieldset>
 		</form>
 
-		<p class="mx-5 mt-5 md:visible md:text-sm text-[0px] collapse">
-			Pour ajuster la taille du tableau, maintenez la touche CTRL enfoncée sur votre clavier tout en
-			faisant défiler avec votre sourie
-		</p>
+		<label class="mx-5 mt-0 md:mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
+
+		<input type="range" class="mx-5" bind:value={scale} min="1" max="3" step="0.05" id="scale" />
 
 		<section id="credits" class="w-full hidden md:block mt-auto text-center">
 			<a
@@ -167,14 +180,14 @@
 			</p>
 		</section>
 		<button
-			class="self-center w-10/12 -mt-5 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
+			class="self-center w-10/12 mt-2 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
 			on:click={downloadTab}>Enregistrer en tant qu'image</button
 		>
 	</div>
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<div
-		class="absolute right-1 top-11 visible md:hidden cursor-pointer"
+		class="absolute right-1 top-11 visible md:hidden cursor-pointer opacity-60"
 		on:mousedown={() => (toggleConfigVisibility = !toggleConfigVisibility)}
 	>
 		<svg
@@ -182,7 +195,7 @@
 			fill="none"
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
-			stroke="purple"
+			stroke="black"
 			class="w-8 h-8"
 		>
 			<path
@@ -193,21 +206,49 @@
 					: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75'}
 			/>
 		</svg>
+		<p class="-mt-1 text-sm ml-0.5">hide</p>
 	</div>
 
-	<div class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col">
-		<TableauDeSigne
-			{functionName}
-			{variableName}
-			formula={formuleTableau}
-			{borneMin}
-			{borneMax}
-			{choix}
-			formulaBase={formula}
-			on:handleVariableNameChanged={variableNameChanged}
-			on:handleBorneMaxChanged={borneMaxChanged}
-			on:handleBorneMinChanged={borneMinChanged}
-			on:handleFunctionNameChanged={functionNameChanged}
-		/>
+	<div
+		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col relative justify-center items-center"
+	>
+		<div
+			class={'h-full '}
+			style={`width: ${Math.abs(scale) * 100}%;  transform: scale(${1 / scale})`}
+		>
+			<TableauDeSigne
+				{functionName}
+				{variableName}
+				formula={formuleTableau}
+				{borneMin}
+				{borneMax}
+				{choix}
+				formulaBase={formula}
+				on:handleVariableNameChanged={variableNameChanged}
+				on:handleBorneMaxChanged={borneMaxChanged}
+				on:handleBorneMinChanged={borneMinChanged}
+				on:handleFunctionNameChanged={functionNameChanged}
+			/>
+		</div>
+
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<!-- svelte-ignore a11y-no-static-element-interactions -->
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="1.5"
+			stroke="darkblue"
+			class="w-8 h-8 absolute top-2 right-2 opacity-50 cursor-pointer"
+			on:click={() => {
+				dispatch('showInfo');
+			}}
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+			/>
+		</svg>
 	</div>
 </div>

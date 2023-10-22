@@ -73,7 +73,7 @@
 <div class="h-12 lg:h-16 w-full bg-white border-b border-x border-black flex flex-row relative">
 	<!-- Nom de la variable -->
 	<section
-		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
+		class="w-2/12 overflow-x-auto overflow-y-hidden h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
 		<SaisieMath
 			value={expression.Expression}
@@ -107,3 +107,21 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	::-webkit-scrollbar {
+		height: 8px;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: #ddbdbd; /* Change the color of the scrollbar thumb */
+	}
+
+	::-webkit-scrollbar-thumb:hover {
+		background-color: #968686; /* Change the color on hover */
+	}
+
+	::-webkit-scrollbar-thumb:active {
+		background-color: #4d4444; /* Change the color on hover */
+	}
+</style>
