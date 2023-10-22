@@ -15,9 +15,7 @@ export default class Solver {
 	 * @returns <Solution[]> Les solutions de l'équation
 	 */
 	static solveEquation(equation: string, variable: string, y: number = 0) {
-		console.log(equation);
-
-		if (equation.includes('x') === false) return [];
+		if (equation.includes(variable) === false) return [];
 
 		// Trouve les solutions de l'équation
 		var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
@@ -125,8 +123,13 @@ export default class Solver {
 	 * @param variableValue La valeur par laquelle la variable doit être remplacé
 	 * @returns Le résultat du calcul
 	 */
-	static formulaToInt(formula: ExpressionElement, variable: string, variableValue: number) {
+	static formulaToInt(
+		formula: ExpressionElement,
+		variable: string,
+		variableValue: number | string
+	) {
 		var x = nerdamer(formula.toString()).sub(variable, '(' + variableValue + ')');
+
 		return this.toInteger(x.toString());
 	}
 }

@@ -141,8 +141,6 @@ export default class Sheller {
 			lignes.push(expression);
 		}
 
-		console.log(lignes);
-
 		// enlève les exposants seul et les formules invalides
 		lignes = lignes.filter((element) => {
 			return !(
@@ -151,8 +149,6 @@ export default class Sheller {
 				element.Expression.count('(') !== element.Expression.count(')')
 			);
 		});
-
-		console.log(lignes);
 
 		return lignes;
 	}

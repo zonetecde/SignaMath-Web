@@ -5,6 +5,7 @@
 
 	// Style
 	export let classes = '';
+	export let classesInput = '';
 	// Valeur par défaut de l'input (txt et katex)
 	export let value = '';
 	// Placeholder de la zone de saisie (valeur par défaut)
@@ -16,10 +17,11 @@
 	// Le nom de l'event associé à l'envoie de la nouvelle formule
 	export let eventName = '';
 	// Nom de la variable
-
 	export let variableName = 'x';
 	// Est-ce que on rentre une formule ici ? (influence la validité)
 	export let isFormula = false;
+	// Valeur interdite
+	export let forbidden = '';
 
 	// Est-ce que l'utilisateur est en train d'éditer la formule ?
 	let isEditing = false;
@@ -44,7 +46,7 @@
 		// Converti la saisie en format Katex
 		katexFormula = !isDisabled ? parse(value).toTex({ parenthesis: 'auto' }) : value;
 		// Vérifie que la variable est présente
-		if (value.includes(variableName) || !isFormula) {
+		if ((value.includes(variableName) || !isFormula) && value !== forbidden) {
 			isFormulaValid = true;
 		} else {
 			isFormulaValid = false;
@@ -89,7 +91,7 @@
 
 {#if isEditing}
 	<textarea
-		class={`bg-transparent text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${
+		class={`bg-transparent text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${classesInput} ${
 			!isFormulaValid ? 'text-red-500' : ''
 		}`}
 		spellcheck="false"
