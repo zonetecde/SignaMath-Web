@@ -5,7 +5,7 @@
 	import ExpressionCell from './ExpressionCell.svelte';
 	import type Cellule from '../../../models/cellule';
 	import Solver from '../../../api/solver';
-	import RowSigns from '../RowSigns.svelte';
+	import RowSigns from './RowSigns.svelte';
 	import AddRowHover from './AddRowHover.svelte';
 
 	export let expression: ExpressionElement;

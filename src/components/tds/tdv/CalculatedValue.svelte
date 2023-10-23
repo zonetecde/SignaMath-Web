@@ -12,7 +12,7 @@
 
 <div
 	class={'absolute ' +
-		(sign.includes('+') ? ' top-2 lg:top-7 ' : ' bottom-2 lg:bottom-7 ') +
+		(sign.includes('+') ? ' top-2 lg:top-4 ' : ' bottom-2 lg:bottom-4 ') +
 		' ' +
 		(position === 'borneMax'
 			? 'right-0'

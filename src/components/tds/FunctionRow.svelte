@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Choix from '../../models/choix';
 	import type Solution from '../../models/solution';
-	import SaisieFonction from '../SaisieFonction.svelte';
+	import SaisieFonction from '../saisie/SaisieFonction.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';

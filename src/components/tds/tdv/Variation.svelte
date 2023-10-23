@@ -1,11 +1,11 @@
 <script lang="ts">
-	import VariationCalculatedValue from './VariationCalculatedValue.svelte';
+	import VariationCalculatedValue from './CalculatedValue.svelte';
 
 	import Solver from '../../../api/solver';
 	import MathsExt from '../../../extensions/mathsExt';
 	import ExpressionElement from '../../../models/expression';
 	import type Solution from '../../../models/solution';
-	import SaisieFonction from '../../SaisieFonction.svelte';
+	import SaisieFonction from '../../saisie/SaisieFonction.svelte';
 	import ArrowDown from '../assets/arrow_down.png';
 	import ArrowUp from '../assets/arrow_up.png';
 

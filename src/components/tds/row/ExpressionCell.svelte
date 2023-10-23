@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type ExpressionElement from '../../../models/expression';
-	import SaisieMath from '../../SaisieMath.svelte';
+	import SaisieMath from '../../saisie/SaisieMath.svelte';
 
 	export let expression: ExpressionElement;
 </script>

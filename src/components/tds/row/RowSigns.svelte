@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type Cellule from '../../models/cellule';
-	import CellSign from './row/CellSign.svelte';
+	import type Cellule from '../../../models/cellule';
+	import CellSign from './CellSign.svelte';
 
 	export let cellules: Cellule[];
 </script>

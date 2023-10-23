@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Katex from 'svelte-katex';
 	import type Solution from '../../models/solution';
-	import SaisieMath from '../SaisieMath.svelte';
+	import SaisieMath from '../saisie/SaisieMath.svelte';
 
 	export let inRangeSolutions: Solution[];
 	export let variableName: string = 'x';
