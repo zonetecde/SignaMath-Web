@@ -62,7 +62,7 @@
 	 * mis par défaut
 	 */
 	onMount(() => {
-		dispatch(eventName, value);
+		dispatch(eventName, value.trim());
 	});
 
 	/**

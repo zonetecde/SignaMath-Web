@@ -21,6 +21,6 @@ export default class ExpressionElement {
 	 * @returns Retourne la formule avec son exposant
 	 */
 	toString() {
-		return this.Expression + (this.Exposant !== '' ? '^(' + this.Exposant + ')' : '');
+		return this.Expression.trim() + (this.Exposant !== '' ? '^(' + this.Exposant + ')' : '');
 	}
 }

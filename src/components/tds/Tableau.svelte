@@ -8,11 +8,18 @@
 	import FunctionRow from './FunctionRow.svelte';
 	import Header from './Header.svelte';
 	import Row from './Row.svelte';
-	import Variation from './Variation.svelte';
+	import Variation from './tdv/Variation.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
 	export let formula: string = 'x^2 - 4x';
+	$: {
+		// Lorsque la formule change on reprend les signes selon la formule
+		// et non seulement les rows
+		console.log('t');
+		formula;
+		updateGlobalSigns = 0;
+	}
 
 	export let borneMin: string = '-inf';
 	export let borneMax: string = '+inf';
@@ -20,6 +27,10 @@
 	// La formule de base écrite par l'utilisateur,
 	// qui est différente de celle dérivée
 	export let formulaBase: string = 'x^2 - 4x';
+	$: {
+		formulaBase;
+		console.log('tes');
+	}
 
 	// Permet d'afficher ce que l'utilisateur veut
 	export let choix: Choix = Choix.Variation;
@@ -38,6 +49,7 @@
 		updateGlobalSigns;
 
 		solutions = [];
+
 		lignes.forEach((line) => {
 			let lineSolutions = Solver.solveEquation(line.toString(), variableName);
 
@@ -122,7 +134,6 @@
 				signs.push(resultat < 0 ? signe + '-' : signe + '+');
 			});
 		} else {
-			console.log('t');
 			// Pour chaque colonne du tableau
 			for (let i = 0; i < inRangeSolutions.length + 1; i++) {
 				let signsDiv = document.querySelectorAll('.column-' + i);
@@ -131,11 +142,9 @@
 				let sign = 1;
 
 				Array.from(signsDiv).forEach((signDiv) => {
-					console.log(signDiv.innerHTML);
 					sign *= signDiv.innerHTML.trim() === '+' ? 1 : -1;
 				});
 
-				console.log(sign);
 				signs.push(sign === 1 ? '+' : '-');
 			}
 		}

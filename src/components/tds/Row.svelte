@@ -72,12 +72,16 @@
 	}
 
 	/**
-	 * Est-ce que l'expression se cancel en 0 à la solution précédente ?
-	 * @param index L'index de la solution
+	 * Contient, dans l'ordre des solutions, si l'expression de cette ligne se cancel à la solution
+	 * S'update dès que les solutions changent
 	 */
-	function doesCancelOnZero(index: number): boolean {
-		const solution = inRangeSolutions[index];
-		return solution.associatedEquations.includes(expression.Expression);
+	let doesCancelOnZero: boolean[] = [];
+	$: {
+		doesCancelOnZero = [];
+		inRangeSolutions.forEach((solution, i) => {
+			const result = solution.associatedEquations.includes(expression.Expression.trim());
+			doesCancelOnZero.push(result);
+		});
 	}
 </script>
 
@@ -116,7 +120,7 @@
 				</div>
 
 				<!-- Met un trait avec un 0 pour la colonne à gauche du signe si l'expression s'annule en 0 à la solution -->
-				{#if doesCancelOnZero(i)}
+				{#if doesCancelOnZero[i]}
 					<!-- Annulation en 0 -->
 					<p
 						class="absolute select-none -translate-y-1/2 top-1/2 -translate-x-1/2 left-[0.05rem] md:left-[0.02rem] lg:left-[0.01rem] w-fit font-normal text-lg lg:text-3xl"
