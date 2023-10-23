@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Sheller from '../../api/sheller';
 	import Solver from '../../api/solver';
 	import MathsExt from '../../extensions/mathsExt';
@@ -83,56 +84,32 @@
 		});
 	}
 
-	// Tableau contenant le signe final de la fonction
-	let signs: string[] = [];
 	$: {
+		choix;
+		// empty signs at first
+		signs = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+		// calcul seulement après que l'ui s'update les signes des colonnes
+		setTimeout(() => {
+			updateColumnSigns();
+		});
+	}
+
+	// Tableau contenant le signe final de la fonction
+	let signs: string[] = ['-', '+'];
+	let websiteMounted = false;
+	onMount(() => {
+		websiteMounted = true;
+	});
+	function updateColumnSigns() {
 		updateGlobalSigns;
 		signs = [];
 
-		// Si on garde la formule entrée de base; sinon on calcul le signe selon les colonnes
-		if (updateGlobalSigns === 0 && choix === Choix.Variation) {
-			// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
-			const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
-
-			const resultat = Solver.formulaToInt(
-				new ExpressionElement(true, false, formula, ''),
-				variableName,
-				compareTo
-			);
-
-			signs.push(
-				isNaN(resultat)
-					? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
-					: resultat < 0
-					? '-'
-					: '+'
-			);
-
-			// Signe entre chaque autres solution
-			inRangeSolutions.forEach((solution) => {
-				let signe = '';
-
-				// Si c'est une valeur interdite on l'écrit dans le signe
-				// le component FunctionRow va ensuite l'interpreter pour y mettre une double barre
-				if (
-					lignes.some((x) => x.Interdite && solution.associatedEquations.includes(x.Expression))
-				) {
-					signe += '|';
-				}
-
-				const resultat = Solver.formulaToInt(
-					new ExpressionElement(true, false, formula, ''),
-					variableName,
-					solution.integer + 0.0000001
-				);
-
-				signs.push(resultat < 0 ? signe + '-' : signe + '+');
-			});
-		} else {
+		if (websiteMounted) {
 			// Pour chaque colonne du tableau
 			for (let i = 0; i < inRangeSolutions.length + 1; i++) {
 				const selecteur = '.column-' + i;
 
+				// Récupère toutes les divs dans la colonne
 				let signsDiv = document.querySelectorAll(selecteur);
 
 				// Calcul du signe
@@ -142,6 +119,7 @@
 					sign *= signDiv.innerHTML.trim() === '+' ? 1 : -1;
 				});
 
+				// Ajout du signe
 				signs.push(sign === 1 ? '+' : '-');
 			}
 		}
@@ -166,7 +144,7 @@
 				expression={line}
 				{inRangeSolutions}
 				{variableName}
-				on:updateColumnsSigns={() => (updateGlobalSigns += 1)}
+				on:updateColumnsSigns={updateColumnSigns}
 			/>
 		{/each}
 
