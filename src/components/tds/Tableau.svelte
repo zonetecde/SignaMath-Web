@@ -90,9 +90,10 @@
 		signs = [];
 
 		// Si on garde la formule entrée de base; sinon on calcul le signe selon les colonnes
-		if (updateGlobalSigns === 0) {
+		if (updateGlobalSigns === 0 && choix === Choix.Variation) {
 			// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
 			const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
+
 			const resultat = Solver.formulaToInt(
 				new ExpressionElement(true, false, formula, ''),
 				variableName,

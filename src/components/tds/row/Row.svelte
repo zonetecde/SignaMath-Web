@@ -27,7 +27,7 @@
 
 	// A chaque fois que les solutions changent on recalcule les signes
 	$: {
-		expression; // Pour que ça soit trigger lorsque l'expression change aussi
+		expression; // Pour que ça soit trigger lorsque l'expression change
 
 		cellules = [];
 

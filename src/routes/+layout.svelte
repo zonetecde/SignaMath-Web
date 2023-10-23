@@ -1,6 +1,7 @@
 <script>
 	import '../app.css';
 	import Icon from '$lib/assets/icon.png';
+	import GitHub from '$lib/assets/github.svg';
 </script>
 
 <div class="h-screen w-screen">
@@ -26,6 +27,15 @@
 			>
 				SignaMath
 			</p>
+
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<img
+				src={GitHub}
+				alt="GitHub logo"
+				class="absolute opacity-60 right-2 md:right-5 w-8 md:w-12 cursor-pointer"
+				on:click={() => window.open('https://github.com/zonetecde/signamath-web')}
+			/>
 		</div>
 	</nav>
 
