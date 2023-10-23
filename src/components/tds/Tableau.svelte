@@ -1,13 +1,14 @@
 <script lang="ts">
-	import Sheller from '../api/sheller';
-	import Solver from '../api/solver';
-	import Choix from '../models/choix';
-	import ExpressionElement from '../models/expression';
-	import type Solution from '../models/solution';
-	import FunctionRow from './tds/FunctionRow.svelte';
-	import Header from './tds/Header.svelte';
-	import Row from './tds/Row.svelte';
-	import Variation from './tds/Variation.svelte';
+	import Sheller from '../../api/sheller';
+	import Solver from '../../api/solver';
+	import MathsExt from '../../extensions/mathsExt';
+	import Choix from '../../models/choix';
+	import ExpressionElement from '../../models/expression';
+	import type Solution from '../../models/solution';
+	import FunctionRow from './FunctionRow.svelte';
+	import Header from './Header.svelte';
+	import Row from './Row.svelte';
+	import Variation from './Variation.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -63,8 +64,8 @@
 		solutions;
 		inRangeSolutions = solutions.filter((solution) => {
 			return (
-				solution.integer >= Solver.toInteger(borneMin) &&
-				solution.integer <= Solver.toInteger(borneMax)
+				solution.integer > Solver.toInteger(borneMin) &&
+				solution.integer < Solver.toInteger(borneMax)
 			);
 		});
 	}
@@ -75,15 +76,21 @@
 		signs = [];
 
 		// Signe entre bornMin et la première solution
-		// s'il n'y a pas de solution on prend 0
-		const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 0;
+		// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
+		const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
 		const resultat = Solver.formulaToInt(
 			new ExpressionElement(true, false, formula, ''),
 			variableName,
 			compareTo
 		);
 
-		signs.push(resultat < 0 ? '-' : '+');
+		signs.push(
+			isNaN(resultat)
+				? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+				: resultat < 0
+				? '-'
+				: '+'
+		);
 
 		// Signe entre chaque autres solution
 		inRangeSolutions.forEach((solution) => {

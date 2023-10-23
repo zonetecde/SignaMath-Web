@@ -1,6 +1,6 @@
 enum Choix {
-	Variation = 0,
-	Tableau = 1
+	Variation = 'variations',
+	Tableau = 'signes'
 }
 
 export default Choix;

@@ -25,12 +25,17 @@
 		/>
 	</section>
 
-	<div class={'w-full flex flex-row text-md lg:text-3xl '}>
+	<div
+		class={'w-full flex flex-row text-md text-center ' +
+			(signs[0].length > 3 ? '' /* Message d'intervalle de définition */ : 'lg:text-3xl')}
+	>
 		<div class="w-full select-none flex justify-center items-center">{signs[0]}</div>
 
 		{#each inRangeSolutions as _, i}
 			<div class="w-full h-full relative">
-				<div class="h-full border-l border-black select-none flex justify-center items-center">
+				<div
+					class="h-full border-l border-black select-none flex justify-center items-center text-center"
+				>
 					{signs[i + 1].replace('|', '')}
 				</div>
 

@@ -9,7 +9,7 @@
 	export let borneMin: string = '-inf';
 </script>
 
-<div class="h-fit w-full bg-white border border-black flex flex-row">
+<div class="h-fit min-h-[54px] w-full bg-white border border-black flex flex-row">
 	<!-- Nom de la variable -->
 	<section
 		class="w-2/12 h-auto border-r border-black flex items-center justify-center text-lg lg:text-xl"

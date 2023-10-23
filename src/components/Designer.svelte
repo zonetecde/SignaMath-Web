@@ -3,23 +3,34 @@
 	import MathsExt from '../extensions/mathsExt';
 	import Choix from '../models/choix';
 	import SaisieFonction from './SaisieFormule.svelte';
-	import TableauDeSigne from './Tableau.svelte';
+	import TableauDeSigne from './tds/Tableau.svelte';
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
 
 	const dispatch = createEventDispatcher();
 
+	// Formule du tableau (non dérivé)
 	let formula: string = 'x ^ 2 - 4 * x';
+	// Nom de la fonction
 	let functionName: string = 'f';
+	// Nom de la variable
 	let variableName: string = 'x';
 
+	// L'intervalle de définition de la fonction
 	let borneMin: string = '-inf';
 	let borneMax: string = '+inf';
 
+	// Visibilité du panneau de configuration (sur mobile)
 	let toggleConfigVisibility: boolean = true;
 
-	let scale: number;
+	// Taille du tableau
+	let scale: number = 1;
 
+	/**
+	 * Trigger lorsque la taille de la fenêtre change
+	 * Permet de montrer la zone de configuration après être passé sur une fenêtre plus
+	 * grande pour qu'elle ne soit pas caché à jamais
+	 */
 	function handleResize() {
 		if (window.innerWidth < 768) {
 			toggleConfigVisibility = false;
@@ -28,48 +39,78 @@
 		}
 	}
 
+	/**
+	 * Trigger lorsque le site est initialisé
+	 */
 	onMount(() => {
+		// Set la taille du tableau en fonction de la taille de la fenêtre
 		if (window.innerWidth < 768) {
-			scale = 1.5; // On mobile
+			scale = 1.5;
 		} else {
 			scale = 1;
 		}
 
-		handleResize(); //
+		handleResize(); // Appel l'event initialement
 		window.addEventListener('resize', handleResize); // Event : redimension de la fenêtre
 	});
 
+	/**
+	 * L'utilisateur a entré un nouveau nom pour la variable
+	 * @param e Nouveau nom
+	 */
 	const variableNameChanged = (e: CustomEvent<any>) => {
+		// Remplace dans la formule l'ancien nom de la variable par le nouveau nom
 		formula = formula.replaceAll(variableName, e.detail);
-
+		// Remplace le nom de la variable par la nouvelle
 		variableName = e.detail;
 	};
 
+	/**
+	 * L'utilisateur a entré une nouvelle formule
+	 * @param e La nouvelle formule
+	 */
 	const functionChanged = (e: CustomEvent<any>) => {
+		// Remplace la formule par la nouvelle
 		formula = e.detail;
 	};
 
+	/**
+	 * L'utilisateur a entré un nouveau nom pour la fonction
+	 * @param e Nouveau nom
+	 */
 	const functionNameChanged = (e: CustomEvent<any>) => {
+		// Remplace l'ancien nom de la fonction par le nouveau nom
 		functionName = e.detail;
 	};
 
+	/**
+	 * L'utilisateur a entré un nouvel intervalle (maximum)
+	 * @param e Nouvel intervalle
+	 */
 	const borneMaxChanged = (e: CustomEvent<any>) => {
+		// Remplace l'ancien intervalle par le nouveau
 		borneMax = e.detail;
 	};
 
+	/**
+	 * L'utilisateur a entré un nouvel intervalle (minimum)
+	 * @param e Nouvel intervalle
+	 */
 	const borneMinChanged = (e: CustomEvent<any>) => {
+		// Remplace l'ancien intervalle par le nouveau
 		borneMin = e.detail;
 	};
 
+	// Le choix de l'utilisateur entre étudier les variations d'une fonction
+	// ou les signes d'une fonction
 	let choix: Choix = Choix.Variation;
 
-	// La formule utilisé dans le tableau,
+	// Désigne la formule utilisé dans le tableau (tout sauf le tableau de variation),
 	// Si on veut étudier des variations, on dérive la formule de base
-	// Cette formule est utilisé partout sauf dans le tableau de variation pour calculer les solutions
 	$: formuleTableau = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName);
 
 	/**
-	 * Télécharge le tableau
+	 * Télécharge le tableau en format image
 	 */
 	function downloadTab() {
 		// L'élément à transformer en image
@@ -92,7 +133,7 @@
 				var a = document.createElement('a');
 				a.href = dataUrl;
 				// Nom de l'image
-				a.download = 'tableau.png';
+				a.download = 'tableau de ' + choix + '.png';
 				a.style.display = 'none';
 				document.body.appendChild(a);
 				// Téléchargement automatique
@@ -110,7 +151,7 @@
 		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:overflow-y-auto md:pt-5 ' +
 			(toggleConfigVisibility ? 'visible' : 'hidden')}
 	>
-		<form class=" p-3 flex flex-col">
+		<form class="px-3 flex flex-col">
 			<fieldset id="group">
 				<div>
 					<div>

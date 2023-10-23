@@ -1,11 +1,33 @@
 <script>
 	// @ts-nocheck
 
+	import { Toaster } from 'svelte-sonner';
+
 	import Designer from '../components/Designer.svelte';
 	import Icon from '$lib/assets/icon.png';
-	import { identity } from 'mathjs';
+	import CommentForm from '../components/about/CommentForm.svelte';
+	import { onMount } from 'svelte';
 
 	let isInfoShown = false;
+	let isSendCommentShown = false;
+
+	onMount(() => {
+		const visited = window.localStorage.getItem('visited') !== null;
+
+		if (!visited) {
+			// first visite : on montre le panneau d'informations
+			isInfoShown = true;
+		}
+
+		window.localStorage.setItem('visited', true);
+	});
+
+	/**
+	 * Toggle the visibility of the send comment
+	 */
+	function toggleSendComment() {
+		isSendCommentShown = !isSendCommentShown;
+	}
 
 	/**
 	 * Toggle the visibility of the infos
@@ -14,6 +36,8 @@
 		isInfoShown = !isInfoShown;
 	}
 </script>
+
+<Toaster />
 
 <div class="w-screen h-full bg-[#f6effa] overflow-hidden">
 	<Designer on:showInfo={toggleShowInfo} />
@@ -28,9 +52,8 @@
 		<div
 			class="flex justify-center items-center h-full"
 			id="bg"
-			on:mousedown={toggleShowInfo}
 			on:click|preventDefault={(e) => {
-				if (e.target.id !== 'bg') toggleShowInfo();
+				if (e.target.id === 'bg') toggleShowInfo();
 			}}
 		>
 			<div
@@ -41,37 +64,61 @@
 						>SignaMath</span
 					>
 				</div>
-
 				<h2 class="text-lg text-center mt-2">Le générateur de tableaux incontournable</h2>
-				<p class="mt-10 leading-6">
-					SignaMath est un site internet permettant de dresser des tableaux de signes et de
-					variations afin d'étudier les signes ou les variations d'une fonction.<br />
-					Entrez une formule dans la zone de saisie prévue à cet effet, et elle sera automatiquement
-					dérivée puis son tableau de signes et de variations y sera dressé.<br />
-					Vous pouvez aussi générer uniquement le tableau de signes, sans dériver la fonction, en cliquant
-					sur le bouton radio prévu à cet effet.<br />
-					Il est recommandé d'utiliser le site sur un ordinateur.<br />
-					Son utilisation est gratuite, et vous n'avez pas à me créditer. Néanmoins,
-					<a href="https://www.buymeacoffee.com/zonetecde" target="_blank" class="italic underline"
-						>un petit café</a
+
+				{#if !isSendCommentShown}
+					<p class="mt-10 leading-6">
+						SignaMath est un site internet permettant de dresser des tableaux de signes et de
+						variations afin d'étudier les signes ou les variations d'une fonction.<br />
+						Entrez une formule dans la zone de saisie prévue à cet effet, et elle sera automatiquement
+						dérivée puis son tableau de signes et de variations y sera dressé.<br />
+						Vous pouvez aussi générer uniquement le tableau de signes, sans dériver la fonction, en cliquant
+						sur le bouton radio prévu à cet effet.<br />
+						Il est recommandé d'utiliser le site sur un ordinateur.<br />
+						Son utilisation est gratuite, et vous n'avez pas à me créditer. Néanmoins,
+						<a
+							href="https://www.buymeacoffee.com/zonetecde"
+							target="_blank"
+							class="italic underline">un petit café</a
+						>
+						ne serait pas de refus...
+						<br />
+						Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit
+						cloner
+						<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
+							>le repo GitHub</a
+						>, ou télécharger
+						<a
+							href="https://github.com/zonetecde/signamath/releases"
+							target="_blank"
+							class="underline">la version logicielle</a
+						>
+						du site.
+						<br /><br />
+					</p>
+				{:else}
+					<div class="my-7">
+						<CommentForm />
+					</div>
+				{/if}
+
+				<div class="w-full flex mt-2 mb-5 justify-center gap-5">
+					{#if !isSendCommentShown}
+						<button
+							on:click={toggleShowInfo}
+							class=" w-64 py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500"
+						>
+							Accéder au site
+						</button>
+					{/if}
+					<button
+						on:click={toggleSendComment}
+						class={' py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500 ' +
+							(isSendCommentShown ? ' w-32' : ' w-64')}
 					>
-					ne serait pas de refus...
-					<br />
-					Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit cloner
-					<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
-						>le repo GitHub</a
-					>, ou télécharger
-					<a
-						href="https://github.com/zonetecde/signamath/releases"
-						target="_blank"
-						class="underline">la version logicielle</a
-					>
-					du site.
-					<br /><br />
-					Si vous avez des retours, n'hésitez pas à me contacter via ce mail :
-					<span class="text-blue-700">zonedetec@gmail.com</span>
-					<br /><br /><br />
-				</p>
+						{isSendCommentShown ? 'Retour' : 'Envoyer un commentaire'}
+					</button>
+				</div>
 
 				<p class="text-center font-bold">Signa Math © 2023 - Rayane Staszewski</p>
 

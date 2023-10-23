@@ -41,6 +41,7 @@
 		"dom-to-image": "^2.6.0",
 		"mathjs": "^11.11.2",
 		"nerdamer": "^1.1.13",
-		"svelte-katex": "^0.1.2"
+		"svelte-katex": "^0.1.2",
+		"svelte-sonner": "^0.3.0"
 	}
 }

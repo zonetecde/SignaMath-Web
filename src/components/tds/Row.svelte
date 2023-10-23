@@ -38,7 +38,7 @@
 
 		if (inRangeSolutions.length === 0) {
 			// signe constant
-			resultat = Solver.formulaToInt(expression, variableName, 0);
+			resultat = Solver.formulaToInt(expression, variableName, 1);
 		} else if (index === 0) {
 			// entre borneMin et la premiere solution
 			// (donc en gros juste avant la premiere solution)
@@ -57,7 +57,11 @@
 			);
 		}
 
-		return resultat < 0 ? '-' : '+';
+		return isNaN(resultat)
+			? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			: resultat < 0
+			? '-'
+			: '+';
 	}
 
 	/**
@@ -85,7 +89,10 @@
 		/>
 	</section>
 
-	<div class={'w-full flex flex-row text-md lg:text-3xl '}>
+	<div
+		class={'w-full flex flex-row text-md text-center ' +
+			(signs[0].length > 3 ? '' /* Message d'intervalle de définition */ : 'lg:text-3xl')}
+	>
 		<div class="w-full select-none flex justify-center items-center">{signs[0]}</div>
 
 		{#each inRangeSolutions as _, i}

@@ -131,6 +131,11 @@ export default class Solver {
 	): number {
 		try {
 			var x = nerdamer(formula.toString()).sub(variable, '(' + variableValue + ')');
+
+			if (x.evaluate().symbol.imaginary === true) {
+				// racine carré d'un nombre négatif / ou nombre complexe
+				return NaN;
+			}
 		} catch {
 			// division par 0 ?
 			if (variableValue.toString() === '0') return NaN;
