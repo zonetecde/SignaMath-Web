@@ -9,7 +9,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	let formula: string = 'x^2 - 4x';
+	let formula: string = 'x ^ 2 - 4 * x';
 	let functionName: string = 'f';
 	let variableName: string = 'x';
 
@@ -35,19 +35,8 @@
 			scale = 1;
 		}
 
-		handleResize(); // Call it initially
-	});
-
-	afterUpdate(() => {
-		// This will be called after each update
-		handleResize();
-	});
-
-	window.addEventListener('resize', handleResize); // Listen to window resize events
-
-	// Cleanup the event listener when the component is destroyed
-	onDestroy(() => {
-		window.removeEventListener('resize', handleResize);
+		handleResize(); //
+		window.addEventListener('resize', handleResize); // Event : redimension de la fenêtre
 	});
 
 	const variableNameChanged = (e: CustomEvent<any>) => {
@@ -83,43 +72,42 @@
 	 * Télécharge le tableau
 	 */
 	function downloadTab() {
+		// L'élément à transformer en image
 		var node = document.getElementById('tableau-de-signe')!;
 
+		// Qualité de l'image
 		var scale = 2;
 
+		// Utilisation de DomToImage pour transformer la div en image
 		DomToImage.toPng(node, {
 			width: node.clientWidth * scale,
 			height: node.clientHeight * scale,
 			style: {
+				// Set de la qualité
 				transform: 'scale(' + scale + ')',
 				transformOrigin: 'top left'
 			}
 		})
 			.then(function (dataUrl: string) {
-				// Create an anchor element for downloading the image
 				var a = document.createElement('a');
 				a.href = dataUrl;
-				a.download = 'tableau.png'; // Set the download attribute and specify the file name
+				// Nom de l'image
+				a.download = 'tableau.png';
 				a.style.display = 'none';
-
-				// Append the anchor element to the document body
 				document.body.appendChild(a);
-
-				// Trigger a click event on the anchor to initiate the download
+				// Téléchargement automatique
 				a.click();
-
-				// Remove the anchor element from the document
 				document.body.removeChild(a);
 			})
 			.catch(function (error: any) {
-				console.error('Oops, something went wrong!', error);
+				window.alert('Désolé ! Un problème est survenu\n\n' + error.message);
 			});
 	}
 </script>
 
 <div class="flex flex-col md:flex-row h-full w-full">
 	<div
-		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative ' +
+		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:overflow-y-auto md:pt-5 ' +
 			(toggleConfigVisibility ? 'visible' : 'hidden')}
 	>
 		<form class=" p-3 flex flex-col">
