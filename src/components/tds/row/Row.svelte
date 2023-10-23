@@ -27,6 +27,7 @@
 
 	// A chaque fois que les solutions changent on recalcule les signes .
 	$: {
+		inRangeSolutions;
 		expression; // Pour que ça soit trigger lorsque l'expression change
 
 		cellules = [];

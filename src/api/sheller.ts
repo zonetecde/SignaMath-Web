@@ -61,6 +61,11 @@ export default class Sheller {
 			if (x.Expression.startsWith('+')) x.Expression = x.Expression.slice(1);
 		});
 
+		// return [
+		// 	new ExpressionElement(false, false, '2x^2-4x+2', ''),
+		// 	new ExpressionElement(false, true, '3x+4', '')
+		// ];
+
 		return expressions;
 	}
 	static DecouperExpression(

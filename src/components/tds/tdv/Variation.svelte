@@ -92,38 +92,40 @@
 			/>
 		{/if}
 
-		{#each inRangeSolutions as solution, i}
-			<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
+		{#if signs.length > inRangeSolutions.length}
+			{#each inRangeSolutions as solution, i}
+				<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
                 une valeur interdite (flèche continue)-->
-			<div class="w-full h-full relative">
-				<div class="h-full select-none flex justify-center items-center relative">
-					<img
-						src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
-						alt={'Flèche vers le ' + signs[i + 1]}
-						class="w-full transform h-full object-fill"
-					/>
-
-					<!-- Calcul la valeur de la solution -->
-					{#if signs[i + 1].includes('|') === false}
-						<VariationCalculatedValue sign={signs[i]} value={values[solution.value]} />
-					{/if}
-
-					<!-- Bordure de valeur interdite -->
-					{#if signs[i + 1].includes('|')}
-						<div class="absolute left-0 w-32 h-full border-l border-black" />
-						<div class="absolute -left-1 w-32 h-full border-l border-black" />
-					{/if}
-
-					<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
-					{#if borneMax !== '+inf' && i === inRangeSolutions.length - 1}
-						<VariationCalculatedValue
-							sign={signs[signs.length - 1]}
-							value={values[borneMax]}
-							position="borneMax"
+				<div class="w-full h-full relative">
+					<div class="h-full select-none flex justify-center items-center relative">
+						<img
+							src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
+							alt={'Flèche vers le ' + signs[i + 1]}
+							class="w-full transform h-full object-fill"
 						/>
-					{/if}
+
+						<!-- Calcul la valeur de la solution -->
+						{#if inRangeSolutions[i].isForbidden === false}
+							<VariationCalculatedValue sign={signs[i]} value={values[solution.value]} />
+						{/if}
+
+						<!-- Bordure de valeur interdite -->
+						{#if inRangeSolutions[i].isForbidden}
+							<div class="absolute left-0 w-32 h-full border-l border-black" />
+							<div class="absolute -left-1 w-32 h-full border-l border-black" />
+						{/if}
+
+						<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
+						{#if borneMax !== '+inf' && i === inRangeSolutions.length - 1}
+							<VariationCalculatedValue
+								sign={signs[signs.length - 1]}
+								value={values[borneMax]}
+								position="borneMax"
+							/>
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/if}
 	</div>
 </div>

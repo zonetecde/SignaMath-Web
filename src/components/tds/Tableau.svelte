@@ -42,7 +42,9 @@
 	// Calcul des solutions
 	$: {
 		// Hook si l'utilisateur change une expression dans le tableau
+		// ou si une nouvelle formule est entrée par le user
 		updateGlobalSigns;
+		formula;
 
 		solutions = [];
 
@@ -52,11 +54,14 @@
 			// Ajoute les solutions qui n'ont pas déjà été ajoutées
 			lineSolutions.forEach((solution) => {
 				if (solutions.some((s) => s.value === solution.value) === false) {
+					solution.isForbidden = line.Interdite ?? false;
+
 					solution.associatedEquations.push(line.toString());
 					solutions.push(solution);
 				} else {
 					// Il existe déjà: on ajoute la formule qui a aussi sa solution associé
 					const existingSolution = solutions.find((s) => s.value === solution.value)!;
+					existingSolution.isForbidden = existingSolution.isForbidden || (line.Interdite ?? false);
 
 					// Vérifie quand même que la solution associé n'existe pas déjà non plus
 					if (existingSolution.associatedEquations.some((s) => s === line.toString()) === false) {
@@ -101,7 +106,9 @@
 		websiteMounted = true;
 	});
 	function updateColumnSigns() {
-		updateGlobalSigns;
+		// Recalcul les solutions grâce à ce hook
+		updateGlobalSigns += 1;
+
 		signs = [];
 
 		if (websiteMounted) {
