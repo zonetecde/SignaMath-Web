@@ -43,8 +43,8 @@
 	$: {
 		// Hook si l'utilisateur change une expression dans le tableau
 		// ou si une nouvelle formule est entrée par le user
-		updateGlobalSigns;
 		formula;
+		updateGlobalSigns;
 
 		solutions = [];
 
@@ -86,6 +86,12 @@
 				solution.integer > Solver.toInteger(borneMin) &&
 				solution.integer < Solver.toInteger(borneMax)
 			);
+		});
+
+		// Update les signes car les solutions ont changé
+		// (ajouté pour bypass le bug de -4x et 4x (-4 et 4) le signe ne changeait pas)
+		setTimeout(() => {
+			updateColumnSigns();
 		});
 	}
 
