@@ -58,63 +58,67 @@
 			</div>
 		{/if}
 
-		{#each inRangeSolutions as _, i}
-			<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
+		{#if signs.length > inRangeSolutions.length}
+			{#each inRangeSolutions as _, i}
+				<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
                 une valeur interdite (flèche continue)-->
-			<div class="w-full h-full relative">
-				<div class="h-full select-none flex justify-center items-center relative">
-					<img
-						src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
-						alt={'Flèche vers le ' + signs[i + 1]}
-						class="w-full transform h-full object-fill"
-					/>
+				<div class="w-full h-full relative">
+					<div class="h-full select-none flex justify-center items-center relative">
+						<img
+							src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
+							alt={'Flèche vers le ' + signs[i + 1]}
+							class="w-full transform h-full object-fill"
+						/>
 
-					<!-- Calcul la valeur de la solution -->
-					{#if signs[i + 1].includes('|') === false}
-						<div
-							class={'absolute left-0 ' +
-								(signs[i + 1].replace('|', '') === '-' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
-						>
-							<p
-								class="w-fit rounded-full bg-white px-3 bg-opacity-50 -translate-x-1/2 text-xs md:text-xs lg:text-xl"
+						<!-- Calcul la valeur de la solution -->
+						{#if signs[i + 1].includes('|') === false}
+							<div
+								class={'absolute left-0 ' +
+									(signs[i + 1].replace('|', '') === '-'
+										? 'top-2 md:top-7'
+										: 'bottom-2 md:bottom-7')}
 							>
-								{MathsExt.roundNumber(
-									Solver.formulaToInt(
-										new ExpressionElement(true, false, formula, ''),
-										variableName,
-										inRangeSolutions[i].value
-									)
-								)}
-							</p>
-						</div>
-					{/if}
+								<p
+									class="w-fit rounded-full bg-white px-3 bg-opacity-50 -translate-x-1/2 text-xs md:text-xs lg:text-xl"
+								>
+									{MathsExt.roundNumber(
+										Solver.formulaToInt(
+											new ExpressionElement(true, false, formula, ''),
+											variableName,
+											inRangeSolutions[i].value
+										)
+									)}
+								</p>
+							</div>
+						{/if}
 
-					<!-- Bordure de valeur interdite -->
-					{#if signs[i + 1].includes('|')}
-						<div class="absolute left-0 w-32 h-full border-l border-black" />
-						<div class="absolute -left-1 w-32 h-full border-l border-black" />
-					{/if}
+						<!-- Bordure de valeur interdite -->
+						{#if signs[i + 1].includes('|')}
+							<div class="absolute left-0 w-32 h-full border-l border-black" />
+							<div class="absolute -left-1 w-32 h-full border-l border-black" />
+						{/if}
 
-					<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
-					{#if i === inRangeSolutions.length - 1 && borneMax !== '+inf'}
-						<div
-							class={'absolute right-0 ' +
-								(signs[0].replace('|', '') === '+' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
-						>
-							<p
-								class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl"
+						<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
+						{#if i === inRangeSolutions.length - 1 && borneMax !== '+inf'}
+							<div
+								class={'absolute right-0 ' +
+									(signs[0].replace('|', '') === '+' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
 							>
-								{MathsExt.roundNumber(
-									Solver.formulaToInt(
-										new ExpressionElement(true, false, formula, ''),
-										variableName,
-										borneMax
-									)
-								)}
-							</p>
-						</div>{/if}
+								<p
+									class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl"
+								>
+									{MathsExt.roundNumber(
+										Solver.formulaToInt(
+											new ExpressionElement(true, false, formula, ''),
+											variableName,
+											borneMax
+										)
+									)}
+								</p>
+							</div>{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+		{/if}
 	</div>
 </div>

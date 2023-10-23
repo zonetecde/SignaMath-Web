@@ -18,7 +18,14 @@ export default class Solver {
 		if (equation.includes(variable) === false) return [];
 
 		// Trouve les solutions de l'équation
-		var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
+		while (equation.startsWith(')')) equation = equation.slice(1);
+
+		console.log(equation);
+		try {
+			var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
+		} catch {
+			return [];
+		}
 
 		// Transforme les solutions en array
 		const solutionsArray = this.stringToArray(rawSolutions.toString());
@@ -140,6 +147,8 @@ export default class Solver {
 			// division par 0 ?
 			if (variableValue.toString() === '0') return NaN;
 		}
+
+		if (x === undefined) return NaN;
 
 		return this.toInteger(x.toString());
 	}

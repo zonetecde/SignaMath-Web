@@ -74,7 +74,11 @@
 	 */
 	const functionChanged = (e: CustomEvent<any>) => {
 		// Remplace la formule par la nouvelle
+		choix = Choix.Tableau;
 		formula = e.detail;
+		setTimeout(() => {
+			choix = Choix.Variation;
+		}, 100);
 	};
 
 	/**
@@ -110,7 +114,9 @@
 
 	// Désigne la formule utilisé dans le tableau (tout sauf le tableau de variation),
 	// Si on veut étudier des variations, on dérive la formule de base
-	$: formuleTableau = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName);
+	$: formuleTableau =
+		choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName)[0];
+	$: deriverTex = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName)[1];
 
 	/**
 	 * Télécharge le tableau en format image
@@ -219,7 +225,7 @@
 							<SaisieFormule
 								{variableName}
 								functionName={functionName + "'"}
-								formula={formuleTableau}
+								formula={deriverTex}
 								isDisabled={true}
 							/>
 						</div>
