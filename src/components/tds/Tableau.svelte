@@ -7,7 +7,7 @@
 	import type Solution from '../../models/solution';
 	import FunctionRow from './FunctionRow.svelte';
 	import Header from './Header.svelte';
-	import Row from './Row.svelte';
+	import Row from './row/Row.svelte';
 	import Variation from './tdv/Variation.svelte';
 
 	export let functionName: string = 'f';
@@ -16,7 +16,6 @@
 	$: {
 		// Lorsque la formule change on reprend les signes selon la formule
 		// et non seulement les rows
-		console.log('t');
 		formula;
 		updateGlobalSigns = 0;
 	}
@@ -27,10 +26,6 @@
 	// La formule de base écrite par l'utilisateur,
 	// qui est différente de celle dérivée
 	export let formulaBase: string = 'x^2 - 4x';
-	$: {
-		formulaBase;
-		console.log('tes');
-	}
 
 	// Permet d'afficher ce que l'utilisateur veut
 	export let choix: Choix = Choix.Variation;
@@ -96,7 +91,6 @@
 
 		// Si on garde la formule entrée de base; sinon on calcul le signe selon les colonnes
 		if (updateGlobalSigns === 0) {
-			// Signe entre bornMin et la première solution
 			// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
 			const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
 			const resultat = Solver.formulaToInt(
@@ -136,7 +130,9 @@
 		} else {
 			// Pour chaque colonne du tableau
 			for (let i = 0; i < inRangeSolutions.length + 1; i++) {
-				let signsDiv = document.querySelectorAll('.column-' + i);
+				const selecteur = '.column-' + i;
+
+				let signsDiv = document.querySelectorAll(selecteur);
 
 				// Calcul du signe
 				let sign = 1;
@@ -163,8 +159,9 @@
 			on:handleBorneMinChanged
 		/>
 
-		{#each lignes as line}
+		{#each lignes as line, index}
 			<Row
+				{index}
 				expression={line}
 				{inRangeSolutions}
 				{variableName}

@@ -60,6 +60,7 @@ export default class Sheller {
 		expressions.map((x) => {
 			if (x.Expression.startsWith('+')) x.Expression = x.Expression.slice(1);
 		});
+
 		return expressions;
 	}
 	static DecouperExpression(

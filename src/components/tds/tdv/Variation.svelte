@@ -19,12 +19,6 @@
 	export let borneMax: string = '+inf';
 	export let borneMin: string = '-inf';
 
-	interface Cellule {
-		value: number;
-		sign: string;
-		position: 'borneMax' | 'borneMin' | 'centre';
-	}
-
 	// Contient les résultats des calculs de la
 	// formule entrée par l'utilisateur en remplçant x par les solutions (= valeurs du tableau de variations
 	// aux extrermités des flèches)
