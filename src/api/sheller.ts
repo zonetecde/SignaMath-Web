@@ -69,7 +69,7 @@ export default class Sheller {
 	): ExpressionElement[] {
 		if (estDeuxieme) {
 			nouvelleFonction = this.SupprimerParentheses(nouvelleFonction);
-		} else console.log(nouvelleFonction);
+		}
 
 		let lignes: ExpressionElement[] = [];
 		let compteurParenthesesOuvertes = 0;
