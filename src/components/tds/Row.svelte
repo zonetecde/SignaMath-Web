@@ -4,13 +4,20 @@
 	import type Solution from '../../models/solution';
 	import SaisieMath from '../SaisieMath.svelte';
 	import Solver from '../../api/solver';
+	import { createEventDispatcher } from 'svelte';
 
 	export let expression: ExpressionElement;
 	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
 
+	const dispatcher = createEventDispatcher();
+
 	const expressionChanged = (e: CustomEvent<any>) => {
 		expression.Expression = e.detail;
+
+		// Trigger le recalcul des signes de la colonne (ceux de la row sont fait automatiquement)
+		// juste après que les signes de cette row ont été recalculés
+		setTimeout(() => dispatcher('updateColumnsSigns'), 10);
 	};
 
 	// Tableau contenant les signes des solutions, par ordre des colonnes du tableau
@@ -91,13 +98,20 @@
 
 	<div
 		class={'w-full flex flex-row text-md text-center ' +
-			(signs[0].length > 3 ? '' /* Message d'intervalle de définition */ : 'lg:text-3xl')}
+			(signs.some((x) => x.length > 3)
+				? '' /* Message d'intervalle de définition */
+				: 'lg:text-3xl')}
 	>
-		<div class="w-full select-none flex justify-center items-center">{signs[0]}</div>
+		<div class={'w-full select-none flex justify-center items-center ' + 'column-0'}>
+			{signs[0]}
+		</div>
 
 		{#each inRangeSolutions as _, i}
-			<div class="w-full h-full relative">
-				<div class="h-full border-l border-black select-none flex justify-center items-center">
+			<div class={'w-full h-full relative '}>
+				<div
+					class={'h-full border-l border-black select-none flex justify-center items-center ' +
+						('column-' + (i + 1))}
+				>
 					{signs[i + 1]}
 				</div>
 

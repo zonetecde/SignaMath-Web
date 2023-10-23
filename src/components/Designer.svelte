@@ -151,9 +151,9 @@
 		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:overflow-y-auto md:pt-5 ' +
 			(toggleConfigVisibility ? 'visible' : 'hidden')}
 	>
-		<form class="px-3 flex flex-col">
-			<fieldset id="group">
-				<div>
+		<form class="px-3 flex flex-col w-full">
+			<fieldset id="group" class="w-full">
+				<div class="w-full">
 					<div>
 						<input
 							type="radio"
@@ -189,19 +189,21 @@
 						>
 					</div>
 
-					<SaisieFonction
-						on:handleFunctionNameChanged={functionNameChanged}
-						on:handleVariableNameChanged={variableNameChanged}
-						on:handleFunctionChanged={functionChanged}
-						{variableName}
-						{functionName}
-						{formula}
-					/>
+					<div class="md:max-w-[270px]">
+						<SaisieFonction
+							on:handleFunctionNameChanged={functionNameChanged}
+							on:handleVariableNameChanged={variableNameChanged}
+							on:handleFunctionChanged={functionChanged}
+							{variableName}
+							{functionName}
+							{formula}
+						/>
+					</div>
 
 					{#if formula !== MathsExt.Simplifier(formula)}
 						<div class="mt-2 w-full flex justify-end">
 							<button
-								class=" px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
+								class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
 								on:click={() => {
 									formula = MathsExt.Simplifier(formula);
 								}}>Simplifier</button
@@ -209,7 +211,7 @@
 						</div>
 					{/if}
 					{#if choix === Choix.Variation}
-						<div class="opacity-70 mt-3">
+						<div class="opacity-70 mt-3 md:max-w-[280px]">
 							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
 							<SaisieFonction
 								{variableName}

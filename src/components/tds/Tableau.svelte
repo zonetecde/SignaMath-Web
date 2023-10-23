@@ -24,6 +24,9 @@
 	// Permet d'afficher ce que l'utilisateur veut
 	export let choix: Choix = Choix.Variation;
 
+	// Hook pour recalculer les signes d'une colonne après qu'une expression a été changé
+	let updateGlobalSigns: number = 0;
+
 	// Shell la fonction et la décompose en plusieurs parties à chaque fois que la formule est modifié
 	$: lignes = Sheller.ShellFunction(formula);
 
@@ -31,6 +34,9 @@
 
 	// Calcul des solutions
 	$: {
+		// Hook si l'utilisateur change une expression dans le tableau
+		updateGlobalSigns;
+
 		solutions = [];
 		lignes.forEach((line) => {
 			let lineSolutions = Solver.solveEquation(line.toString(), variableName);
@@ -58,7 +64,7 @@
 		});
 	}
 
-	// Prend uniquement les solutions dans l'interval demandé
+	// Prend uniquement les solutions dans l'intervalle demandé
 	let inRangeSolutions: Solution[] = [];
 	$: {
 		solutions;
@@ -73,43 +79,66 @@
 	// Tableau contenant le signe final de la fonction
 	let signs: string[] = [];
 	$: {
+		updateGlobalSigns;
 		signs = [];
 
-		// Signe entre bornMin et la première solution
-		// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
-		const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
-		const resultat = Solver.formulaToInt(
-			new ExpressionElement(true, false, formula, ''),
-			variableName,
-			compareTo
-		);
-
-		signs.push(
-			isNaN(resultat)
-				? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
-				: resultat < 0
-				? '-'
-				: '+'
-		);
-
-		// Signe entre chaque autres solution
-		inRangeSolutions.forEach((solution) => {
-			let signe = '';
-
-			// Si c'est une valeur interdite on l'écrit dans le signe
-			// le component FunctionRow va ensuite l'interpreter pour y mettre une double barre
-			if (lignes.some((x) => x.Interdite && solution.associatedEquations.includes(x.Expression))) {
-				signe += '|';
-			}
-
+		// Si on garde la formule entrée de base; sinon on calcul le signe selon les colonnes
+		if (updateGlobalSigns === 0) {
+			// Signe entre bornMin et la première solution
+			// s'il n'y a pas de solution on prend 1 - pas 0 pour éviter les problèmes de division par 0
+			const compareTo = inRangeSolutions.length > 0 ? inRangeSolutions[0].integer - 0.0000001 : 1;
 			const resultat = Solver.formulaToInt(
 				new ExpressionElement(true, false, formula, ''),
 				variableName,
-				solution.integer + 0.0000001
+				compareTo
 			);
 
-			signs.push(resultat < 0 ? signe + '-' : signe + '+');
-		});
+			signs.push(
+				isNaN(resultat)
+					? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+					: resultat < 0
+					? '-'
+					: '+'
+			);
+
+			// Signe entre chaque autres solution
+			inRangeSolutions.forEach((solution) => {
+				let signe = '';
+
+				// Si c'est une valeur interdite on l'écrit dans le signe
+				// le component FunctionRow va ensuite l'interpreter pour y mettre une double barre
+				if (
+					lignes.some((x) => x.Interdite && solution.associatedEquations.includes(x.Expression))
+				) {
+					signe += '|';
+				}
+
+				const resultat = Solver.formulaToInt(
+					new ExpressionElement(true, false, formula, ''),
+					variableName,
+					solution.integer + 0.0000001
+				);
+
+				signs.push(resultat < 0 ? signe + '-' : signe + '+');
+			});
+		} else {
+			console.log('t');
+			// Pour chaque colonne du tableau
+			for (let i = 0; i < inRangeSolutions.length + 1; i++) {
+				let signsDiv = document.querySelectorAll('.column-' + i);
+
+				// Calcul du signe
+				let sign = 1;
+
+				Array.from(signsDiv).forEach((signDiv) => {
+					console.log(signDiv.innerHTML);
+					sign *= signDiv.innerHTML.trim() === '+' ? 1 : -1;
+				});
+
+				console.log(sign);
+				signs.push(sign === 1 ? '+' : '-');
+			}
+		}
 	}
 </script>
 
@@ -126,7 +155,12 @@
 		/>
 
 		{#each lignes as line}
-			<Row expression={line} {inRangeSolutions} {variableName} />
+			<Row
+				expression={line}
+				{inRangeSolutions}
+				{variableName}
+				on:updateColumnsSigns={() => (updateGlobalSigns += 1)}
+			/>
 		{/each}
 
 		<FunctionRow

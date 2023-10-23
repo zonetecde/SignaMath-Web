@@ -27,7 +27,9 @@
 
 	<div
 		class={'w-full flex flex-row text-md text-center ' +
-			(signs[0].length > 3 ? '' /* Message d'intervalle de définition */ : 'lg:text-3xl')}
+			(signs.some((x) => x.length > 3)
+				? '' /* Message d'intervalle de définition */
+				: 'lg:text-3xl')}
 	>
 		<div class="w-full select-none flex justify-center items-center">{signs[0]}</div>
 
