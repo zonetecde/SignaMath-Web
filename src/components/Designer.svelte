@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { afterUpdate, createEventDispatcher, onDestroy, onMount } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import MathsExt from '../extensions/mathsExt';
 	import Choix from '../models/choix';
-	import SaisieFonction from './SaisieFormule.svelte';
+	import SaisieFormule from './saisie/SaisieFormule.svelte';
 	import TableauDeSigne from './tds/Tableau.svelte';
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
@@ -25,6 +25,9 @@
 
 	// Taille du tableau
 	let scale: number = 1;
+
+	// Utile pour cacher certaines icones
+	export let isInfoShown: boolean = false;
 
 	/**
 	 * Trigger lorsque la taille de la fenêtre change
@@ -154,7 +157,7 @@
 		<form class="px-3 flex flex-col w-full">
 			<fieldset id="group" class="w-full">
 				<div class="w-full">
-					<div>
+					<div class="mt-3">
 						<input
 							type="radio"
 							id="variations"
@@ -190,7 +193,7 @@
 					</div>
 
 					<div class="md:max-w-[270px]">
-						<SaisieFonction
+						<SaisieFormule
 							on:handleFunctionNameChanged={functionNameChanged}
 							on:handleVariableNameChanged={variableNameChanged}
 							on:handleFunctionChanged={functionChanged}
@@ -213,7 +216,7 @@
 					{#if choix === Choix.Variation}
 						<div class="opacity-70 mt-3 md:max-w-[280px]">
 							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
-							<SaisieFonction
+							<SaisieFormule
 								{variableName}
 								functionName={functionName + "'"}
 								formula={formuleTableau}
@@ -225,7 +228,7 @@
 			</fieldset>
 		</form>
 
-		<label class="mx-5 mt-0 md:mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
+		<label class="mx-5 mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
 
 		<input type="range" class="mx-5" bind:value={scale} min="1" max="3" step="0.05" id="scale" />
 
@@ -257,31 +260,33 @@
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->
 	<!-- Bouton pour toggle la visibilité de la configuration -->
-	<div
-		class="absolute right-1 mt-1 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
-		on:mousedown={() => {
-			toggleConfigVisibility = !toggleConfigVisibility;
-		}}
-	>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke-width="1.5"
-			stroke="black"
-			class="w-8 h-8"
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d={toggleConfigVisibility
-					? 'M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-					: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75'}
-			/>
-		</svg>
-		<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
-	</div>
 
+	{#if !isInfoShown}
+		<div
+			class="absolute right-1 mt-1 visible md:hidden cursor-pointer opacity-60 z-50 flex flex-col items-center justify-center"
+			on:mousedown={() => {
+				toggleConfigVisibility = !toggleConfigVisibility;
+			}}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="black"
+				class="w-8 h-8"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d={toggleConfigVisibility
+						? 'M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+						: 'M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75'}
+				/>
+			</svg>
+			<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
+		</div>
+	{/if}
 	<div
 		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative"
 	>
@@ -306,7 +311,7 @@
 
 		{#if toggleConfigVisibility === false}
 			<div class="w-8/12 absolute -top-1.5 self-center">
-				<SaisieFonction
+				<SaisieFormule
 					on:handleFunctionNameChanged={functionNameChanged}
 					on:handleVariableNameChanged={variableNameChanged}
 					on:handleFunctionChanged={functionChanged}
@@ -316,24 +321,27 @@
 				/>
 			</div>
 		{/if}
-		<!-- svelte-ignore a11y-click-events-have-key-events -->
-		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			stroke-width="1.5"
-			stroke="darkblue"
-			class={'w-8 h-8 absolute top-1.5 mt-1 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer z-50 '}
-			on:click={() => {
-				dispatch('showInfo');
-			}}
-		>
-			<path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-			/>
-		</svg>
+
+		{#if !isInfoShown}
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y-no-static-element-interactions -->
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="darkblue"
+				class={'w-8 h-8 absolute top-1.5 mt-1 left-2 md:left-auto md:right-2 opacity-50 cursor-pointer z-50 '}
+				on:click={() => {
+					dispatch('showInfo');
+				}}
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+				/>
+			</svg>
+		{/if}
 	</div>
 </div>

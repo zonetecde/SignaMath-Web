@@ -1,13 +1,11 @@
 <script lang="ts">
-	import VariationCalculatedValue from './CalculatedValue.svelte';
-
-	import Solver from '../../../api/solver';
-	import MathsExt from '../../../extensions/mathsExt';
-	import ExpressionElement from '../../../models/expression';
-	import type Solution from '../../../models/solution';
-	import SaisieFonction from '../../saisie/SaisieFonction.svelte';
-	import ArrowDown from '../assets/arrow_down.png';
-	import ArrowUp from '../assets/arrow_up.png';
+	import Solver from '../../api/solver';
+	import MathsExt from '../../extensions/mathsExt';
+	import ExpressionElement from '../../models/expression';
+	import type Solution from '../../models/solution';
+	import SaisieFonction from '../SaisieFonction.svelte';
+	import ArrowDown from './assets/arrow_down.png';
+	import ArrowUp from './assets/arrow_up.png';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -18,47 +16,6 @@
 
 	export let borneMax: string = '+inf';
 	export let borneMin: string = '-inf';
-
-	// Contient les résultats des calculs de la
-	// formule entrée par l'utilisateur en remplçant x par les solutions (= valeurs du tableau de variations
-	// aux extrermités des flèches)
-	// {[valeur de x, resultat]}
-	let values: Record<string, number> = {};
-	$: {
-		if (inRangeSolutions) {
-			values = {};
-			for (let i = -1; i < inRangeSolutions.length + 1; i++) {
-				// Pour i = -1, borneMin
-				// pour i > -1 et < nbre de solutions, la solution
-				// pour i > nbre de solutions, borneMax
-				let result;
-
-				switch (i) {
-					case -1:
-						result = borneMin;
-						break;
-					case inRangeSolutions.length:
-						result = borneMax;
-						break;
-					default:
-						result = inRangeSolutions[i].value;
-						break;
-				}
-
-				if (result !== '-inf' && result !== '+inf') {
-					// Remplace x par 'result', calcul
-					// et met le résultat dans le dictionnaire
-					values[result] = MathsExt.roundNumber(
-						Solver.formulaToInt(
-							new ExpressionElement(true, false, formula, ''),
-							variableName,
-							result
-						)
-					);
-				}
-			}
-		}
-	}
 </script>
 
 <div class="h-20 lg:h-52 w-full bg-white border-b border-x border-black flex flex-row relative">
@@ -85,14 +42,23 @@
 
 		<!-- Si la borneMin !== -inf, alors on calcul sa solution -->
 		{#if borneMin !== '-inf'}
-			<VariationCalculatedValue
-				sign={signs[0] === '+' ? '-' : '+'}
-				value={values[borneMin]}
-				position="borneMin"
-			/>
+			<div
+				class={'absolute left-0 ' +
+					(signs[0].replace('|', '') === '-' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
+			>
+				<p class="w-fit bg-white rounded-full px-3 bg-opacity-50 text-xs md:text-xs lg:text-xl">
+					{MathsExt.roundNumber(
+						Solver.formulaToInt(
+							new ExpressionElement(true, false, formula, ''),
+							variableName,
+							borneMin
+						)
+					)}
+				</p>
+			</div>
 		{/if}
 
-		{#each inRangeSolutions as solution, i}
+		{#each inRangeSolutions as _, i}
 			<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
                 une valeur interdite (flèche continue)-->
 			<div class="w-full h-full relative">
@@ -105,7 +71,22 @@
 
 					<!-- Calcul la valeur de la solution -->
 					{#if signs[i + 1].includes('|') === false}
-						<VariationCalculatedValue sign={signs[i]} value={values[solution.value]} />
+						<div
+							class={'absolute left-0 ' +
+								(signs[i + 1].replace('|', '') === '-' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
+						>
+							<p
+								class="w-fit rounded-full bg-white px-3 bg-opacity-50 -translate-x-1/2 text-xs md:text-xs lg:text-xl"
+							>
+								{MathsExt.roundNumber(
+									Solver.formulaToInt(
+										new ExpressionElement(true, false, formula, ''),
+										variableName,
+										inRangeSolutions[i].value
+									)
+								)}
+							</p>
+						</div>
 					{/if}
 
 					<!-- Bordure de valeur interdite -->
@@ -115,13 +96,23 @@
 					{/if}
 
 					<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
-					{#if borneMax !== '+inf' && i === inRangeSolutions.length - 1}
-						<VariationCalculatedValue
-							sign={signs[signs.length - 1]}
-							value={values[borneMax]}
-							position="borneMax"
-						/>
-					{/if}
+					{#if i === inRangeSolutions.length - 1 && borneMax !== '+inf'}
+						<div
+							class={'absolute right-0 ' +
+								(signs[0].replace('|', '') === '+' ? 'top-2 md:top-7' : 'bottom-2 md:bottom-7')}
+						>
+							<p
+								class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl"
+							>
+								{MathsExt.roundNumber(
+									Solver.formulaToInt(
+										new ExpressionElement(true, false, formula, ''),
+										variableName,
+										borneMax
+									)
+								)}
+							</p>
+						</div>{/if}
 				</div>
 			</div>
 		{/each}

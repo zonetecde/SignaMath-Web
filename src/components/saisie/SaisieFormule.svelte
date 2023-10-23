@@ -9,7 +9,7 @@
 	export let isDisabled: boolean = false;
 </script>
 
-<div class="mt-3 flex flex-row items-center rounded-lg bg-white">
+<div class="w-full mt-3 flex flex-row items-center rounded-lg bg-white overflow-auto">
 	<SaisieFonction
 		{functionName}
 		{variableName}

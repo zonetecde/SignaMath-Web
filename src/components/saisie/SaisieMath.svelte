@@ -62,7 +62,7 @@
 	 * mis par défaut
 	 */
 	onMount(() => {
-		dispatch(eventName, value);
+		dispatch(eventName, value.trim());
 	});
 
 	/**
@@ -91,7 +91,7 @@
 
 {#if isEditing}
 	<textarea
-		class={`bg-transparent text-xl mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${classesInput} ${
+		class={`bg-transparent text-xs md:text-xs lg:text-lg mt-7 outline-none placeholder:text-opacity-50 resize-none ${classes} ${classesInput} ${
 			!isFormulaValid ? 'text-red-500' : ''
 		}`}
 		spellcheck="false"
@@ -127,13 +127,8 @@
 	/>
 {:else}
 	<div
-		class={`  pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
-			(isDisabled ? 'cursor-default ' : 'cursor-text hover:font-bold hover:text-blue-700 ') +
-			(value.length > 10 && value.length < 15
-				? 'lg:text-lg '
-				: value.length > 15
-				? 'lg:text-xs '
-				: '')}
+		class={`pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
+			(isDisabled ? 'cursor-default ' : 'cursor-text hover:font-bold hover:text-blue-700 ')}
 		on:mousedown={() => {
 			if (!isDisabled) {
 				isEditing = true;
