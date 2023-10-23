@@ -20,7 +20,6 @@ export default class Solver {
 		// Trouve les solutions de l'équation
 		while (equation.startsWith(')')) equation = equation.slice(1);
 
-		console.log(equation);
 		try {
 			var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
 		} catch {
