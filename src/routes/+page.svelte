@@ -52,7 +52,7 @@
 		<div
 			class="flex justify-center items-center h-full"
 			id="bg"
-			on:click|preventDefault={(e) => {
+			on:click={(e) => {
 				if (e.target.id === 'bg') toggleShowInfo();
 			}}
 		>
@@ -89,8 +89,9 @@
 							>le repo GitHub</a
 						>, ou télécharger
 						<a
-							href="https://github.com/zonetecde/signamath/releases"
+							href="https://github.com/zonetecde/signamath-web/releases/latest/download/signamath.exe"
 							target="_blank"
+							download
 							class="underline">la version logicielle</a
 						>
 						du site.

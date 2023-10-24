@@ -23,7 +23,7 @@
 			},
 			"externalBin": [],
 			"icon": ["icons/128x128.png", "icons/icon.ico"],
-			"identifier": "com.tauri.dev",
+			"identifier": "com.signamath.online",
 			"longDescription": "",
 			"macOS": {
 				"entitlements": null,
