@@ -4,35 +4,39 @@ import * as math from 'mathjs';
 
 export default class Sheller {
 	static Sheller(formula: string): ExpressionElement[] {
+		// Transforme la formule en 'node' de mathjs
 		const node = math.parse(formula);
 
+		// Si la formule ne contient pas de fraction, on va utiliser
+		// alors l'ancienne méthode de shell.
 		if (formula.includes('/') === false) {
-			console.log('test');
-			const oldMethod = this.ShellFunction(formula);
+			const expressions_oldMethod = this.ShellFunction(formula);
 			var expressions: ExpressionElement[] = [];
-			oldMethod.forEach((element) => {
+
+			// Convertie l'objet ExpressionElement2 en ExpressionElement
+			expressions_oldMethod.forEach((element) => {
 				expressions.push(new ExpressionElement(false, element.toString()));
 			});
+
 			return expressions;
 		} else if (formula.count('/') >= 2 && formula.length > 40) {
-			// trop gros: une seul colonne
+			// Si la formule est beaucoup trop grande, on ne la split pas, on retourne que le gros bloc
 			return [new ExpressionElement(false, formula)];
 		}
 
-		console.log(formula);
+		// Sinon, pour toutes les autres formules du type x/y
 		const nodes = this.DoNodeThing(node);
 
-		console.log(nodes);
 		var expressions: ExpressionElement[] = [];
 
 		nodes.forEach((node) => {
-			// Prend uniquement les nodes qui ne sont pas des arrays
-			// = les expressions principales
+			// Prend uniquement les nodes qui ne sont pas des arrays (les autres étant des sous-parties d'expression)
+			// = les "expressions principales" (donc dans x/y c'est le x puis le y)
 			if (node.Expression) {
-				console.log(node);
-
-				// utliise l'ancienne méthode
+				// utliise l'ancienne méthode pour split l'expression principal
 				const elts: ExpressionElement2[] = this.ShellFunction(node.Expression);
+
+				// Si l'expression est dénominateur dans x/y alors tout les éléments ici sont au dénominateur aussi (= on est sur y)
 				if (node.Interdite) {
 					elts.forEach((x) => {
 						x.Interdite = true;
@@ -40,6 +44,7 @@ export default class Sheller {
 				}
 
 				elts.forEach((elt) => {
+					// Prevent des bugs dans les expressions
 					if (elt.Expression.count(')') === elt.Expression.count('(')) {
 						if (elt.Expression.startsWith('/')) {
 							expressions.push(new ExpressionElement(true, elt.toString().slice(1)));
@@ -53,17 +58,21 @@ export default class Sheller {
 			}
 		});
 
-		console.log(expressions);
 		return expressions;
 	}
 
+	/**
+	 * Récupère x et y d'une formule du type x/y
+	 * @param node Le node de la formule mathématiques entière
+	 * @param forbidden Pour la récursive
+	 * @returns Les expressions x et y (et autres sous-élément)
+	 */
 	static DoNodeThing(node: any, forbidden = false): ExpressionElement[] {
-		console.log(node);
 		if (math.typeOf(node) === 'OperatorNode' && node.op === '/') {
 			const numeratorElements: ExpressionElement[] = this.DoNodeThing(node.args[0], forbidden);
+
 			// tout les dénomateurs sont des valeurs interdites donc true
 			const denominatorElements: ExpressionElement[] = this.DoNodeThing(node.args[1], true);
-
 			return numeratorElements.concat(denominatorElements);
 		} else if (math.typeOf(node) === 'ParenthesisNode') {
 			return this.DoNodeThing(node.content, forbidden);
@@ -71,7 +80,6 @@ export default class Sheller {
 			math.typeOf(node) === 'OperatorNode' &&
 			(node.op === '*' || node.op === '+' || node.op === '^' || node.op === '-')
 		) {
-			console.log(node);
 			const argsElements: ExpressionElement[] = node.args.map((arg: any) =>
 				this.DoNodeThing(arg, forbidden)
 			);
@@ -127,7 +135,6 @@ export default class Sheller {
 			let decoupe = this.DecouperExpression(expression, true);
 			if (decoupe.length > 1) {
 				expressions.splice(i, 1);
-				console.log(expressions);
 				expressions.push(
 					...decoupe.map((x) => new ExpressionElement2(null, false, x.Expression, ''))
 				);
@@ -141,11 +148,6 @@ export default class Sheller {
 		expressions.map((x) => {
 			if (x.Expression.startsWith('+')) x.Expression = x.Expression.slice(1);
 		});
-
-		// return [
-		// 	new ExpressionElement(false, false, '2x^2-4x+2', ''),
-		// 	new ExpressionElement(false, true, '3x+4', '')
-		// ];
 
 		return expressions;
 	}
