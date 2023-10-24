@@ -77,7 +77,8 @@
 		}
 
 		return isNaN(resultat)
-			? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			//? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			? "Ø"
 			: resultat < 0
 			? '-'
 			: '+';

@@ -58,7 +58,7 @@ export default class MathsExt {
 			// on la simplifiera nous même après
 			let derive = math
 				.derivative(math.parse(formula).toString(), variableName, {
-					simplify: !formula.includes('/')
+					simplify: !formula.includes('/') && !formula.includes('sqrt')
 				})
 				.toString();
 

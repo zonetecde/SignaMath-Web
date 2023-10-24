@@ -149,7 +149,7 @@
 	 */
 	function createNewRow(e: any): void {
 		const rowIndex = e.detail.index;
-		const item = new ExpressionElement(e.detail.isForbidden, 'x');
+		const item = new ExpressionElement(e.detail.isForbidden, variableName);
 		lignes.splice(rowIndex, 0, item);
 
 		lignes = lignes; // trigger le {#each} et le calcul des solutions

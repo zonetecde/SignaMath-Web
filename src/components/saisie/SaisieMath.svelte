@@ -83,7 +83,14 @@
 
 			// Pas la peine d'envoyer la même saisie deux fois
 			if (hasFormulaInputChanged) {
-				dispatch(eventName, value);
+				dispatch(
+					eventName,
+					value
+						.replaceAll('()', '')
+						.replaceAll('Cos', 'cos')
+						.replaceAll('Sin', 'sin')
+						.replaceAll('Tan', 'tan')
+				);
 			}
 		} else if (forbidden.includes(value.trim())) {
 			switch (value.trim()) {

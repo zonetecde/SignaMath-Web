@@ -21,6 +21,7 @@
 			eventName="handleVariableNameChanged"
 			on:handleVariableNameChanged
 			classes="text-center "
+			onlyAllowLetter
 		/>
 	</section>
 
