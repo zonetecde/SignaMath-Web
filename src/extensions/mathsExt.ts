@@ -12,13 +12,43 @@ export default class MathsExt {
 	}
 
 	/**
+	 * Permet de savoir si un str est un nombre
+	 * @param str Le str à analyser
+	 * @returns Est-ce que le str est un nbre ?
+	 */
+	static isNumeric(str: string) {
+		return /^\d+$/.test(str);
+	}
+
+	/**
 	 * Dérive est simplifie une expression mathématiques
 	 * @param formula La formule à dériver
 	 * @param variableName Le nom de la variable dans la formule
 	 * @returns La dérivée
 	 */
 	static Deriver(formula: string, variableName: string): string {
-		// Si on a un x comme ceci
+		// Si on a un x comme ceci : x4 xYYYY ou Y un integer
+		// Alors on doit inverser YYYYY avec x
+		let previousIsX: boolean = false;
+		for (let i = 0; i < formula.length; i++) {
+			const element = formula[i];
+			if (previousIsX && this.isNumeric(element)) {
+				// on est dans le cadre de xY
+				let z = i + 1;
+				let integer = formula[i];
+				while (this.isNumeric(formula[z])) {
+					integer += formula[z];
+					z++;
+				}
+				// on inverse YYYYY et x
+				formula = formula.replace(variableName + integer, integer + variableName);
+				previousIsX = false;
+			}
+
+			if (element === variableName) {
+				previousIsX = true;
+			}
+		}
 
 		// Calcul la dérivée
 		// Si c'est une fonction normal (= sans fraction) on la simplifie
