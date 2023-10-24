@@ -77,8 +77,8 @@
 		}
 
 		return isNaN(resultat)
-			//? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
-			? "Ø"
+			? //? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			  'Ø'
 			: resultat < 0
 			? '-'
 			: '+';
@@ -110,7 +110,7 @@
 	<!-- Indicateur si c'est une ligne de valeur interdite -->
 	<div class="absolute top-0 bottom-0 -left-28 collapse md:visible">
 		<div class="flex h-full items-center justify-center">
-			<p class="text-sm text-opacity-50 text-black italic">
+			<p class="text-sm text-opacity-50 text-black italic select-none">
 				{expression.Interdite ? 'valeur interdite' : ''}
 			</p>
 		</div>

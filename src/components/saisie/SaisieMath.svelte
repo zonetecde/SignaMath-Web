@@ -83,6 +83,15 @@
 
 			// Pas la peine d'envoyer la même saisie deux fois
 			if (hasFormulaInputChanged) {
+				// Analytic
+				fetch(
+					'https://www.rayanestaszewski.fr/api/software/software-being-used?softwareName=SignaMath Web&detail=' +
+						value,
+					{
+						method: 'POST'
+					}
+				);
+
 				dispatch(
 					eventName,
 					value
