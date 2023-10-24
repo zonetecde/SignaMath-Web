@@ -56,7 +56,7 @@
 					);
 
 					if (isNaN(resultat) === false) values[result] = resultat;
-					else {
+					else if (inRangeSolutions[i]) {
 						// Valeur interdite
 						inRangeSolutions[i].isForbidden = true;
 					}
