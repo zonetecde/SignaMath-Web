@@ -25,8 +25,8 @@
 		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 	</svg> -->
 	<div
-		class={'flex flex-row border-black ' +
-			(isTop ? 'border-b rounded-br-lg' : 'border-t rounded-tr-lg')}
+		class={'flex flex-row border-black md:text-base text-xs md:my-0 ' +
+			(isTop ? 'border-b rounded-br-lg -mt-2' : 'border-t rounded-tr-lg -mb-2')}
 	>
 		<button class="px-3 py-1 bg-green-200 cursor-pointer" on:click={() => handleCreateNewRow(false)}
 			>Ajouter une ligne</button

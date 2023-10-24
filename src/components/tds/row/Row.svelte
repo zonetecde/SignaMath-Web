@@ -128,7 +128,7 @@
 
 	{#if showAddsButton}
 		<button
-			class="absolute right-1 bottom-1 text-base bg-red-200 px-4 py-0.5 rounded-md hover:bg-red-300 duration-100"
+			class="absolute right-1 bottom-1 text-xs md:text-base bg-red-200 px-4 py-0.5 rounded-md hover:bg-red-300 duration-100"
 			on:click={handleDeleteLine}>Supprimer</button
 		>
 

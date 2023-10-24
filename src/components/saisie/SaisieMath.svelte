@@ -22,14 +22,6 @@
 	export let isFormula = false;
 	// Valeur interdite
 	export let forbidden = '';
-	// Est-ce que on bring le focus après l'ajout ? (= on est directement dans la zone de saisie)
-	export let bringFocusAfterInit: boolean = false;
-	onMount(() => {
-		console.log(bringFocusAfterInit);
-		if (bringFocusAfterInit) {
-			handleUserClickOnFormula();
-		}
-	});
 
 	// Est-ce que l'utilisateur est en train d'éditer la formule ? (bring focus when added)
 	let isEditing: boolean;
@@ -96,7 +88,9 @@
 		// dans l'input
 	};
 
-	function handleUserClickOnFormula() {
+	function handleUserClickOnFormula(
+		event: MouseEvent & { currentTarget: EventTarget & HTMLDivElement }
+	) {
 		if (!isDisabled) {
 			isEditing = true;
 			// reset la variable hasFormulaInputChanged
