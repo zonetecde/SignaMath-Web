@@ -25,8 +25,6 @@
 		classes="w-full pl-1 rounded-r-lg"
 		value={formula}
 		maxLength={999}
-		isFormula={true}
-		{variableName}
 		{isDisabled}
 	/>
 </div>

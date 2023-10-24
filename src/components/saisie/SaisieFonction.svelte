@@ -15,6 +15,7 @@
 	value={functionName}
 	maxLength={3}
 	{isDisabled}
+	onlyAllowLetter
 />
 <SaisieMath classes="pl-1" classesInput="w-3" value={'('} maxLength={1} isDisabled />
 <SaisieMath
@@ -23,9 +24,10 @@
 	classes="pl-0.5"
 	classesInput="w-4"
 	value={variableName}
-	forbidden="e"
+	forbidden={['e', 'i']}
 	maxLength={1}
 	{isDisabled}
+	onlyAllowLetter
 />
 
 <SaisieMath classesInput="w-7" classes="pr-1" value={')'} maxLength={1} isDisabled />
