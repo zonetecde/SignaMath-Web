@@ -89,12 +89,13 @@
 							>le repo GitHub</a
 						>, ou télécharger
 						<a
-							href="https://github.com/zonetecde/signamath-web/releases/latest/download/signamath.exe"
+							href="https://github.com/zonetecde/signamath/"
 							target="_blank"
 							download
-							class="underline">la version logicielle</a
-						>
-						du site.
+							class="underline"
+							>la version logicielle
+						</a>
+						(dépréciée) du site.
 						<br /><br />
 					</p>
 				{:else}
