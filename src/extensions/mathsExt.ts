@@ -64,13 +64,31 @@ export default class MathsExt {
 		// Alors on simplifie uniquement le numérateur
 		if (derive.count('/') === 1) {
 			// Récupère le numérateur
-			const num = derive.split('/')[0];
+			let num = derive.split('/')[0].replaceAll(' ', '');
+			let croppedNum = '';
+
+			// entre ... )" / et la prenthèse ouvrante si le numérateur est entre parenthèses
+			// récupère ici le numérateur à l'aide des parenthèses qui l'englobe
+			if (num[num.length - 1] === ')') {
+				let offset = 0;
+				for (let i = num.length - 1; i > 0; i--) {
+					const element = num[i];
+					if (element === ')') offset++;
+					else if (offset === 1 && element === '(') {
+						croppedNum = num.substring(i, num.length);
+						break;
+					} else if (element === '(') offset--;
+				}
+			}
+
 			const denominateur = derive.split('/')[1];
-			let num_simplifier: string = num;
+
+			let num_simplifier: string = croppedNum;
 			try {
-				num_simplifier = nerdamer('simplify(' + num + ')').toString();
+				num_simplifier = nerdamer('simplify(' + croppedNum + ')').toString();
+				console.log(num_simplifier);
 			} catch {}
-			return `(${num_simplifier})/${denominateur}`;
+			return `(${num.replace(croppedNum, num_simplifier)})/${denominateur}`;
 		} else {
 			return derive;
 		}
