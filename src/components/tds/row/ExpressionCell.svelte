@@ -5,6 +5,7 @@
 	export let expression: ExpressionElement;
 </script>
 
+<!-- TODO: Problème en vue mobile (clique sur une row, barre verticale non complète) -->
 <section
 	class="w-2/12 overflow-x-auto overflow-y-hidden -my-2.5 border-r border-black flex items-center justify-center text-lg lg:text-xl"
 >

@@ -7,7 +7,6 @@
 	const dispatcher = createEventDispatcher();
 
 	function handleCreateNewRow(isForbidden: boolean) {
-		console.log(index);
 		dispatcher('createNewRow', { index: index, isForbidden: isForbidden });
 	}
 </script>
@@ -25,15 +24,15 @@
 		<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 	</svg> -->
 	<div
-		class={'flex flex-row border-black md:text-base text-xs md:my-0 ' +
-			(isTop ? 'border-b rounded-br-lg -mt-2' : 'border-t rounded-tr-lg -mb-2')}
+		class={'flex flex-row border-black md:text-base z-50 text-xs md:my-0 ' +
+			(isTop ? 'border-b rounded-br-md -mt-2' : 'border-t rounded-tr-md -mb-2')}
 	>
 		<button class="px-3 py-1 bg-green-200 cursor-pointer" on:click={() => handleCreateNewRow(false)}
 			>Ajouter une ligne</button
 		>
 		<button
-			class={'px-3 py-1 bg-red-200 border-r cursor-pointer border-black ' +
-				(isTop ? 'rounded-br-lg' : 'rounded-tr-lg')}
+			class={'px-3 py-1 bg-red-200 border-r cursor-pointer z-50 border-black ' +
+				(isTop ? 'rounded-br-md' : 'rounded-tr-md')}
 			on:click={() => handleCreateNewRow(true)}>Ajouter une ligne de valeur interdite</button
 		>
 	</div>
