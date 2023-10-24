@@ -37,6 +37,13 @@
 	// Shell la fonction et la décompose en plusieurs parties à chaque fois que la formule est modifié
 	$: lignes = Sheller.Sheller(formula);
 
+	// Hook pour cacher les boutons "ajouter une row"
+	let newLineHasBeenAdded: number = 0;
+	$: {
+		lignes;
+		newLineHasBeenAdded += 1;
+	}
+
 	let solutions: Solution[] = [];
 
 	// Calcul des solutions
@@ -113,8 +120,6 @@
 	});
 	function updateColumnSigns() {
 		// Recalcul les solutions grâce à ce hook
-		//updateGlobalSigns += 1;
-
 		signs = [];
 
 		if (websiteMounted) {
@@ -137,6 +142,20 @@
 			}
 		}
 	}
+
+	/**
+	 * Ajoute une nouvelle row dans le tableau
+	 * @param e L'index de la row
+	 */
+	function createNewRow(e: CustomEvent<any>): void {
+		const rowIndex = e.detail.index;
+		const item = new ExpressionElement(e.detail.isForbidden, 'x');
+		lignes.splice(rowIndex, 0, item);
+
+		lignes = lignes; // trigger le {#each} et le calcul des solutions
+
+		// bring le focus dans l'input de la nouvelle row
+	}
 </script>
 
 <div class="w-full h-full flex items-center justify-center flex-col">
@@ -158,6 +177,11 @@
 				{inRangeSolutions}
 				{variableName}
 				on:updateColumnsSigns={updateColumnSigns}
+				on:createNewRow={createNewRow}
+				{newLineHasBeenAdded}
+				on:expressionChanged={() => {
+					updateGlobalSigns += 1; // hook permettant de recalculer les solutions
+				}}
 			/>
 		{/each}
 

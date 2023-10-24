@@ -12,6 +12,7 @@
 	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
 	export let index: number = 0;
+	export let newLineHasBeenAdded: number = 0; // hook
 
 	const dispatcher = createEventDispatcher();
 
@@ -20,7 +21,7 @@
 
 		// Trigger le recalcul des signes de la colonne (ceux de la row sont fait automatiquement)
 		// juste après que les signes de cette row ont été recalculés
-		setTimeout(() => dispatcher('updateColumnsSigns'), 20);
+		dispatcher('expressionChanged');
 	};
 
 	let cellules: Cellule[] = [];
@@ -82,27 +83,34 @@
 			: '+';
 	}
 
-	let showAddsButton = false;
+	let showAddsButton = true;
+	$: {
+		newLineHasBeenAdded;
+		showAddsButton = false;
+	}
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!--
+
+-->
+<div
+	class="w-full bg-white border-b border-x border-black flex relative flex-col"
 	on:mouseenter={() => (showAddsButton = true)}
 	on:mouseleave={() => (showAddsButton = false)}
--->
-<div class="w-full bg-white border-b border-x border-black flex relative flex-col">
+>
 	{#if showAddsButton}
-		<AddRowHover index={index - 1} />
+		<AddRowHover {index} on:createNewRow isTop={true} />
 	{/if}
 
 	<div class="h-fit py-2.5 w-full flex flex-row">
 		<!-- Nom de la variable -->
 		<ExpressionCell on:handleExpressionChanged={expressionChanged} {expression} />
 
-		<RowSigns {cellules} />
+		<RowSigns {cellules} extendSize={showAddsButton} />
 	</div>
 
 	{#if showAddsButton}
-		<AddRowHover index={index + 1} />
+		<AddRowHover index={index + 1} on:createNewRow isTop={false} />
 	{/if}
 </div>

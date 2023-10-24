@@ -3,11 +3,12 @@
 
 	export let cellule: Cellule;
 	export let index: number;
+	export let extendSize: boolean;
 
 	let columnClass = 'column-' + index;
 </script>
 
-<div class={'w-full h-auto  -my-2.5 relative '}>
+<div class={'w-full h-auto relative ' + (extendSize ? '-my-11' : '-my-2.5')}>
 	<div
 		class={`h-full border-black select-none flex justify-center items-center ${columnClass} ` +
 			(index === 0 ? '' : 'border-l')}

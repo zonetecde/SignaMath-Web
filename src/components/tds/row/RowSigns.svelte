@@ -3,6 +3,9 @@
 	import CellSign from './CellSign.svelte';
 
 	export let cellules: Cellule[];
+
+	// Pour que les colonnes se rejoignent (le trait continue)
+	export let extendSize: boolean;
 </script>
 
 <div
@@ -12,7 +15,7 @@
 			: 'lg:text-3xl')}
 >
 	{#each cellules as cellule, index}
-		<CellSign {cellule} {index} />
+		<CellSign {cellule} {index} {extendSize} />
 	{/each}
 </div>
 

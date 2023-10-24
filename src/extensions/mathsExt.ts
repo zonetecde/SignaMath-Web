@@ -32,7 +32,10 @@ export default class MathsExt {
 			// Récupère le numérateur
 			const num = derive.split('/')[0];
 			const denominateur = derive.split('/')[1];
-			const num_simplifier = nerdamer('simplify(' + num + ')').toString();
+			let num_simplifier: string = num;
+			try {
+				num_simplifier = nerdamer('simplify(' + num + ')').toString();
+			} catch {}
 			return `(${num_simplifier})/${denominateur}`;
 		} else {
 			return derive;

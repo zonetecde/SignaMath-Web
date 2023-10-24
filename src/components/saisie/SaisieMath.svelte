@@ -22,9 +22,17 @@
 	export let isFormula = false;
 	// Valeur interdite
 	export let forbidden = '';
+	// Est-ce que on bring le focus après l'ajout ? (= on est directement dans la zone de saisie)
+	export let bringFocusAfterInit: boolean = false;
+	onMount(() => {
+		console.log(bringFocusAfterInit);
+		if (bringFocusAfterInit) {
+			handleUserClickOnFormula();
+		}
+	});
 
-	// Est-ce que l'utilisateur est en train d'éditer la formule ?
-	let isEditing = false;
+	// Est-ce que l'utilisateur est en train d'éditer la formule ? (bring focus when added)
+	let isEditing: boolean;
 
 	// Prevent de trigger l'event associé à l'envoie de la nouvelle
 	// saisie de l'utilisateur.
@@ -87,6 +95,21 @@
 		// else : le placeholder est affiché vu qu'il n'y a pas de texte
 		// dans l'input
 	};
+
+	function handleUserClickOnFormula() {
+		if (!isDisabled) {
+			isEditing = true;
+			// reset la variable hasFormulaInputChanged
+			// dès qu'elle passera en true ça voudrait dire que
+			// l'utilisateur a changé la formule
+			hasFormulaInputChanged = false;
+
+			// Attend 20ms le temps que l'input se créé, puis lui bring le focus
+			setTimeout(() => {
+				if (ref) ref.focus();
+			}, 20);
+		}
+	}
 </script>
 
 {#if isEditing}
@@ -129,20 +152,7 @@
 	<div
 		class={`pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
 			(isDisabled ? 'cursor-default ' : 'cursor-text hover:font-bold hover:text-blue-700 ')}
-		on:mousedown={() => {
-			if (!isDisabled) {
-				isEditing = true;
-				// reset la variable hasFormulaInputChanged
-				// dès qu'elle passera en true ça voudrait dire que
-				// l'utilisateur a changé la formule
-				hasFormulaInputChanged = false;
-
-				// Attend 20ms le temps que l'input se créé, puis lui bring le focus
-				setTimeout(() => {
-					if (ref) ref.focus();
-				}, 20);
-			}
-		}}
+		on:mousedown={handleUserClickOnFormula}
 		role="button"
 		tabindex="0"
 	>
