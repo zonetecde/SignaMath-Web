@@ -231,7 +231,7 @@
 
 		<label class="mx-5 mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
 
-		<input type="range" class="mx-5" bind:value={scale} min="1" max="3" step="0.05" id="scale" />
+		<input type="range" class="mx-5" bind:value={scale} min="0.5" max="3" step="0.05" id="scale" />
 
 		<section id="credits" class="w-full hidden md:block mt-auto text-center">
 			<a
