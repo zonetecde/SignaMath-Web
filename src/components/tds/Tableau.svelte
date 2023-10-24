@@ -16,8 +16,8 @@
 	export let formula: string = 'x^2 - 4x';
 	$: {
 		// Lorsque la formule change on reprend les signes selon la formule
-		// et non seulement les rows
-		formula;
+		// et non selon les rows
+		formulaBase;
 		updateGlobalSigns = 0;
 	}
 
