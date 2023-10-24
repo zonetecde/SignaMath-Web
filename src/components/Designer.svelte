@@ -110,6 +110,7 @@
 
 	// Désigne la formule utilisé dans le tableau (tout sauf le tableau de variation),
 	// Si on veut étudier des variations, on dérive la formule de base
+	$: formula = formula.replaceAll('()', ''); // Evite des erreurs
 	$: formuleTableau = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName);
 	$: formuleTableauLaTex = MathsExt.toTex(formuleTableau);
 

@@ -54,7 +54,7 @@ export default class MathsExt {
 		// Si c'est une fonction normal (= sans fraction) on la simplifie
 		// Sinon on ne la simplifie pas car elle simplifiera aussi le dénominateur :
 		// on la simplifiera nous même après
-		const derive = math
+		let derive = math
 			.derivative(math.parse(formula).toString(), variableName, {
 				simplify: !formula.includes('/')
 			})
@@ -87,10 +87,13 @@ export default class MathsExt {
 			try {
 				num_simplifier = nerdamer('simplify(' + croppedNum + ')').toString();
 			} catch {}
-			return `(${num.replace(croppedNum, num_simplifier)})/${denominateur}`;
-		} else {
-			return derive;
+			derive = `(${num.replace(croppedNum, num_simplifier)})/${denominateur}`;
 		}
+
+		// Enlève les multiplications par 1 inutiles
+		derive = derive.replaceAll('*1', '').replaceAll('* 1', '');
+
+		return derive;
 	}
 
 	/**

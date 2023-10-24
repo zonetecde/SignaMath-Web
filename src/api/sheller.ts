@@ -4,8 +4,6 @@ import * as math from 'mathjs';
 
 export default class Sheller {
 	static Sheller(formula: string): ExpressionElement[] {
-		formula = formula.replaceAll(' * 1', ''); // Remplace les multiplications par 1 inutile
-
 		// Transforme la formule en 'node' de mathjs
 		const node = math.parse(formula);
 
@@ -19,6 +17,9 @@ export default class Sheller {
 			expressions_oldMethod.forEach((element) => {
 				expressions.push(new ExpressionElement(false, element.toString()));
 			});
+
+			// Prevent des bugs dans les expressions
+			expressions = expressions.filter((x) => x.Expression.count(')') === x.Expression.count('('));
 
 			return expressions;
 		} else if (formula.count('/') >= 2 && formula.length > 40) {
@@ -90,6 +91,11 @@ export default class Sheller {
 			return [{ Expression: node.toString(), Interdite: forbidden }];
 		} else if (math.typeOf(node) === 'SymbolNode') {
 			return [{ Expression: node.name, Interdite: forbidden }];
+		} else {
+			// Dans le cas de 1/x par exemple, ou 'x' est dans .name
+			if (node.name) {
+				return [new ExpressionElement(forbidden, node.name)];
+			}
 		}
 
 		return [];
