@@ -163,7 +163,7 @@
 	 */
 	function deleteLine(e: CustomEvent<any>): void {
 		// On ne peut pas supprimer toutes les lignes
-		const rowIndex = e.detail.index;
+		const rowIndex = e.detail;
 		lignes.splice(rowIndex, 1);
 		lignes = lignes; // trigger le {#each} et le calcul des solutions
 
