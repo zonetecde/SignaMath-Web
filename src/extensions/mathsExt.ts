@@ -71,7 +71,7 @@ export default class MathsExt {
 			// récupère ici le numérateur à l'aide des parenthèses qui l'englobe
 			if (num[num.length - 1] === ')') {
 				let offset = 0;
-				for (let i = num.length - 1; i > 0; i--) {
+				for (let i = num.length - 1; i >= 0; i--) {
 					const element = num[i];
 					if (element === ')') offset++;
 					else if (offset === 1 && element === '(') {
@@ -86,7 +86,6 @@ export default class MathsExt {
 			let num_simplifier: string = croppedNum;
 			try {
 				num_simplifier = nerdamer('simplify(' + croppedNum + ')').toString();
-				console.log(num_simplifier);
 			} catch {}
 			return `(${num.replace(croppedNum, num_simplifier)})/${denominateur}`;
 		} else {

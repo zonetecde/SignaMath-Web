@@ -4,6 +4,8 @@ import * as math from 'mathjs';
 
 export default class Sheller {
 	static Sheller(formula: string): ExpressionElement[] {
+		formula = formula.replaceAll(' * 1', ''); // Remplace les multiplications par 1 inutile
+
 		// Transforme la formule en 'node' de mathjs
 		const node = math.parse(formula);
 
