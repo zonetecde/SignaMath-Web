@@ -6,7 +6,7 @@
 </script>
 
 <section
-	class="w-2/12 overflow-x-auto overflow-y-hidden h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
+	class="w-2/12 overflow-x-auto overflow-y-hidden -my-2.5 border-r border-black flex items-center justify-center text-lg lg:text-xl"
 >
 	<SaisieMath
 		value={expression.Expression}

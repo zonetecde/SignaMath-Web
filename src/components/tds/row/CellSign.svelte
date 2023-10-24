@@ -7,7 +7,7 @@
 	let columnClass = 'column-' + index;
 </script>
 
-<div class={'w-full h-full relative '}>
+<div class={'w-full h-auto  -my-2.5 relative '}>
 	<div
 		class={`h-full border-black select-none flex justify-center items-center ${columnClass} ` +
 			(index === 0 ? '' : 'border-l')}

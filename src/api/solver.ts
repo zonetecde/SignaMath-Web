@@ -18,7 +18,11 @@ export default class Solver {
 		if (equation.includes(variable) === false) return [];
 
 		// Trouve les solutions de l'équation
-		var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
+		try {
+			var rawSolutions = nerdamer.solveEquations(equation + ' = ' + y, variable);
+		} catch {
+			return [];
+		}
 
 		// Transforme les solutions en array
 		const solutionsArray = this.stringToArray(rawSolutions.toString());
@@ -141,6 +145,11 @@ export default class Solver {
 			if (variableValue.toString() === '0') return NaN;
 		}
 
-		return this.toInteger(x.toString());
+		if (x) return this.toInteger(x.toString());
+		else {
+			// valeur interdite dans une très grande expression qui contient
+			// à la fois num et den
+			return NaN;
+		}
 	}
 }

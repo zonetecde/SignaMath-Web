@@ -8,6 +8,7 @@
 	import SaisieFonction from '../../saisie/SaisieFonction.svelte';
 	import ArrowDown from '../assets/arrow_down.png';
 	import ArrowUp from '../assets/arrow_up.png';
+	import { createEventDispatcher } from 'svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -18,6 +19,8 @@
 
 	export let borneMax: string = '+inf';
 	export let borneMin: string = '-inf';
+
+	const dispatcher = createEventDispatcher();
 
 	// Contient les résultats des calculs de la
 	// formule entrée par l'utilisateur en remplçant x par les solutions (= valeurs du tableau de variations
@@ -48,13 +51,15 @@
 				if (result !== '-inf' && result !== '+inf') {
 					// Remplace x par 'result', calcul
 					// et met le résultat dans le dictionnaire
-					values[result] = MathsExt.roundNumber(
-						Solver.formulaToInt(
-							new ExpressionElement(true, false, formula, ''),
-							variableName,
-							result
-						)
+					const resultat = MathsExt.roundNumber(
+						Solver.formulaToInt(new ExpressionElement(false, formula), variableName, result)
 					);
+
+					if (isNaN(resultat) === false) values[result] = resultat;
+					else {
+						// Valeur interdite
+						inRangeSolutions[i].isForbidden = true;
+					}
 				}
 			}
 		}

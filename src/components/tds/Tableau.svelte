@@ -35,7 +35,7 @@
 	let updateGlobalSigns: number = 0;
 
 	// Shell la fonction et la décompose en plusieurs parties à chaque fois que la formule est modifié
-	$: lignes = Sheller.ShellFunction(formula);
+	$: lignes = Sheller.Sheller(formula);
 
 	let solutions: Solution[] = [];
 
@@ -113,7 +113,7 @@
 	});
 	function updateColumnSigns() {
 		// Recalcul les solutions grâce à ce hook
-		updateGlobalSigns += 1;
+		//updateGlobalSigns += 1;
 
 		signs = [];
 

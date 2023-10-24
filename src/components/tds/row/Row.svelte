@@ -95,7 +95,7 @@
 		<AddRowHover index={index - 1} />
 	{/if}
 
-	<div class="h-12 lg:h-16 w-full flex flex-row">
+	<div class="h-fit py-2.5 w-full flex flex-row">
 		<!-- Nom de la variable -->
 		<ExpressionCell on:handleExpressionChanged={expressionChanged} {expression} />
 

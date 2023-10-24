@@ -111,6 +111,7 @@
 	// Désigne la formule utilisé dans le tableau (tout sauf le tableau de variation),
 	// Si on veut étudier des variations, on dérive la formule de base
 	$: formuleTableau = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName);
+	$: formuleTableauLaTex = MathsExt.toTex(formuleTableau);
 
 	/**
 	 * Télécharge le tableau en format image
@@ -219,7 +220,7 @@
 							<SaisieFormule
 								{variableName}
 								functionName={functionName + "'"}
-								formula={formuleTableau}
+								formula={formuleTableauLaTex}
 								isDisabled={true}
 							/>
 						</div>

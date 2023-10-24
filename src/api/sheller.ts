@@ -1,16 +1,98 @@
-// @ts-ignore
-import nerdamer from 'nerdamer/all';
-import ExpressionElement from '../models/expression';
+import { json } from '@sveltejs/kit';
+import ExpressionElement, { ExpressionElement2 } from '../models/expression';
+import * as math from 'mathjs';
 
 export default class Sheller {
-	static ShellFunction(formula: string): ExpressionElement[] {
+	static Sheller(formula: string): ExpressionElement[] {
+		const node = math.parse(formula);
+
+		if (formula.includes('/') === false) {
+			console.log('test');
+			const oldMethod = this.ShellFunction(formula);
+			var expressions: ExpressionElement[] = [];
+			oldMethod.forEach((element) => {
+				expressions.push(new ExpressionElement(false, element.toString()));
+			});
+			return expressions;
+		} else if (formula.count('/') >= 2 && formula.length > 40) {
+			// trop gros: une seul colonne
+			return [new ExpressionElement(false, formula)];
+		}
+
+		console.log(formula);
+		const nodes = this.DoNodeThing(node);
+
+		console.log(nodes);
+		var expressions: ExpressionElement[] = [];
+
+		nodes.forEach((node) => {
+			// Prend uniquement les nodes qui ne sont pas des arrays
+			// = les expressions principales
+			if (node.Expression) {
+				console.log(node);
+
+				// utliise l'ancienne méthode
+				const elts: ExpressionElement2[] = this.ShellFunction(node.Expression);
+				if (node.Interdite) {
+					elts.forEach((x) => {
+						x.Interdite = true;
+					});
+				}
+
+				elts.forEach((elt) => {
+					if (elt.Expression.count(')') === elt.Expression.count('(')) {
+						if (elt.Expression.startsWith('/')) {
+							expressions.push(new ExpressionElement(true, elt.toString().slice(1)));
+						} else if (elt.Expression.startsWith('*') || elt.Expression.startsWith('^')) {
+							expressions.push(new ExpressionElement(elt.Interdite, elt.toString().slice(1)));
+						} else {
+							expressions.push(new ExpressionElement(elt.Interdite, elt.toString()));
+						}
+					}
+				});
+			}
+		});
+
+		console.log(expressions);
+		return expressions;
+	}
+
+	static DoNodeThing(node: any, forbidden = false): ExpressionElement[] {
+		console.log(node);
+		if (math.typeOf(node) === 'OperatorNode' && node.op === '/') {
+			const numeratorElements: ExpressionElement[] = this.DoNodeThing(node.args[0], forbidden);
+			// tout les dénomateurs sont des valeurs interdites donc true
+			const denominatorElements: ExpressionElement[] = this.DoNodeThing(node.args[1], true);
+
+			return numeratorElements.concat(denominatorElements);
+		} else if (math.typeOf(node) === 'ParenthesisNode') {
+			return this.DoNodeThing(node.content, forbidden);
+		} else if (
+			math.typeOf(node) === 'OperatorNode' &&
+			(node.op === '*' || node.op === '+' || node.op === '^' || node.op === '-')
+		) {
+			console.log(node);
+			const argsElements: ExpressionElement[] = node.args.map((arg: any) =>
+				this.DoNodeThing(arg, forbidden)
+			);
+			return [{ Expression: node.toString(), Interdite: forbidden }, ...argsElements];
+		} else if (math.typeOf(node) === 'ConstantNode') {
+			return [{ Expression: node.toString(), Interdite: forbidden }];
+		} else if (math.typeOf(node) === 'SymbolNode') {
+			return [{ Expression: node.name, Interdite: forbidden }];
+		}
+
+		return [];
+	}
+
+	static ShellFunction(formula: string): ExpressionElement2[] {
 		// Enlève les espaces et les signes de multiplication entre deux expressions
 		formula = formula.replaceAll(' ', '').replaceAll(')*(', ')(');
 
 		//let expressions = this.DecouperExpression(formula);
 		let lignes = this.DecouperExpression(formula);
 
-		let expressions: ExpressionElement[] = [];
+		let expressions: ExpressionElement2[] = [];
 		if (lignes.length > 0) {
 			for (let i = 0; i < lignes.length; i++) {
 				if (lignes[i].Exposant === '') {
@@ -18,13 +100,13 @@ export default class Sheller {
 
 					expression = this.SupprimerParentheses(expression);
 
-					let nouvellesExpressions: ExpressionElement[] = [];
+					let nouvellesExpressions: ExpressionElement2[] = [];
 					let decoupe = this.DecouperExpression(expression);
 					nouvellesExpressions.push(...decoupe);
 
 					nouvellesExpressions.forEach((ligne) => {
 						expressions.push(
-							new ExpressionElement(
+							new ExpressionElement2(
 								null,
 								lignes[i].Expression.includes('/'),
 								ligne.Expression.replaceAll('/', '').replaceAll('*', '')
@@ -45,10 +127,9 @@ export default class Sheller {
 			let decoupe = this.DecouperExpression(expression, true);
 			if (decoupe.length > 1) {
 				expressions.splice(i, 1);
+				console.log(expressions);
 				expressions.push(
-					...decoupe.map(
-						(x) => new ExpressionElement(null, expressions[i].Interdite, x.Expression, '')
-					)
+					...decoupe.map((x) => new ExpressionElement2(null, false, x.Expression, ''))
 				);
 				i = 0;
 			}
@@ -71,12 +152,12 @@ export default class Sheller {
 	static DecouperExpression(
 		nouvelleFonction: string,
 		estDeuxieme: boolean = false
-	): ExpressionElement[] {
+	): ExpressionElement2[] {
 		if (estDeuxieme) {
 			nouvelleFonction = this.SupprimerParentheses(nouvelleFonction);
 		}
 
-		let lignes: ExpressionElement[] = [];
+		let lignes: ExpressionElement2[] = [];
 		let compteurParenthesesOuvertes = 0;
 		let indexDebutLigne = 0;
 
@@ -117,7 +198,7 @@ export default class Sheller {
 						}
 					}
 
-					let expression = new ExpressionElement(
+					let expression = new ExpressionElement2(
 						true,
 						false,
 						nouvelleFonction.substring(indexDebutLigne, i + 1),
@@ -135,7 +216,7 @@ export default class Sheller {
 				}
 			} else if (nouvelleFonction[i] === '/' && compteurParenthesesOuvertes === 0) {
 				let ligneInterdite = nouvelleFonction.substring(indexDebutLigne, i).trim();
-				let expression = new ExpressionElement(true, true, ligneInterdite, '');
+				let expression = new ExpressionElement2(true, true, ligneInterdite, '');
 				lignes.push(expression);
 				indexDebutLigne = i;
 			}
@@ -143,7 +224,7 @@ export default class Sheller {
 
 		if (indexDebutLigne < nouvelleFonction.length) {
 			let derniereLigne = nouvelleFonction.substring(indexDebutLigne).trim();
-			let expression = new ExpressionElement(true, false, derniereLigne, '');
+			let expression = new ExpressionElement2(true, false, derniereLigne, '');
 			lignes.push(expression);
 		}
 
