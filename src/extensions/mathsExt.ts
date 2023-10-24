@@ -18,12 +18,16 @@ export default class MathsExt {
 	 * @returns La dérivée
 	 */
 	static Deriver(formula: string, variableName: string): string {
+		// Si on a un x comme ceci
+
 		// Calcul la dérivée
 		// Si c'est une fonction normal (= sans fraction) on la simplifie
 		// Sinon on ne la simplifie pas car elle simplifiera aussi le dénominateur :
 		// on la simplifiera nous même après
 		const derive = math
-			.derivative(formula, variableName, { simplify: !formula.includes('/') })
+			.derivative(math.parse(formula).toString(), variableName, {
+				simplify: !formula.includes('/')
+			})
 			.toString();
 
 		// Si on a une fraction (une seul, sinon la fonction est considéré trop grande)

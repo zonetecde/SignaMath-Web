@@ -147,7 +147,7 @@
 	 * Ajoute une nouvelle row dans le tableau
 	 * @param e L'index de la row
 	 */
-	function createNewRow(e: CustomEvent<any>): void {
+	function createNewRow(e: any): void {
 		const rowIndex = e.detail.index;
 		const item = new ExpressionElement(e.detail.isForbidden, 'x');
 		lignes.splice(rowIndex, 0, item);
@@ -155,6 +155,23 @@
 		lignes = lignes; // trigger le {#each} et le calcul des solutions
 
 		// bring le focus dans l'input de la nouvelle row
+	}
+
+	/**
+	 * Supprime une ligne
+	 * @param e.detail L'index de la ligne à supprimer
+	 */
+	function deleteLine(e: CustomEvent<any>): void {
+		// On ne peut pas supprimer toutes les lignes
+		const rowIndex = e.detail.index;
+		lignes.splice(rowIndex, 1);
+		lignes = lignes; // trigger le {#each} et le calcul des solutions
+
+		// On ne peut pas avoir un tableau vide, donc ajoute une ligne
+		// uniquement fait d'un 'x'
+		if (lignes.length === 0) {
+			createNewRow({ detail: { index: 0 } });
+		}
 	}
 </script>
 
@@ -182,6 +199,7 @@
 				on:expressionChanged={() => {
 					updateGlobalSigns += 1; // hook permettant de recalculer les solutions
 				}}
+				on:deleteLine={deleteLine}
 			/>
 		{/each}
 

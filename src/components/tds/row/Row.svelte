@@ -83,6 +83,13 @@
 			: '+';
 	}
 
+	/**
+	 * Appuie sur le bouton pour supprimer la ligne
+	 */
+	function handleDeleteLine() {
+		dispatcher('deleteLine', index);
+	}
+
 	let showAddsButton = true;
 	$: {
 		newLineHasBeenAdded;
@@ -99,6 +106,15 @@
 	on:mouseenter={() => (showAddsButton = true)}
 	on:mouseleave={() => (showAddsButton = false)}
 >
+	<!-- Indicateur si c'est une ligne de valeur interdite -->
+	<div class="absolute top-0 bottom-0 -left-28">
+		<div class="flex h-full items-center justify-center">
+			<p class="text-sm text-opacity-50 text-black italic">
+				{expression.Interdite ? 'valeur interdite' : ''}
+			</p>
+		</div>
+	</div>
+
 	{#if showAddsButton}
 		<AddRowHover {index} on:createNewRow isTop={true} />
 	{/if}
@@ -111,6 +127,11 @@
 	</div>
 
 	{#if showAddsButton}
+		<button
+			class="absolute right-1 bottom-1 text-base bg-red-200 px-4 py-0.5 rounded-md hover:bg-red-300 duration-100"
+			on:click={handleDeleteLine}>Supprimer</button
+		>
+
 		<AddRowHover index={index + 1} on:createNewRow isTop={false} />
 	{/if}
 </div>
