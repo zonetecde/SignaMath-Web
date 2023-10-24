@@ -107,7 +107,7 @@
 	on:mouseleave={() => (showAddsButton = false)}
 >
 	<!-- Indicateur si c'est une ligne de valeur interdite -->
-	<div class="absolute top-0 bottom-0 -left-28">
+	<div class="absolute top-0 bottom-0 -left-28 collapse md:visible">
 		<div class="flex h-full items-center justify-center">
 			<p class="text-sm text-opacity-50 text-black italic">
 				{expression.Interdite ? 'valeur interdite' : ''}
