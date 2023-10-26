@@ -1,5 +1,5 @@
 {
-	"name": "Signa Math",
+	"name": "SignaMath",
 	"short_name": "signa-math-web",
 	"start_url": ".",
 	"display": "standalone",
@@ -8,7 +8,7 @@
 	"icons": [
 		{
 			"src": "./favicon.png",
-			"sizes": "64x64",
+			"sizes": "500x500",
 			"type": "image/png"
 		}
 	],
