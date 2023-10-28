@@ -88,7 +88,7 @@
 							>le repo GitHub</a
 						>, ou télécharger
 						<a
-							href="https://github.com/zonetecde/signamath/"
+							href="https://github.com/zonetecde/signamath"
 							target="_blank"
 							download
 							class="underline"
