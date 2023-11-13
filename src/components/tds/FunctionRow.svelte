@@ -9,6 +9,20 @@
 	export let signs: string[] = [];
 
 	export let choix: Choix = Choix.Variation;
+
+	let functionNameTableau: string = functionName;
+	$: {
+		switch (choix) {
+			case Choix.Variation:
+				functionNameTableau = functionName + "'";
+				break;
+			case Choix.Convexite:
+				functionNameTableau = functionName + "'";
+				break;
+		}
+
+		console.log(functionNameTableau);
+	}
 </script>
 
 <div class="h-12 lg:h-16 w-full bg-white border-b border-x border-black flex flex-row relative">
@@ -19,7 +33,7 @@
 		<SaisieFonction
 			on:handleFunctionNameChanged
 			on:handleVariableNameChanged
-			functionName={functionName + (choix === Choix.Variation ? "'" : '')}
+			functionName={functionNameTableau}
 			{variableName}
 			isDisabled={choix === Choix.Variation}
 		/>
