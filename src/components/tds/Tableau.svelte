@@ -10,6 +10,7 @@
 	import Header from './Header.svelte';
 	import Row from './row/Row.svelte';
 	import Variation from './tdv/Variation.svelte';
+	import ConvexiteRow from './ConvexiteRow.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -212,6 +213,17 @@
 			on:handleFunctionNameChanged
 			on:handleVariableNameChanged
 		/>
+
+		{#if choix === Choix.Convexite}
+			<ConvexiteRow
+				{inRangeSolutions}
+				{functionName}
+				{signs}
+				{variableName}
+				on:handleFunctionNameChanged
+				on:handleVariableNameChanged
+			/>
+		{/if}
 
 		{#if choix === Choix.Variation}
 			<Variation

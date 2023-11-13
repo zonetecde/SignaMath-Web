@@ -8,20 +8,10 @@
 	export let inRangeSolutions: Solution[];
 	export let signs: string[] = [];
 
-	export let choix: Choix = Choix.Variation;
-
-	let functionNameTableau: string = functionName;
 	$: {
-		switch (choix) {
-			case Choix.Variation:
-				functionNameTableau = functionName + "'";
-				break;
-			case Choix.Convexite:
-				functionNameTableau = functionName + "''";
-				break;
-			case Choix.Tableau:
-				functionNameTableau = functionName;
-				break;
+		for (let i = 0; i < signs.length; i++) {
+			if (signs[i] === '+') signs[i] = 'convexe';
+			else signs[i] = 'concave';
 		}
 	}
 </script>
@@ -34,9 +24,8 @@
 		<SaisieFonction
 			on:handleFunctionNameChanged
 			on:handleVariableNameChanged
-			functionName={functionNameTableau}
+			{functionName}
 			{variableName}
-			isDisabled={choix === Choix.Variation || choix === Choix.Convexite}
 		/>
 	</section>
 
