@@ -27,3 +27,19 @@
 body {
 	font-family: 'DM Sans', sans-serif;
 }
+
+.scrollbar-w-2 {
+	::-webkit-scrollbar {
+		width: 5px;
+	}
+
+	::-webkit-scrollbar-button {
+		background: #ccc;
+	}
+	::-webkit-scrollbar-track-piece {
+		background: #888;
+	}
+	::-webkit-scrollbar-thumb {
+		background: #171616;
+	}
+}

@@ -17,11 +17,21 @@
 				functionNameTableau = functionName + "'";
 				break;
 			case Choix.Convexite:
-				functionNameTableau = functionName + "'";
+				functionNameTableau = functionName + "''";
+				break;
+			case Choix.Tableau:
+				functionNameTableau = functionName;
 				break;
 		}
+	}
 
-		console.log(functionNameTableau);
+	$: {
+		if (choix === Choix.Convexite) {
+			for (let i = 0; i < signs.length; i++) {
+				if (signs[i] === '+') signs[i] = 'convexe';
+				else signs[i] = 'concave';
+			}
+		}
 	}
 </script>
 
@@ -35,7 +45,7 @@
 			on:handleVariableNameChanged
 			functionName={functionNameTableau}
 			{variableName}
-			isDisabled={choix === Choix.Variation}
+			isDisabled={choix === Choix.Variation || choix === Choix.Convexite}
 		/>
 	</section>
 

@@ -130,7 +130,8 @@
 	let formuleDeriveTableauLaTex = '';
 	// Si on est en convexité alors la formule de la dérivé première est déjà mise
 	// Si on est en dérivation on la calcul automatiquement
-	$: formuleDeriveTableauLaTex = choix === Choix.Variation ? MathsExt.toTex(formuleTableau) : formuleDeriveTableauLaTex;
+	$: formuleDeriveTableauLaTex =
+		choix === Choix.Variation ? MathsExt.toTex(formuleTableau) : formuleDeriveTableauLaTex;
 	$: formuleDeriveSecondeTableauLaTex = MathsExt.toTex(formuleTableau);
 
 	/**
@@ -171,12 +172,21 @@
 </script>
 
 <div class="flex flex-col md:flex-row h-full w-full">
-	<div class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:overflow-y-auto md:pt-5 ' + (toggleConfigVisibility ? 'visible' : 'hidden')}>
-		<form class="px-3 flex flex-col w-full">
+	<div
+		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:pt-5 scrollbar-w-2 ' +
+			(toggleConfigVisibility ? 'visible' : 'hidden')}
+	>
+		<form class="px-3 flex flex-col w-full md:overflow-y-auto">
 			<fieldset id="group" class="w-full">
 				<div class="w-full">
 					<div class="mt-3">
-						<input type="radio" id="convexité" name="group" checked on:change={() => (choix = Choix.Convexite)} />
+						<input
+							type="radio"
+							id="convexité"
+							name="group"
+							checked
+							on:change={() => (choix = Choix.Convexite)}
+						/>
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="convexité"
@@ -186,7 +196,14 @@
 							}}>Étude de la convexité d'une fonction</label
 						>
 						<br />
-						<input class="mt-2.5" type="radio" id="variations" name="group" checked on:change={() => (choix = Choix.Variation)} />
+						<input
+							class="mt-2.5"
+							type="radio"
+							id="variations"
+							name="group"
+							checked
+							on:change={() => (choix = Choix.Variation)}
+						/>
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="variations"
@@ -197,7 +214,13 @@
 						>
 
 						<br />
-						<input class="mt-2.5" type="radio" id="tableau" name="group" on:change={() => (choix = Choix.Tableau)} />
+						<input
+							class="mt-2.5"
+							type="radio"
+							id="tableau"
+							name="group"
+							on:change={() => (choix = Choix.Tableau)}
+						/>
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="tableau"
@@ -209,11 +232,18 @@
 					</div>
 
 					<div class="md:max-w-[270px]">
-						<SaisieFormule on:handleFunctionNameChanged={functionNameChanged} on:handleVariableNameChanged={variableNameChanged} on:handleFunctionChanged={functionChanged} {variableName} {functionName} {formula} />
+						<SaisieFormule
+							on:handleFunctionNameChanged={functionNameChanged}
+							on:handleVariableNameChanged={variableNameChanged}
+							on:handleFunctionChanged={functionChanged}
+							{variableName}
+							{functionName}
+							{formula}
+						/>
 					</div>
 
 					{#if formula !== MathsExt.Simplifier(formula)}
-						<div class="mt-2 w-full flex justify-end">
+						<div class="mt-2 w-full flex justify-end hidden">
 							<button
 								class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
 								on:click={() => {
@@ -225,13 +255,23 @@
 					{#if choix === Choix.Variation || choix === Choix.Convexite}
 						<div class="opacity-70 mt-3 md:max-w-[280px]">
 							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
-							<SaisieFormule {variableName} functionName={functionName + "'"} formula={formuleDeriveTableauLaTex} isDisabled={true} />
+							<SaisieFormule
+								{variableName}
+								functionName={functionName + "'"}
+								formula={formuleDeriveTableauLaTex}
+								isDisabled={true}
+							/>
 						</div>
 
 						{#if choix === Choix.Convexite}
 							<div class="opacity-70 mt-3 md:max-w-[280px]">
 								<p class="italic -mb-3 cursor-default">Dérivée seconde de f(x)</p>
-								<SaisieFormule {variableName} functionName={functionName + "''"} formula={formuleDeriveSecondeTableauLaTex} isDisabled={true} />
+								<SaisieFormule
+									{variableName}
+									functionName={functionName + "''"}
+									formula={formuleDeriveSecondeTableauLaTex}
+									isDisabled={true}
+								/>
 							</div>
 						{/if}
 					{/if}
@@ -243,19 +283,29 @@
 
 		<input type="range" class="mx-5" bind:value={scale} min="0.5" max="3" step="0.05" id="scale" />
 
-		<section id="credits" class="w-full hidden md:block mt-auto text-center">
-			<a href="https://www.buymeacoffee.com/zonetecde" class="mt-auto self-center flex w-full justify-center" target="_blank"
-				><img src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png" alt="Buy Me A Coffee" style="height: 40px !important;width: 150px !important;" /></a
+		<section id="credits" class="w-full hidden md:block mt-auto pt-5 text-center">
+			<a
+				href="https://www.buymeacoffee.com/zonetecde"
+				class="mt-auto self-center flex w-full justify-center"
+				target="_blank"
+				><img
+					src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png"
+					alt="Buy Me A Coffee"
+					style="height: 40px !important;width: 150px !important;"
+				/></a
 			>
 
 			<p class="text-gray-700 self-center underline-offset-2 mt-2">
-				<a href="https://www.rayanestaszewski.fr" target="_blank" class="underline">Rayane Staszewski</a>
+				<a href="https://www.rayanestaszewski.fr" target="_blank" class="underline"
+					>Rayane Staszewski</a
+				>
 				-
 				<a target="_blank" href="https://github.com/zonetecde" class="underline">GitHub</a>
 			</p>
 		</section>
-		<button class="self-center w-10/12 mt-2 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400" on:click={downloadTab}
-			>Enregistrer en tant qu'image</button
+		<button
+			class="self-center w-10/12 mt-2 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
+			on:click={downloadTab}>Enregistrer en tant qu'image</button
 		>
 	</div>
 
@@ -269,7 +319,14 @@
 				toggleConfigVisibility = !toggleConfigVisibility;
 			}}
 		>
-			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="w-8 h-8">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="black"
+				class="w-8 h-8"
+			>
 				<path
 					stroke-linecap="round"
 					stroke-linejoin="round"
@@ -281,8 +338,13 @@
 			<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
 		</div>
 	{/if}
-	<div class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative">
-		<div class={'h-full '} style={`width: ${Math.abs(scale) * 100}%;  transform: scale(${1 / scale})`}>
+	<div
+		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative"
+	>
+		<div
+			class={'h-full '}
+			style={`width: ${Math.abs(scale) * 100}%;  transform: scale(${1 / scale})`}
+		>
 			<TableauDeSigne
 				{functionName}
 				{variableName}
@@ -300,7 +362,14 @@
 
 		{#if toggleConfigVisibility === false}
 			<div class="w-8/12 absolute -top-1.5 self-center">
-				<SaisieFormule on:handleFunctionNameChanged={functionNameChanged} on:handleVariableNameChanged={variableNameChanged} on:handleFunctionChanged={functionChanged} {variableName} {functionName} {formula} />
+				<SaisieFormule
+					on:handleFunctionNameChanged={functionNameChanged}
+					on:handleVariableNameChanged={variableNameChanged}
+					on:handleFunctionChanged={functionChanged}
+					{variableName}
+					{functionName}
+					{formula}
+				/>
 			</div>
 		{/if}
 
@@ -318,7 +387,11 @@
 					dispatch('showInfo');
 				}}
 			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
+				/>
 			</svg>
 		{/if}
 	</div>
