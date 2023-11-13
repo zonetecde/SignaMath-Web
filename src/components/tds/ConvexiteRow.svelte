@@ -2,6 +2,7 @@
 	import Choix from '../../models/choix';
 	import type Solution from '../../models/solution';
 	import SaisieFonction from '../saisie/SaisieFonction.svelte';
+	import SaisieMath from '../saisie/SaisieMath.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -21,11 +22,14 @@
 	<section
 		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
-		<SaisieFonction
+		<SaisieMath
 			on:handleFunctionNameChanged
-			on:handleVariableNameChanged
-			{functionName}
-			{variableName}
+			eventName="handleFunctionNameChanged"
+			classes="text-center text-right pl-2 rounded-l-lg"
+			classesInput="w-10"
+			value={functionName}
+			maxLength={3}
+			onlyAllowLetter
 		/>
 	</section>
 
@@ -44,20 +48,6 @@
 				>
 					{signs[i + 1]}
 				</div>
-
-				<!-- Met un trait avec un 0 pour la colonne à gauche du signe si l'expression s'annule en 0 à la solution -->
-				<!-- C'est une valeur interdite si dans le signe il y a une barre -->
-				{#if inRangeSolutions[i].isForbidden === false}
-					<!-- Annulation en 0 -->
-					<p
-						class="absolute select-none -translate-y-1/2 top-1/2 -translate-x-1/2 left-[0.05rem] md:left-[0.02rem] lg:left-[0.01rem] w-fit font-normal text-lg lg:text-3xl"
-					>
-						0
-					</p>
-				{:else}
-					<!-- Valeur interdite : double barre -->
-					<div class="w-full h-full top-0 absolute -left-1 border-l border-black" />
-				{/if}
 			</div>
 		{/each}
 	</div>

@@ -9,6 +9,7 @@
 	import ArrowDown from '../assets/arrow_down.png';
 	import ArrowUp from '../assets/arrow_up.png';
 	import { createEventDispatcher } from 'svelte';
+	import SaisieMath from '../../saisie/SaisieMath.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -71,11 +72,14 @@
 	<section
 		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
-		<SaisieFonction
+		<SaisieMath
 			on:handleFunctionNameChanged
-			on:handleVariableNameChanged
-			{functionName}
-			{variableName}
+			eventName="handleFunctionNameChanged"
+			classes="text-center text-right pl-2 rounded-l-lg"
+			classesInput="w-10"
+			value={functionName}
+			maxLength={3}
+			onlyAllowLetter
 		/>
 	</section>
 
