@@ -119,20 +119,20 @@
 				break;
 			case Choix.Tableau:
 				formuleTableau = formula;
+				break;
 			case Choix.Convexite:
 				const derivePremiere = MathsExt.Deriver(formula, variableName);
-				formuleDeriveTableauLaTex = MathsExt.toTex(derivePremiere);
+				formuleDeriveTableau = derivePremiere;
 
 				formuleTableau = MathsExt.Deriver(derivePremiere, variableName);
+				break;
 		}
 	}
 
-	let formuleDeriveTableauLaTex = '';
+	let formuleDeriveTableau = '';
 	// Si on est en convexité alors la formule de la dérivé première est déjà mise
 	// Si on est en dérivation on la calcul automatiquement
-	$: formuleDeriveTableauLaTex =
-		choix === Choix.Variation ? MathsExt.toTex(formuleTableau) : formuleDeriveTableauLaTex;
-	$: formuleDeriveSecondeTableauLaTex = MathsExt.toTex(formuleTableau);
+	$: formuleDeriveTableau = choix === Choix.Variation ? formuleTableau : formuleDeriveTableau;
 
 	/**
 	 * Télécharge le tableau en format image
@@ -256,10 +256,11 @@
 						<div class="opacity-70 mt-3 md:max-w-[280px]">
 							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
 							<SaisieFormule
+								on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
 								{variableName}
 								functionName={functionName + "'"}
-								formula={formuleDeriveTableauLaTex}
-								isDisabled={true}
+								formula={formuleDeriveTableau}
+								canEditFunctionName={false}
 							/>
 						</div>
 
@@ -267,10 +268,11 @@
 							<div class="opacity-70 mt-3 md:max-w-[280px]">
 								<p class="italic -mb-3 cursor-default">Dérivée seconde de f(x)</p>
 								<SaisieFormule
+									on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
 									{variableName}
 									functionName={functionName + "''"}
-									formula={formuleDeriveSecondeTableauLaTex}
-									isDisabled={true}
+									formula={formuleTableau}
+									canEditFunctionName={false}
 								/>
 							</div>
 						{/if}

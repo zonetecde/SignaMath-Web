@@ -174,6 +174,14 @@
 			createNewRow({ detail: { index: 0 } });
 		}
 	}
+
+	let isBorneMinForbidden: boolean = false;
+	let isBorneMaxForbidden: boolean = false;
+
+	$: {
+		isBorneMinForbidden = solutions.some((x) => x.value === borneMin);
+		isBorneMaxForbidden = solutions.some((x) => x.value === borneMax);
+	}
 </script>
 
 <div class="w-full h-full flex items-center justify-center flex-col">
@@ -205,6 +213,8 @@
 		{/each}
 
 		<FunctionRow
+			{isBorneMinForbidden}
+			{isBorneMaxForbidden}
 			{inRangeSolutions}
 			{functionName}
 			{signs}
@@ -216,10 +226,11 @@
 
 		{#if choix === Choix.Convexite}
 			<ConvexiteRow
+				{isBorneMaxForbidden}
+				{isBorneMinForbidden}
 				{inRangeSolutions}
 				{functionName}
 				{signs}
-				{variableName}
 				on:handleFunctionNameChanged
 				on:handleVariableNameChanged
 			/>
@@ -227,6 +238,8 @@
 
 		{#if choix === Choix.Variation}
 			<Variation
+				{isBorneMinForbidden}
+				{isBorneMaxForbidden}
 				{inRangeSolutions}
 				{functionName}
 				{signs}

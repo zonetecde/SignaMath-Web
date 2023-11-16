@@ -21,7 +21,8 @@
 	export let borneMax: string = '+inf';
 	export let borneMin: string = '-inf';
 
-	const dispatcher = createEventDispatcher();
+	export let isBorneMinForbidden: boolean = false;
+	export let isBorneMaxForbidden: boolean = false;
 
 	// Contient les résultats des calculs de la
 	// formule entrée par l'utilisateur en remplçant x par les solutions (= valeurs du tableau de variations
@@ -85,6 +86,12 @@
 
 	<div class={'w-full flex flex-row text-md lg:text-3xl relative'}>
 		<div class="w-full select-none flex justify-center items-center">
+			<!-- Si la borneMin est une valeur interdite, alors ajoute une double barre (juste après
+			la première colonne)-->
+			{#if isBorneMinForbidden}
+				<div class="w-full h-full top-0 absolute left-1 border-l border-black" />
+			{/if}
+
 			<img
 				src={signs[0].replace('|', '') === '+' ? ArrowUp : ArrowDown}
 				alt={'Flèche vers le ' + signs[0]}
@@ -135,6 +142,12 @@
 					</div>
 				</div>
 			{/each}
+
+			<!-- Si la borneMax est une valeur interdite, alors ajoute une double barre (juste après
+			la dernière colonne colonne)-->
+			{#if isBorneMaxForbidden}
+				<div class="w-full h-full top-0 absolute right-1 border-r border-black" />
+			{/if}
 		{/if}
 	</div>
 </div>

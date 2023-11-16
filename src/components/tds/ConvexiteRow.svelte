@@ -5,9 +5,11 @@
 	import SaisieMath from '../saisie/SaisieMath.svelte';
 
 	export let functionName: string = 'f';
-	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
 	export let signs: string[] = [];
+
+	export let isBorneMinForbidden: boolean = false;
+	export let isBorneMaxForbidden: boolean = false;
 
 	$: {
 		for (let i = 0; i < signs.length; i++) {
@@ -39,7 +41,15 @@
 				? '' /* Message d'intervalle de définition */
 				: 'lg:text-3xl')}
 	>
-		<div class="w-full select-none flex justify-center items-center">{signs[0]}</div>
+		<div class="w-full select-none flex justify-center items-center">
+			<!-- Si la borneMin est une valeur interdite, alors ajoute une double barre (juste après
+			la première colonne)-->
+			{#if isBorneMinForbidden}
+				<div class="w-full h-full top-0 absolute left-1 border-l border-black" />
+			{/if}
+
+			{signs[0]}
+		</div>
 
 		{#each inRangeSolutions as _, i}
 			<div class="w-full h-full relative">
@@ -48,7 +58,18 @@
 				>
 					{signs[i + 1]}
 				</div>
+
+				{#if inRangeSolutions[i].isForbidden}
+					<!-- Valeur interdite : double barre -->
+					<div class="w-full h-full top-0 absolute -left-1 border-l border-black" />
+				{/if}
 			</div>
 		{/each}
+
+		<!-- Si la borneMax est une valeur interdite, alors ajoute une double barre (juste après
+la dernière colonne colonne)-->
+		{#if isBorneMaxForbidden}
+			<div class="w-full h-full top-0 absolute right-1 border-r border-black" />
+		{/if}
 	</div>
 </div>
