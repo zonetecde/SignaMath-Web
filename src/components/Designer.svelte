@@ -178,7 +178,7 @@
 	>
 		<form class="px-3 flex flex-col w-full md:overflow-y-auto">
 			<fieldset id="group" class="w-full">
-				<div class="w-full">
+				<div class="w-full flex flex-col-reverse lg:flex-col">
 					<div class="mt-3">
 						<input
 							type="radio"
@@ -190,7 +190,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="convexité"
-							class="text-md md:text-xl pr-10"
+							class="text-md lg:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('convexité')?.click();
 							}}>Étude de la convexité d'une fonction</label
@@ -207,7 +207,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="variations"
-							class="text-md md:text-xl pr-10"
+							class="text-md lg:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('variations')?.click();
 							}}>Étude des variations d'une fonction</label
@@ -224,59 +224,61 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="tableau"
-							class="text-md md:text-xl"
+							class="text-md lg:text-xl"
 							on:mousedown={() => {
 								document.getElementById('tableau')?.click();
 							}}>Tableau de signe d'une fonction</label
 						>
 					</div>
 
-					<div class="md:max-w-[270px]">
-						<SaisieFormule
-							on:handleFunctionNameChanged={functionNameChanged}
-							on:handleVariableNameChanged={variableNameChanged}
-							on:handleFunctionChanged={functionChanged}
-							{variableName}
-							{functionName}
-							{formula}
-						/>
-					</div>
-
-					{#if formula !== MathsExt.Simplifier(formula)}
-						<div class="mt-2 w-full flex justify-end hidden">
-							<button
-								class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
-								on:click={() => {
-									formula = MathsExt.Simplifier(formula);
-								}}>Simplifier</button
-							>
-						</div>
-					{/if}
-					{#if choix === Choix.Variation || choix === Choix.Convexite}
-						<div class="opacity-70 mt-3 md:max-w-[280px]">
-							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
+					<div>
+						<div class="md:max-w-[270px]">
 							<SaisieFormule
-								on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
+								on:handleFunctionNameChanged={functionNameChanged}
+								on:handleVariableNameChanged={variableNameChanged}
+								on:handleFunctionChanged={functionChanged}
 								{variableName}
-								functionName={functionName + "'"}
-								formula={formuleDeriveTableau}
-								canEditFunctionName={false}
+								{functionName}
+								{formula}
 							/>
 						</div>
 
-						{#if choix === Choix.Convexite}
+						{#if formula !== MathsExt.Simplifier(formula)}
+							<div class="mt-2 w-full flex justify-end hidden">
+								<button
+									class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
+									on:click={() => {
+										formula = MathsExt.Simplifier(formula);
+									}}>Simplifier</button
+								>
+							</div>
+						{/if}
+						{#if choix === Choix.Variation || choix === Choix.Convexite}
 							<div class="opacity-70 mt-3 md:max-w-[280px]">
-								<p class="italic -mb-3 cursor-default">Dérivée seconde de f(x)</p>
+								<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
 								<SaisieFormule
 									on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
 									{variableName}
-									functionName={functionName + "''"}
-									formula={formuleTableau}
+									functionName={functionName + "'"}
+									formula={formuleDeriveTableau}
 									canEditFunctionName={false}
 								/>
 							</div>
+
+							{#if choix === Choix.Convexite}
+								<div class="opacity-70 mt-3 md:max-w-[280px]">
+									<p class="italic -mb-3 cursor-default">Dérivée seconde de f(x)</p>
+									<SaisieFormule
+										on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
+										{variableName}
+										functionName={functionName + "''"}
+										formula={formuleTableau}
+										canEditFunctionName={false}
+									/>
+								</div>
+							{/if}
 						{/if}
-					{/if}
+					</div>
 				</div>
 			</fieldset>
 		</form>
