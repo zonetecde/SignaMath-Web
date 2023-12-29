@@ -110,7 +110,29 @@
 
 	// Désigne la formule utilisé dans le tableau (tout sauf le tableau de variation),
 	// Si on veut étudier des variations, on dérive la formule de base
-	$: formuleTableau = choix === Choix.Tableau ? formula : MathsExt.Deriver(formula, variableName);
+	// Si on veut étudier la convexité, on dérive deux fois la formule de base
+	let formuleTableau: string = '2x-4';
+	$: {
+		switch (choix) {
+			case Choix.Variation:
+				formuleTableau = MathsExt.Deriver(formula, variableName);
+				break;
+			case Choix.Tableau:
+				formuleTableau = formula;
+				break;
+			case Choix.Convexite:
+				const derivePremiere = MathsExt.Deriver(formula, variableName);
+				formuleDeriveTableau = derivePremiere;
+
+				formuleTableau = MathsExt.Deriver(derivePremiere, variableName);
+				break;
+		}
+	}
+
+	let formuleDeriveTableau = '';
+	// Si on est en convexité alors la formule de la dérivé première est déjà mise
+	// Si on est en dérivation on la calcul automatiquement
+	$: formuleDeriveTableau = choix === Choix.Variation ? formuleTableau : formuleDeriveTableau;
 
 	/**
 	 * Télécharge le tableau en format image
@@ -151,14 +173,31 @@
 
 <div class="flex flex-col md:flex-row h-full w-full">
 	<div
-		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:overflow-y-auto md:pt-5 ' +
+		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:pt-5 scrollbar-w-2 ' +
 			(toggleConfigVisibility ? 'visible' : 'hidden')}
 	>
-		<form class="px-3 flex flex-col w-full">
+		<form class="px-3 flex flex-col w-full md:overflow-y-auto">
 			<fieldset id="group" class="w-full">
-				<div class="w-full">
+				<div class="w-full flex flex-col-reverse lg:flex-col">
 					<div class="mt-3">
 						<input
+							type="radio"
+							id="convexité"
+							name="group"
+							checked
+							on:change={() => (choix = Choix.Convexite)}
+						/>
+						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+						<label
+							for="convexité"
+							class="text-md lg:text-xl pr-10"
+							on:mousedown={() => {
+								document.getElementById('convexité')?.click();
+							}}>Étude de la convexité d'une fonction</label
+						>
+						<br />
+						<input
+							class="mt-2.5"
 							type="radio"
 							id="variations"
 							name="group"
@@ -168,7 +207,7 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="variations"
-							class="text-md md:text-xl pr-10"
+							class="text-md lg:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('variations')?.click();
 							}}>Étude des variations d'une fonction</label
@@ -176,7 +215,7 @@
 
 						<br />
 						<input
-							class="mt-5"
+							class="mt-2.5"
 							type="radio"
 							id="tableau"
 							name="group"
@@ -185,54 +224,70 @@
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 						<label
 							for="tableau"
-							class="text-md md:text-xl"
+							class="text-md lg:text-xl"
 							on:mousedown={() => {
 								document.getElementById('tableau')?.click();
 							}}>Tableau de signe d'une fonction</label
 						>
 					</div>
 
-					<div class="md:max-w-[270px]">
-						<SaisieFormule
-							on:handleFunctionNameChanged={functionNameChanged}
-							on:handleVariableNameChanged={variableNameChanged}
-							on:handleFunctionChanged={functionChanged}
-							{variableName}
-							{functionName}
-							{formula}
-						/>
-					</div>
-
-					{#if formula !== MathsExt.Simplifier(formula)}
-						<div class="mt-2 w-full flex justify-end">
-							<button
-								class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
-								on:click={() => {
-									formula = MathsExt.Simplifier(formula);
-								}}>Simplifier</button
-							>
-						</div>
-					{/if}
-					{#if choix === Choix.Variation}
-						<div class="opacity-70 mt-3 md:max-w-[280px]">
-							<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
+					<div>
+						<div class="md:max-w-[270px]">
 							<SaisieFormule
+								on:handleFunctionNameChanged={functionNameChanged}
+								on:handleVariableNameChanged={variableNameChanged}
+								on:handleFunctionChanged={functionChanged}
 								{variableName}
-								functionName={functionName + "'"}
-								formula={formuleTableau}
-								isDisabled={true}
+								{functionName}
+								{formula}
 							/>
 						</div>
-					{/if}
+
+						{#if formula !== MathsExt.Simplifier(formula)}
+							<div class="mt-2 w-full flex justify-end hidden">
+								<button
+									class="px-3 text-base py-1 rounded-xl bg-purple-300 border-2 border-purple-500"
+									on:click={() => {
+										formula = MathsExt.Simplifier(formula);
+									}}>Simplifier</button
+								>
+							</div>
+						{/if}
+						{#if choix === Choix.Variation || choix === Choix.Convexite}
+							<div class="opacity-70 mt-3 md:max-w-[280px]">
+								<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
+								<SaisieFormule
+									on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
+									{variableName}
+									functionName={functionName + "'"}
+									formula={formuleDeriveTableau}
+									canEditFunctionName={false}
+								/>
+							</div>
+
+							{#if choix === Choix.Convexite}
+								<div class="opacity-70 mt-3 md:max-w-[280px]">
+									<p class="italic -mb-3 cursor-default">Dérivée seconde de f(x)</p>
+									<SaisieFormule
+										on:handleFunctionChanged={(e) => (formuleTableau = e.detail)}
+										{variableName}
+										functionName={functionName + "''"}
+										formula={formuleTableau}
+										canEditFunctionName={false}
+									/>
+								</div>
+							{/if}
+						{/if}
+					</div>
 				</div>
 			</fieldset>
 		</form>
 
 		<label class="mx-5 mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
 
-		<input type="range" class="mx-5" bind:value={scale} min="1" max="3" step="0.05" id="scale" />
+		<input type="range" class="mx-5" bind:value={scale} min="0.5" max="3" step="0.05" id="scale" />
 
-		<section id="credits" class="w-full hidden md:block mt-auto text-center">
+		<section id="credits" class="w-full hidden md:block mt-auto pt-5 text-center">
 			<a
 				href="https://www.buymeacoffee.com/zonetecde"
 				class="mt-auto self-center flex w-full justify-center"

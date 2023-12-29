@@ -21,6 +21,8 @@
 			eventName="handleVariableNameChanged"
 			on:handleVariableNameChanged
 			classes="text-center "
+			onlyAllowLetter
+			forbidden={['e']}
 		/>
 	</section>
 

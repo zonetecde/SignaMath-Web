@@ -20,7 +20,9 @@
 			? '-left-0.5 transform -translate-x-1/2 '
 			: 'left-0')}
 >
-	<p class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl">
-		{value}
-	</p>
+	{#if value !== undefined}
+		<p class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl">
+			{value}
+		</p>
+	{/if}
 </div>

@@ -1,8 +1,19 @@
-<script>
+<script lang="ts">
 	import '../app.css';
 	import Icon from '$lib/assets/icon.png';
 	import GitHub from '$lib/assets/github.svg';
+	import { toast } from 'svelte-sonner';
+	import { inject } from '@vercel/analytics';
+	import { dev } from '$app/environment';
+
+	inject({ mode: dev ? 'development' : 'production' });
+
+	function handleError(event: any) {
+		toast.error('Une erreur est survenue, désolé !');
+	}
 </script>
+
+<svelte:window on:error={handleError} />
 
 <div class="h-screen w-screen">
 	<nav

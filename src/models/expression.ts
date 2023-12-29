@@ -1,6 +1,24 @@
 export default class ExpressionElement {
 	public Expression: string;
 	public Interdite: boolean | null;
+
+	constructor(isInterdite: boolean | null, expression: string) {
+		this.Interdite = isInterdite;
+		this.Expression = expression;
+	}
+
+	/**
+	 * ToString
+	 * @returns Retourne la formule avec son exposant
+	 */
+	toString() {
+		return this.Expression.trim();
+	}
+}
+
+export class ExpressionElement2 {
+	public Expression: string;
+	public Interdite: boolean | null;
 	public Exposant: string | null;
 	public IsNumerator: boolean | null;
 

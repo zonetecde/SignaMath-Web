@@ -52,7 +52,7 @@
 		<div
 			class="flex justify-center items-center h-full"
 			id="bg"
-			on:click|preventDefault={(e) => {
+			on:click={(e) => {
 				if (e.target.id === 'bg') toggleShowInfo();
 			}}
 		>
@@ -70,12 +70,11 @@
 					<p class="mt-10 leading-6">
 						SignaMath est un site internet permettant de dresser des tableaux de signes et de
 						variations afin d'étudier les signes ou les variations d'une fonction.<br />
-						Entrez une formule dans la zone de saisie prévue à cet effet, et elle sera automatiquement
-						dérivée puis son tableau de signes et de variations y sera dressé.<br />
-						Vous pouvez aussi générer uniquement le tableau de signes, sans dériver la fonction, en cliquant
-						sur le bouton radio prévu à cet effet.<br />
-						Il est recommandé d'utiliser le site sur un ordinateur.<br />
-						Son utilisation est gratuite, et vous n'avez pas à me créditer. Néanmoins,
+						Entrez une formule dans la zone de saisie prévue à cet effet pour qu'elle soit automatiquement
+						dérivée et que son tableau de variations ou de signes soit dressé.<br /> Pour passer du
+						tableau de variations au tableau de signes, il faut appuyer sur le bouton radio prévu à
+						cet effet.<br />
+						Le site étant gratuit,
 						<a
 							href="https://www.buymeacoffee.com/zonetecde"
 							target="_blank"
@@ -89,11 +88,16 @@
 							>le repo GitHub</a
 						>, ou télécharger
 						<a
-							href="https://github.com/zonetecde/signamath/releases"
+							href="https://github.com/zonetecde/signamath"
 							target="_blank"
-							class="underline">la version logicielle</a
-						>
-						du site.
+							download
+							class="underline"
+							>la version logicielle
+						</a>
+						(dépréciée) du site.
+						<br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
+						<i>"Envoyer un commentaire"</i>
+						ci-dessous.
 						<br /><br />
 					</p>
 				{:else}
@@ -120,7 +124,7 @@
 					</button>
 				</div>
 
-				<p class="text-center font-bold">Signa Math © 2023 - Rayane Staszewski</p>
+				<p class="text-center font-bold">SignaMath 2023 - Rayane Staszewski</p>
 
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->

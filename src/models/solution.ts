@@ -8,6 +8,7 @@ export default class Solution {
 	latex: string;
 	integer: number;
 	associatedEquations: string[];
+	isForbidden: boolean = false;
 
 	constructor(formula: string, latex: string, integer: number) {
 		this.value = formula;

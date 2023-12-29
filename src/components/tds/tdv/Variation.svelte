@@ -8,6 +8,8 @@
 	import SaisieFonction from '../../saisie/SaisieFonction.svelte';
 	import ArrowDown from '../assets/arrow_down.png';
 	import ArrowUp from '../assets/arrow_up.png';
+	import { createEventDispatcher } from 'svelte';
+	import SaisieMath from '../../saisie/SaisieMath.svelte';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -18,6 +20,9 @@
 
 	export let borneMax: string = '+inf';
 	export let borneMin: string = '-inf';
+
+	export let isBorneMinForbidden: boolean = false;
+	export let isBorneMaxForbidden: boolean = false;
 
 	// Contient les résultats des calculs de la
 	// formule entrée par l'utilisateur en remplçant x par les solutions (= valeurs du tableau de variations
@@ -48,13 +53,15 @@
 				if (result !== '-inf' && result !== '+inf') {
 					// Remplace x par 'result', calcul
 					// et met le résultat dans le dictionnaire
-					values[result] = MathsExt.roundNumber(
-						Solver.formulaToInt(
-							new ExpressionElement(true, false, formula, ''),
-							variableName,
-							result
-						)
+					const resultat = MathsExt.roundNumber(
+						Solver.formulaToInt(new ExpressionElement(false, formula), variableName, result)
 					);
+
+					if (isNaN(resultat) === false) values[result] = resultat;
+					else if (inRangeSolutions[i]) {
+						// Valeur interdite
+						inRangeSolutions[i].isForbidden = true;
+					}
 				}
 			}
 		}
@@ -66,16 +73,25 @@
 	<section
 		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
-		<SaisieFonction
+		<SaisieMath
 			on:handleFunctionNameChanged
-			on:handleVariableNameChanged
-			{functionName}
-			{variableName}
+			eventName="handleFunctionNameChanged"
+			classes="text-center text-right pl-2 rounded-l-lg"
+			classesInput="w-10"
+			value={functionName}
+			maxLength={3}
+			onlyAllowLetter
 		/>
 	</section>
 
 	<div class={'w-full flex flex-row text-md lg:text-3xl relative'}>
 		<div class="w-full select-none flex justify-center items-center">
+			<!-- Si la borneMin est une valeur interdite, alors ajoute une double barre (juste après
+			la première colonne)-->
+			{#if isBorneMinForbidden}
+				<div class="w-full h-full top-0 absolute left-1 border-l border-black" />
+			{/if}
+
 			<img
 				src={signs[0].replace('|', '') === '+' ? ArrowUp : ArrowDown}
 				alt={'Flèche vers le ' + signs[0]}
@@ -92,38 +108,46 @@
 			/>
 		{/if}
 
-		{#each inRangeSolutions as solution, i}
-			<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
+		{#if signs.length > inRangeSolutions.length}
+			{#each inRangeSolutions as solution, i}
+				<!-- On cache la flèche là si la dernière flèche est du même signe, et que ce n'est pas
                 une valeur interdite (flèche continue)-->
-			<div class="w-full h-full relative">
-				<div class="h-full select-none flex justify-center items-center relative">
-					<img
-						src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
-						alt={'Flèche vers le ' + signs[i + 1]}
-						class="w-full transform h-full object-fill"
-					/>
-
-					<!-- Calcul la valeur de la solution -->
-					{#if signs[i + 1].includes('|') === false}
-						<VariationCalculatedValue sign={signs[i]} value={values[solution.value]} />
-					{/if}
-
-					<!-- Bordure de valeur interdite -->
-					{#if signs[i + 1].includes('|')}
-						<div class="absolute left-0 w-32 h-full border-l border-black" />
-						<div class="absolute -left-1 w-32 h-full border-l border-black" />
-					{/if}
-
-					<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
-					{#if borneMax !== '+inf' && i === inRangeSolutions.length - 1}
-						<VariationCalculatedValue
-							sign={signs[signs.length - 1]}
-							value={values[borneMax]}
-							position="borneMax"
+				<div class="w-full h-full relative">
+					<div class="h-full select-none flex justify-center items-center relative">
+						<img
+							src={signs[i + 1].includes('+') ? ArrowUp : ArrowDown}
+							alt={'Flèche vers le ' + signs[i + 1]}
+							class="w-full transform h-full object-fill"
 						/>
-					{/if}
+
+						<!-- Calcul la valeur de la solution -->
+						{#if inRangeSolutions[i].isForbidden === false}
+							<VariationCalculatedValue sign={signs[i]} value={values[solution.value]} />
+						{/if}
+
+						<!-- Bordure de valeur interdite -->
+						{#if inRangeSolutions[i].isForbidden}
+							<div class="absolute left-0 w-32 h-full border-l border-black" />
+							<div class="absolute -left-1 w-32 h-full border-l border-black" />
+						{/if}
+
+						<!-- Si la borneMax !== +inf, alors on calcul sa solution -->
+						{#if borneMax !== '+inf' && i === inRangeSolutions.length - 1}
+							<VariationCalculatedValue
+								sign={signs[signs.length - 1]}
+								value={values[borneMax]}
+								position="borneMax"
+							/>
+						{/if}
+					</div>
 				</div>
-			</div>
-		{/each}
+			{/each}
+
+			<!-- Si la borneMax est une valeur interdite, alors ajoute une double barre (juste après
+			la dernière colonne colonne)-->
+			{#if isBorneMaxForbidden}
+				<div class="w-full h-full top-0 absolute right-1 border-r border-black" />
+			{/if}
+		{/if}
 	</div>
 </div>

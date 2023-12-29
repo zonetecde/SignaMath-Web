@@ -2,6 +2,7 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import Katex from 'svelte-katex';
 	import { parse } from 'mathjs';
+	import { toast } from 'svelte-sonner';
 
 	// Style
 	export let classes = '';
@@ -16,15 +17,13 @@
 	export let isDisabled = false;
 	// Le nom de l'event associé à l'envoie de la nouvelle formule
 	export let eventName = '';
-	// Nom de la variable
-	export let variableName = 'x';
-	// Est-ce que on rentre une formule ici ? (influence la validité)
-	export let isFormula = false;
 	// Valeur interdite
-	export let forbidden = '';
+	export let forbidden: string[] = [];
+	// Uniquement les lettres sont autorisées ?
+	export let onlyAllowLetter: boolean = false;
 
-	// Est-ce que l'utilisateur est en train d'éditer la formule ?
-	let isEditing = false;
+	// Est-ce que l'utilisateur est en train d'éditer la formule ? (bring focus when added)
+	let isEditing: boolean;
 
 	// Prevent de trigger l'event associé à l'envoie de la nouvelle
 	// saisie de l'utilisateur.
@@ -46,7 +45,10 @@
 		// Converti la saisie en format Katex
 		katexFormula = !isDisabled ? parse(value).toTex({ parenthesis: 'auto' }) : value;
 		// Vérifie que la variable est présente
-		if ((value.includes(variableName) || !isFormula) && value !== forbidden) {
+		if (
+			forbidden.includes(value.trim()) === false &&
+			((onlyAllowLetter && /^[a-zA-Z']+$/.test(value)) || !onlyAllowLetter)
+		) {
 			isFormulaValid = true;
 		} else {
 			isFormulaValid = false;
@@ -81,12 +83,61 @@
 
 			// Pas la peine d'envoyer la même saisie deux fois
 			if (hasFormulaInputChanged) {
-				dispatch(eventName, value);
+				// // Analytic
+				// fetch(
+				// 	'https://www.rayanestaszewski.fr/api/software/software-being-used?softwareName=SignaMath Web&detail=' +
+				// 		value,
+				// 	{
+				// 		method: 'POST'
+				// 	}
+				// );
+
+				dispatch(
+					eventName,
+					value
+						.replaceAll('()', '')
+						.replaceAll('Cos', 'cos')
+						.replaceAll('Sin', 'sin')
+						.replaceAll('Tan', 'tan')
+				);
 			}
+		} else if (forbidden.includes(value.trim())) {
+			switch (value.trim()) {
+				case 'i':
+					toast.error("Le nom de variable 'i' est réservé à l'imaginaire");
+					break;
+				case 'e':
+					toast.error("Le nom de variable 'e' est réservé à l'exponentielle");
+					break;
+				default:
+					toast.error("Le nom de variable saisi n'est pas autorisé.");
+					break;
+			}
+		} else if (onlyAllowLetter && /^[a-zA-Z']+$/.test(value)) {
+			toast.error('Uniquement les lettres sont autorisées.');
+		} else {
+			// else : le placeholder est affiché vu qu'il n'y a pas de texte
+			// dans l'input
+			toast.error('Veuillez saisir une formule valide.');
 		}
-		// else : le placeholder est affiché vu qu'il n'y a pas de texte
-		// dans l'input
 	};
+
+	function handleUserClickOnFormula(
+		event: MouseEvent & { currentTarget: EventTarget & HTMLDivElement }
+	) {
+		if (!isDisabled) {
+			isEditing = true;
+			// reset la variable hasFormulaInputChanged
+			// dès qu'elle passera en true ça voudrait dire que
+			// l'utilisateur a changé la formule
+			hasFormulaInputChanged = false;
+
+			// Attend 20ms le temps que l'input se créé, puis lui bring le focus
+			setTimeout(() => {
+				if (ref) ref.focus();
+			}, 20);
+		}
+	}
 </script>
 
 {#if isEditing}
@@ -129,20 +180,7 @@
 	<div
 		class={`pb-2 pt-2.5 select-none text-xs md:text-xs lg:text-lg ${classes} ` +
 			(isDisabled ? 'cursor-default ' : 'cursor-text hover:font-bold hover:text-blue-700 ')}
-		on:mousedown={() => {
-			if (!isDisabled) {
-				isEditing = true;
-				// reset la variable hasFormulaInputChanged
-				// dès qu'elle passera en true ça voudrait dire que
-				// l'utilisateur a changé la formule
-				hasFormulaInputChanged = false;
-
-				// Attend 20ms le temps que l'input se créé, puis lui bring le focus
-				setTimeout(() => {
-					if (ref) ref.focus();
-				}, 20);
-			}
-		}}
+		on:mousedown={handleUserClickOnFormula}
 		role="button"
 		tabindex="0"
 	>

@@ -12,6 +12,7 @@
 	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
 	export let index: number = 0;
+	export let newLineHasBeenAdded: number = 0; // hook
 
 	const dispatcher = createEventDispatcher();
 
@@ -20,13 +21,14 @@
 
 		// Trigger le recalcul des signes de la colonne (ceux de la row sont fait automatiquement)
 		// juste après que les signes de cette row ont été recalculés
-		setTimeout(() => dispatcher('updateColumnsSigns'), 20);
+		dispatcher('expressionChanged');
 	};
 
 	let cellules: Cellule[] = [];
 
-	// A chaque fois que les solutions changent on recalcule les signes
+	// A chaque fois que les solutions changent on recalcule les signes .
 	$: {
+		inRangeSolutions;
 		expression; // Pour que ça soit trigger lorsque l'expression change
 
 		cellules = [];
@@ -75,33 +77,62 @@
 		}
 
 		return isNaN(resultat)
-			? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			? //? "Ø racine d'un nombre négatif, changer l'intervalle de définition"
+			  'Ø'
 			: resultat < 0
 			? '-'
 			: '+';
 	}
 
-	let showAddsButton = false;
+	/**
+	 * Appuie sur le bouton pour supprimer la ligne
+	 */
+	function handleDeleteLine() {
+		dispatcher('deleteLine', index);
+	}
+
+	let showAddsButton = true;
+	$: {
+		newLineHasBeenAdded;
+		showAddsButton = false;
+	}
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <!--
+
+-->
+<div
+	class="w-full bg-white border-b border-x border-black flex relative flex-col"
 	on:mouseenter={() => (showAddsButton = true)}
 	on:mouseleave={() => (showAddsButton = false)}
--->
-<div class="w-full bg-white border-b border-x border-black flex relative flex-col">
-	{#if showAddsButton}
-		<AddRowHover index={index - 1} />
-	{/if}
-
-	<div class="h-12 lg:h-16 w-full flex flex-row">
-		<!-- Nom de la variable -->
-		<ExpressionCell on:handleExpressionChanged={expressionChanged} {expression} />
-
-		<RowSigns {cellules} />
+>
+	<!-- Indicateur si c'est une ligne de valeur interdite -->
+	<div class="absolute top-0 bottom-0 -left-28 collapse md:visible">
+		<div class="flex h-full items-center justify-center">
+			<p class="text-sm text-opacity-50 text-black italic select-none">
+				{expression.Interdite ? 'valeur interdite' : ''}
+			</p>
+		</div>
 	</div>
 
 	{#if showAddsButton}
-		<AddRowHover index={index + 1} />
+		<AddRowHover {index} on:createNewRow isTop={true} />
+	{/if}
+
+	<div class="h-fit py-2.5 w-full flex flex-row">
+		<!-- Nom de la variable -->
+		<ExpressionCell on:handleExpressionChanged={expressionChanged} {expression} />
+
+		<RowSigns {cellules} extendSize={showAddsButton} />
+	</div>
+
+	{#if showAddsButton}
+		<button
+			class="absolute right-1 bottom-1 text-xs md:text-base bg-red-200 px-4 py-0.5 rounded-md hover:bg-red-300 duration-100"
+			on:click={handleDeleteLine}>Supprimer</button
+		>
+
+		<AddRowHover index={index + 1} on:createNewRow isTop={false} />
 	{/if}
 </div>
