@@ -1,6 +1,6 @@
 {
 	"name": "SignaMath",
-	"short_name": "signa-math-web",
+	"short_name": "signamath",
 	"start_url": ".",
 	"display": "standalone",
 	"background_color": "#fff",
