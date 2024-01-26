@@ -1,0 +1,9 @@
+{
+	"redirects": [
+		{
+			"source": "https://signamath.online",
+			"destination": "https://signamath.fr",
+			"permanent": true
+		}
+	]
+}
