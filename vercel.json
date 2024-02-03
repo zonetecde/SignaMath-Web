@@ -3,7 +3,8 @@
 		{
 			"source": "https://signamath.online",
 			"destination": "https://signamath.fr",
-			"permanent": true
+			"permanent": true,
+            "statusCode": 301
 		}
 	]
 }
