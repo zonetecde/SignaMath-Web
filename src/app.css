@@ -31,6 +31,7 @@ body {
 .scrollbar-w-2 {
 	::-webkit-scrollbar {
 		width: 5px;
+		height: 5px;
 	}
 
 	::-webkit-scrollbar-button {
@@ -40,6 +41,6 @@ body {
 		background: #888;
 	}
 	::-webkit-scrollbar-thumb {
-		background: #171616;
+		background: #464242;
 	}
 }
