@@ -33,10 +33,12 @@ export async function GET({ url }: { url: URL }) {
 
 		transporter.sendMail(mailOptions, (error: any, info: any) => {
 			if (error) {
-				return console.log(error);
+				return new Response('Error: ' + error);
 			}
 			return new Response('Email sent: ' + info.response);
 		});
+
+		return new Response('Email sent.');
 	} catch (error) {
 		console.log('Error: ' + error);
 		return new Response('Error: ' + error);
