@@ -12,12 +12,9 @@
 	function sendMessage() {
 		if (message.trim() !== '' && email.trim() !== '') {
 			toast.info('Envoie en cours...');
-			fetch(
-				`https://www.rayanestaszewski.fr/api/Software/send-me-a-message?software=${software}&email=${email}&message=${mailContent}`,
-				{
-					method: 'POST'
-				}
-			)
+			fetch(`/send-email?name=Commentaire sur ${software}&message=${mailContent}&email=${email}`, {
+				method: 'GET'
+			})
 				.then((response) => {
 					if (response.ok) {
 						toast.success('Message envoyé, merci !');

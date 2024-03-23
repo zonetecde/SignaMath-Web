@@ -38,10 +38,12 @@
 		"@types/algebra.js": "^0.2.3",
 		"@types/dom-to-image": "^2.6.6",
 		"@types/express": "^4.17.20",
+		"@types/nodemailer": "^6.4.14",
 		"dom-to-image": "^2.6.0",
 		"esbuild": "^0.19.5",
 		"mathjs": "^11.11.2",
 		"nerdamer": "^1.1.13",
+		"nodemailer": "^6.9.13",
 		"svelte-katex": "^0.1.2",
 		"svelte-sonner": "^0.3.0"
 	}
