@@ -13,34 +13,38 @@ export async function GET({ url }: { url: URL }) {
 		return new Response('Missing name, email, or message.');
 	}
 
-	try {
-		let transporter = nodemailer.createTransport({
-			host: process.env.host,
-			port: 587,
-			secure: false,
-			auth: {
-				user: 'zonetecde@rayanestaszewski.fr',
-				pass: process.env.pass
-			}
+	let transporter = nodemailer.createTransport({
+		host: process.env.host,
+		port: 587,
+		secure: false,
+		auth: {
+			user: 'zonetecde@rayanestaszewski.fr',
+			pass: process.env.pass
+		}
+	});
+
+	let mailOptions = {
+		from: 'zonetecde@rayanestaszewski.fr',
+		to: 'zonedetec@gmail.com',
+		subject: 'SignaMath - ' + name + ' (' + email + ')',
+		html: message
+	};
+
+	async function wrapedSendEmail(): Promise<boolean> {
+		return new Promise((resolve, reject) => {
+			// Envoyez l'email en utilisant la méthode sendMail
+			transporter.sendMail(mailOptions, (error: any, info: any) => {
+				if (error) {
+					resolve(false);
+					return console.log(error);
+				} else {
+					resolve(true);
+				}
+			});
 		});
-
-		let mailOptions = {
-			from: 'zonetecde@rayanestaszewski.fr',
-			to: 'zonedetec@gmail.com',
-			subject: 'SignaMath - ' + name + ' (' + email + ')',
-			html: message
-		};
-
-		transporter.sendMail(mailOptions, (error: any, info: any) => {
-			if (error) {
-				return new Response('Error: ' + error);
-			}
-			return new Response('Email sent: ' + info.response);
-		});
-
-		return new Response('Email sent.');
-	} catch (error) {
-		console.log('Error: ' + error);
-		return new Response('Error: ' + error);
 	}
+
+	const success: boolean = await wrapedSendEmail();
+
+	return new Response(success ? 'Email sent!' : 'Email failed to send.');
 }
