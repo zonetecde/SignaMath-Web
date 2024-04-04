@@ -11,6 +11,8 @@
 	import Row from './row/Row.svelte';
 	import Variation from './tdv/Variation.svelte';
 	import ConvexiteRow from './ConvexiteRow.svelte';
+	import { resultatDirect } from '$lib';
+	import { re } from 'mathjs';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -209,6 +211,7 @@
 					updateGlobalSigns += 1; // hook permettant de recalculer les solutions
 				}}
 				on:deleteLine={deleteLine}
+				hide={$resultatDirect}
 			/>
 		{/each}
 
@@ -220,6 +223,7 @@
 			{signs}
 			{variableName}
 			{choix}
+			directFormula={$resultatDirect ? formulaBase : ''}
 			on:handleFunctionNameChanged
 			on:handleVariableNameChanged
 		/>

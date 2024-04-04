@@ -2,6 +2,7 @@
 	import Choix from '../../models/choix';
 	import type Solution from '../../models/solution';
 	import SaisieFonction from '../saisie/SaisieFonction.svelte';
+	import SaisieMath from '../saisie/SaisieMath.svelte';
 
 	export let isBorneMinForbidden: boolean = false;
 	export let isBorneMaxForbidden: boolean = false;
@@ -10,6 +11,7 @@
 	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
 	export let signs: string[] = [];
+	export let directFormula: string = ''; // Si renseigné, alors on affiche directement la formule à la place d'un nom de fonction
 
 	export let choix: Choix = Choix.Variation;
 
@@ -34,13 +36,17 @@
 	<section
 		class="w-2/12 h-full border-r border-black flex items-center justify-center text-lg lg:text-xl"
 	>
-		<SaisieFonction
-			on:handleFunctionNameChanged
-			on:handleVariableNameChanged
-			functionName={functionNameTableau}
-			{variableName}
-			isDisabled={choix === Choix.Variation || choix === Choix.Convexite}
-		/>
+		{#if directFormula === ''}
+			<SaisieFonction
+				on:handleFunctionNameChanged
+				on:handleVariableNameChanged
+				functionName={functionNameTableau}
+				{variableName}
+				isDisabled={choix === Choix.Variation || choix === Choix.Convexite}
+			/>
+		{:else}
+			<SaisieMath value={directFormula} isDisabled />
+		{/if}
 	</section>
 
 	<div

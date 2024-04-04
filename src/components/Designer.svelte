@@ -4,6 +4,8 @@
 	import Choix from '../models/choix';
 	import SaisieFormule from './saisie/SaisieFormule.svelte';
 	import TableauDeSigne from './tds/Tableau.svelte';
+	import { resultatDirect } from '$lib';
+
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
 
@@ -11,6 +13,7 @@
 
 	// Formule du tableau (non dérivé)
 	let formula: string = 'x ^ 2 - 4 * x';
+
 	// Nom de la fonction
 	let functionName: string = 'f';
 	// Nom de la variable
@@ -232,6 +235,22 @@
 					</div>
 
 					<div>
+						{#if choix === Choix.Variation || choix === Choix.Convexite}
+							<input
+								type="checkbox"
+								id="resultatsdirect"
+								class="mt-3"
+								on:change={() => {
+									resultatDirect.set(!$resultatDirect);
+								}}
+							/>
+
+							<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+							<label for="resultatsdirect" class="text-sm lg:text-lg pr-10"
+								>Ne pas utiliser la dérivée</label
+							>
+						{/if}
+
 						<div class="md:max-w-[270px]">
 							<SaisieFormule
 								on:handleFunctionNameChanged={functionNameChanged}
@@ -253,7 +272,8 @@
 								>
 							</div>
 						{/if}
-						{#if choix === Choix.Variation || choix === Choix.Convexite}
+
+						{#if (choix === Choix.Variation || choix === Choix.Convexite) && !$resultatDirect}
 							<div class="opacity-70 mt-3 md:max-w-[280px]">
 								<p class="italic -mb-3 cursor-default">Dérivée de f(x)</p>
 								<SaisieFormule

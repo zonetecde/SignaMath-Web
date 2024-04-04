@@ -13,6 +13,7 @@
 	export let inRangeSolutions: Solution[];
 	export let index: number = 0;
 	export let newLineHasBeenAdded: number = 0; // hook
+	export let hide: boolean = false;
 
 	const dispatcher = createEventDispatcher();
 
@@ -103,7 +104,8 @@
 
 -->
 <div
-	class="w-full bg-white border-b border-x border-black flex relative flex-col"
+	class={'w-full bg-white border-b border-x border-black flex relative flex-col ' +
+		(hide ? 'hidden' : '')}
 	on:mouseenter={() => (showAddsButton = true)}
 	on:mouseleave={() => (showAddsButton = false)}
 >
