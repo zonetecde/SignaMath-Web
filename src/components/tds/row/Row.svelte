@@ -11,9 +11,12 @@
 	export let expression: ExpressionElement;
 	export let variableName: string = 'x';
 	export let inRangeSolutions: Solution[];
+	export let allSolutions: Solution[]; // Contient toutes les solutions meme hors range
+	export let borneMin: string;
 	export let index: number = 0;
 	export let newLineHasBeenAdded: number = 0; // hook
 	export let hide: boolean = false;
+	export let isBorneMinForbidden: boolean;
 
 	const dispatcher = createEventDispatcher();
 
@@ -39,6 +42,12 @@
 			sign: getSign(0),
 			doesCancelOnZero: false
 		});
+
+		// Si borneMin != -inf alors ça veut dire que la premiere expression s'annule peut
+		// etre à borneMin
+		if (allSolutions.length > 0 && !isBorneMinForbidden) {
+			cellules[0].doesCancelOnZero = allSolutions[0].value == borneMin;
+		}
 
 		// Pour tout les autres signes entre les différentes solutions
 		inRangeSolutions.forEach((solution, i) => {

@@ -12,7 +12,6 @@
 	import Variation from './tdv/Variation.svelte';
 	import ConvexiteRow from './ConvexiteRow.svelte';
 	import { resultatDirect } from '$lib';
-	import { re } from 'mathjs';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -50,6 +49,7 @@
 	let solutions: Solution[] = [];
 
 	// Calcul des solutions
+	let allSolutions: Solution[] = []; // Contient meme les solutions hors de l'intervalle
 	$: {
 		// Hook si l'utilisateur change une expression dans le tableau
 		// ou si une nouvelle formule est entrée par le user
@@ -85,6 +85,8 @@
 		solutions.sort((a, b) => {
 			return a.integer - b.integer;
 		});
+
+		allSolutions = solutions;
 	}
 
 	// Prend uniquement les solutions dans l'intervalle demandé
@@ -181,8 +183,8 @@
 	let isBorneMaxForbidden: boolean = false;
 
 	$: {
-		isBorneMinForbidden = solutions.some((x) => x.value === borneMin);
-		isBorneMaxForbidden = solutions.some((x) => x.value === borneMax);
+		isBorneMinForbidden = solutions.some((x) => x.value === borneMin && x.isForbidden);
+		isBorneMaxForbidden = solutions.some((x) => x.value === borneMax && x.isForbidden);
 	}
 </script>
 
@@ -201,8 +203,11 @@
 		{#each lignes as line, index}
 			<Row
 				{index}
+				{borneMin}
 				expression={line}
 				{inRangeSolutions}
+				{allSolutions}
+				{isBorneMinForbidden}
 				{variableName}
 				on:updateColumnsSigns={updateColumnSigns}
 				on:createNewRow={createNewRow}
