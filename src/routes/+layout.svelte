@@ -36,6 +36,8 @@
 				SignaMath
 			</p>
 
+			<img src="palestine.jpg" alt="Palestine" class="h-3/5 object-contain" />
+
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<img
