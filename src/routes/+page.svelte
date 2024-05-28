@@ -1,6 +1,5 @@
-<script>
+<script lang="ts">
 	// @ts-nocheck
-
 	import { Toaster } from 'svelte-sonner';
 
 	import Designer from '../components/Designer.svelte';
@@ -41,6 +40,7 @@
 
 <div class="w-screen h-full bg-[#f6effa] overflow-hidden">
 	<Designer on:showInfo={toggleShowInfo} {isInfoShown} />
+
 
 	<div
 		class={'absolute top-0 left-0 w-full h-full bg-black duration-200 ' +

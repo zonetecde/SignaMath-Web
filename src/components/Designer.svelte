@@ -1,3 +1,7 @@
+<svelte:head>
+	<script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+</svelte:head>
+
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import MathsExt from '../extensions/mathsExt';
@@ -58,9 +62,11 @@
 
 		handleResize(); // Appel l'event initialement
 		window.addEventListener('resize', handleResize); // Event : redimension de la fenêtre
+
+		showGraph()
 	});
 
-	/**
+		/**
 	 * L'utilisateur a entré un nouveau nom pour la variable
 	 * @param e Nouveau nom
 	 */
@@ -78,6 +84,8 @@
 	const functionChanged = (e: CustomEvent<any>) => {
 		// Remplace la formule par la nouvelle
 		formula = e.detail;
+
+		showGraph()
 	};
 
 	/**
@@ -137,6 +145,23 @@
 	// Si on est en dérivation on la calcul automatiquement
 	$: formuleDeriveTableau = choix === Choix.Variation ? formuleTableau : formuleDeriveTableau;
 
+	function showGraph(){
+		// Update le graph
+		 //@ts-ignore
+		 functionPlot({
+			target: '#graph',
+			width: 300,
+			height: 200,
+			data: [{
+				fn: formula,
+				derivative: {
+				fn: formuleTableau,
+				updateOnMouseMove: true
+				}
+			}]
+		})
+	}
+
 	/**
 	 * Télécharge le tableau en format image
 	 */
@@ -179,7 +204,7 @@
 		class={'md:w-2/12 md:min-w-[300px] bg-[#c3aac5cb] md:h-full flex justify-center flex-col relative md:pt-5 scrollbar-w-2 ' +
 			(toggleConfigVisibility ? 'visible' : 'hidden')}
 	>
-		<form class="px-3 flex flex-col w-full md:overflow-y-auto">
+		<form class="px-3 flex flex-col w-full md:overflow-y-auto overflow-x-hidden">
 			<fieldset id="group" class="w-full">
 				<div class="w-full flex flex-col-reverse lg:flex-col">
 					<div class="mt-3">
@@ -297,6 +322,9 @@
 									/>
 								</div>
 							{/if}
+
+							<div id="graph" class="w-[300px] h-[200px] hidden md:block mt-5 -ml-7 bg-white bg-opacity-30 rounded-2xl"></div>
+
 						{/if}
 					</div>
 				</div>
@@ -362,6 +390,7 @@
 			<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
 		</div>
 	{/if}
+	
 	<div
 		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative"
 	>
