@@ -61,6 +61,17 @@ export default class Sheller {
 			}
 		});
 
+		// Si la toute dernière expression est `2`, et que l'avant dernière se finit par `^(2)`, alors on enlève le `2` de la dernière expression
+		if (expressions.length > 1) {
+			const lastExpression = expressions[expressions.length - 1].Expression;
+			const beforeLastExpression = expressions[expressions.length - 2].Expression;
+
+			if (lastExpression === '2' && beforeLastExpression.endsWith('^(2)')) {
+				// Enlève la dernière expression
+				expressions.pop();
+			}
+		}
+
 		return expressions;
 	}
 

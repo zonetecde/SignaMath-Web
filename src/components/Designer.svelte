@@ -1,14 +1,10 @@
-<svelte:head>
-	<script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
-</svelte:head>
-
 <script lang="ts">
 	import { createEventDispatcher, onMount } from 'svelte';
 	import MathsExt from '../extensions/mathsExt';
 	import Choix from '../models/choix';
 	import SaisieFormule from './saisie/SaisieFormule.svelte';
 	import TableauDeSigne from './tds/Tableau.svelte';
-	import { resultatDirect } from '$lib';
+	import { isFetching, resultatDirect } from '$lib';
 
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
@@ -63,10 +59,10 @@
 		handleResize(); // Appel l'event initialement
 		window.addEventListener('resize', handleResize); // Event : redimension de la fenêtre
 
-		showGraph()
+		showGraph();
 	});
 
-		/**
+	/**
 	 * L'utilisateur a entré un nouveau nom pour la variable
 	 * @param e Nouveau nom
 	 */
@@ -85,7 +81,7 @@
 		// Remplace la formule par la nouvelle
 		formula = e.detail;
 
-		showGraph()
+		showGraph();
 	};
 
 	/**
@@ -123,21 +119,26 @@
 	// Si on veut étudier des variations, on dérive la formule de base
 	// Si on veut étudier la convexité, on dérive deux fois la formule de base
 	let formuleTableau: string = '2x-4';
-	$: {
+	async function updateFormule() {
+		isFetching.set(true);
 		switch (choix) {
 			case Choix.Variation:
-				formuleTableau = MathsExt.Deriver(formula, variableName);
+				formuleTableau = await MathsExt.Deriver(formula, variableName);
 				break;
 			case Choix.Tableau:
 				formuleTableau = formula;
 				break;
 			case Choix.Convexite:
-				const derivePremiere = MathsExt.Deriver(formula, variableName);
+				const derivePremiere = await MathsExt.Deriver(formula, variableName);
 				formuleDeriveTableau = derivePremiere;
-
-				formuleTableau = MathsExt.Deriver(derivePremiere, variableName);
+				formuleTableau = await MathsExt.Deriver(derivePremiere, variableName);
 				break;
 		}
+		isFetching.set(false);
+	}
+
+	$: if (formula || choix) {
+		updateFormule();
 	}
 
 	let formuleDeriveTableau = '';
@@ -145,21 +146,23 @@
 	// Si on est en dérivation on la calcul automatiquement
 	$: formuleDeriveTableau = choix === Choix.Variation ? formuleTableau : formuleDeriveTableau;
 
-	function showGraph(){
+	function showGraph() {
 		// Update le graph
-		 //@ts-ignore
-		 functionPlot({
+		//@ts-ignore
+		functionPlot({
 			target: '#graph',
 			width: 300,
 			height: 200,
-			data: [{
-				fn: formula,
-				derivative: {
-				fn: formuleTableau,
-				updateOnMouseMove: true
+			data: [
+				{
+					fn: formula,
+					derivative: {
+						fn: formuleTableau,
+						updateOnMouseMove: true
+					}
 				}
-			}]
-		})
+			]
+		});
 	}
 
 	/**
@@ -198,6 +201,10 @@
 			});
 	}
 </script>
+
+<svelte:head>
+	<script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+</svelte:head>
 
 <div class="flex flex-col md:flex-row h-full w-full">
 	<div
@@ -323,8 +330,10 @@
 								</div>
 							{/if}
 
-							<div id="graph" class="w-[300px] h-[200px] hidden md:block mt-5 -ml-7 bg-white bg-opacity-30 rounded-2xl"></div>
-
+							<div
+								id="graph"
+								class="w-[300px] h-[200px] hidden md:block mt-5 -ml-7 bg-white bg-opacity-30 rounded-2xl"
+							/>
 						{/if}
 					</div>
 				</div>
@@ -390,7 +399,7 @@
 			<p class="-mt-1 text-sm">{toggleConfigVisibility ? 'hide' : 'show'}</p>
 		</div>
 	{/if}
-	
+
 	<div
 		class="pt-5 w-full h-full overflow-y-auto overflow-x-hidden mb-5 flex flex-col justify-center items-center relative"
 	>

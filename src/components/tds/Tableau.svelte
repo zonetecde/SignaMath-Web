@@ -11,7 +11,7 @@
 	import Row from './row/Row.svelte';
 	import Variation from './tdv/Variation.svelte';
 	import ConvexiteRow from './ConvexiteRow.svelte';
-	import { resultatDirect } from '$lib';
+	import { isFetching, resultatDirect } from '$lib';
 
 	export let functionName: string = 'f';
 	export let variableName: string = 'x';
@@ -189,7 +189,7 @@
 </script>
 
 <div class="w-full h-full flex items-center justify-center flex-col">
-	<div class="w-11/12 md:w-10/12" id="tableau-de-signe">
+	<div class="w-11/12 md:w-10/12 relative" id="tableau-de-signe">
 		<Header
 			{variableName}
 			{borneMax}
@@ -259,6 +259,21 @@
 				on:handleFunctionNameChanged
 				on:handleVariableNameChanged
 			/>
+		{/if}
+
+		{#if $isFetching}
+			<div
+				class="absolute top-0 left-0 w-full h-full backdrop-blur-[2px] bg-opacity-50 flex items-center justify-center"
+			>
+				<div class="bg-white p-5 rounded-lg shadow-lg border-2">
+					<div class="flex items-center justify-center gap-2">
+						<div
+							class="w-5 h-5 border-2 border-t-0 border-l-0 border-black rounded-full animate-spin"
+						/>
+						<p>Calcul en cours...</p>
+					</div>
+				</div>
+			</div>
 		{/if}
 	</div>
 </div>
