@@ -119,26 +119,23 @@
 	// Si on veut étudier des variations, on dérive la formule de base
 	// Si on veut étudier la convexité, on dérive deux fois la formule de base
 	let formuleTableau: string = '2x-4';
-	async function updateFormule() {
+
+	$: {
 		isFetching.set(true);
 		switch (choix) {
 			case Choix.Variation:
-				formuleTableau = await MathsExt.Deriver(formula, variableName);
+				formuleTableau = MathsExt.Deriver(formula, variableName);
 				break;
 			case Choix.Tableau:
 				formuleTableau = formula;
 				break;
 			case Choix.Convexite:
-				const derivePremiere = await MathsExt.Deriver(formula, variableName);
+				const derivePremiere = MathsExt.Deriver(formula, variableName);
 				formuleDeriveTableau = derivePremiere;
-				formuleTableau = await MathsExt.Deriver(derivePremiere, variableName);
+				formuleTableau = MathsExt.Deriver(derivePremiere, variableName);
 				break;
 		}
 		isFetching.set(false);
-	}
-
-	$: if (formula || choix) {
-		updateFormule();
 	}
 
 	let formuleDeriveTableau = '';
