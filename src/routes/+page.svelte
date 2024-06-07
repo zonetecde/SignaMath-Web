@@ -41,7 +41,6 @@
 <div class="w-screen h-full bg-[#f6effa] overflow-hidden">
 	<Designer on:showInfo={toggleShowInfo} {isInfoShown} />
 
-
 	<div
 		class={'absolute top-0 left-0 w-full h-full bg-black duration-200 ' +
 			(isInfoShown ? 'scale-100  bg-opacity-60' : 'scale-0  bg-opacity-0')}
@@ -124,7 +123,7 @@
 					</button>
 				</div>
 
-				<p class="text-center font-bold">SignaMath 2023 - Rayane Staszewski</p>
+				<p class="text-center font-bold">SignaMath 2024 - Rayane Staszewski</p>
 
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
