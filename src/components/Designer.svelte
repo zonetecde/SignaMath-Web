@@ -354,8 +354,7 @@
 			>
 
 			<p class="text-gray-700 self-center underline-offset-2 mt-2">
-				<a href="https://www.rayanestaszewski.fr" target="_blank" class="underline"
-					>Rayane Staszewski</a
+				<a href="https://rayanestaszewski.fr" target="_blank" class="underline">Rayane Staszewski</a
 				>
 				-
 				<a target="_blank" href="https://github.com/zonetecde" class="underline">GitHub</a>

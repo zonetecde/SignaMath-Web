@@ -4,10 +4,30 @@
 	import GitHub from '$lib/assets/github.svg';
 	import { toast } from 'svelte-sonner';
 	import { dev } from '$app/environment';
+	import { onMount } from 'svelte';
 
 	function handleError(event: any) {
 		toast.error('Une erreur est survenue, désolé !');
 	}
+
+	onMount(() => {
+		// Vérifie si le localStorage contient la clé needWebsiteVisible
+		if (localStorage.getItem('needWebsiteVisible')) {
+			// Récupère la date stockée
+			const date = parseInt(localStorage.getItem('needWebsiteVisible') as string);
+
+			// Vérifie si la date est inférieure à 24h
+			if (new Date().getTime() - date < 86400000) {
+				// Si oui, on cache le message
+				needWebsiteVisible = false;
+			}
+		} else {
+			// Si non, on affiche le message
+			needWebsiteVisible = true;
+		}
+	});
+
+	let needWebsiteVisible = false;
 </script>
 
 <svelte:window on:error={handleError} />
@@ -62,3 +82,38 @@
 		<slot />
 	</div>
 </div>
+
+{#if needWebsiteVisible}
+	<div class="bg-[#21633e] bg-opacity-75 border-[#235f48] border-t-2 w-full h-16 absolute bottom-0">
+		<div class="flex items-center justify-center h-full w-full relative">
+			<p>
+				Besoin <b>d'un site internet professionnel</b> pour votre activité et <b>à petit prix</b> ?
+				Retrouvez-moi sur
+				<a href="https://rayanestaszewski.fr" target="_blank" class="text-blue-950"
+					>rayanestaszewski.fr</a
+				> !
+			</p>
+		</div>
+
+		<button
+			class="top-1 right-1 absolute"
+			on:click={() => {
+				needWebsiteVisible = false;
+
+				// Store pendant 24h dans le localStorage
+				localStorage.setItem('needWebsiteVisible', new Date().getTime().toString());
+			}}
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="1.5"
+				stroke="black"
+				class="size-6 bg-white bg-opacity-30 rounded-full border border-black"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+			</svg>
+		</button>
+	</div>
+{/if}
