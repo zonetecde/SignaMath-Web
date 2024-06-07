@@ -58,14 +58,14 @@
 
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-			<img
+			<!-- <img
 				src="palestine.jpg"
 				alt="Palestine"
 				class="h-3/5 object-contain cursor-pointer hover:scale-125 duration-150"
 				on:click={() => {
 					window.open('https://pcrf1.app.neoncrm.com/forms/general', '_blank');
 				}}
-			/>
+			/> -->
 
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
