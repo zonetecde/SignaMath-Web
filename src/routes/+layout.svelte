@@ -50,11 +50,13 @@
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 			<p
-				class="text-black md:font-bold text-2xl md:text-3xl select-none cursor-pointer"
+				class="text-black md:font-bold text-2xl md:text-3xl select-none cursor-pointer text-center leading-5"
 				on:click={() => window.location.reload()}
 			>
-				SignaMath
+				<s>SignaMath</s> SigmaMath
 			</p>
+
+			<img src="sigmamath.png" alt="SigmaMath" class="h-20 -ml-8" />
 
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
