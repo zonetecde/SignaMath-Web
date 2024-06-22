@@ -60,7 +60,7 @@
 			>
 				<div class="text-3xl font-bold text-center flex flex-row items-center justify-center -mt-2">
 					<img src={Icon} class="w-14 mb-2" alt="Logo du site" /><span class="ml-3 mr-7"
-						><s>SignaMath</s> SigmaMath</span
+						>SignaMath</span
 					>
 				</div>
 				<h2 class="text-lg text-center mt-2">Le générateur de tableaux incontournable</h2>
