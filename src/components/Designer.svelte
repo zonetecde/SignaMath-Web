@@ -135,6 +135,10 @@
 				formuleTableau = MathsExt.Deriver(derivePremiere, variableName);
 				break;
 		}
+
+		setTimeout(() => {
+			showGraph();
+		}, 100);
 		isFetching.set(false);
 	}
 
