@@ -11,23 +11,23 @@
 	}
 
 	onMount(() => {
-		// Vérifie si le localStorage contient la clé needWebsiteVisible
-		if (localStorage.getItem('needWebsiteVisible')) {
+		// Vérifie si le localStorage contient la clé signamathdonation
+		if (localStorage.getItem('signamathdonation')) {
 			// Récupère la date stockée
-			const date = parseInt(localStorage.getItem('needWebsiteVisible') as string);
+			const date = parseInt(localStorage.getItem('signamathdonation') as string);
 
 			// Vérifie si la date est inférieure à 24h
 			if (new Date().getTime() - date < 86400000) {
 				// Si oui, on cache le message
-				needWebsiteVisible = false;
+				signamathdonation = false;
 			}
 		} else {
 			// Si non, on affiche le message
-			needWebsiteVisible = true;
+			signamathdonation = true;
 		}
 	});
 
-	let needWebsiteVisible = false;
+	let signamathdonation = false;
 </script>
 
 <svelte:window on:error={handleError} />
@@ -83,25 +83,26 @@
 	</div>
 </div>
 
-{#if needWebsiteVisible}
-	<div class="bg-[#21633e] bg-opacity-75 border-[#235f48] border-t-2 w-full h-16 absolute bottom-0">
-		<div class="flex items-center justify-center h-full w-full relative">
+{#if signamathdonation}
+	<div
+		class="bg-[#c9aa9f] bg-opacity-90 border-[#5f4523] border-y-2 py-20 w-full h-16 absolute bottom-1/2"
+	>
+		<div class="flex items-center justify-center h-full w-full relative text-center">
 			<p>
-				Besoin <b>d'un site internet professionnel</b> pour votre activité et <b>à petit prix</b> ?
-				Retrouvez-moi sur
-				<a href="https://rayanestaszewski.fr" target="_blank" class="text-blue-950"
-					>rayanestaszewski.fr</a
-				> !
+				<strong>SignaMath risque de bientôt fermer !</strong><br />Développer ce site internet et
+				payer l'hébergement devient compliqué pour moi, qui ne suis qu'un étudiant. Pour permettre à
+				SignaMath de continuer à exister, faites un don sur
+				<a href="https://ko-fi.com/I2I6ZLAM3" class="text-blue-800 underline">Ko-fi</a> !
 			</p>
 		</div>
 
 		<button
 			class="top-1 right-1 absolute"
 			on:click={() => {
-				needWebsiteVisible = false;
+				signamathdonation = false;
 
 				// Store pendant 24h dans le localStorage
-				localStorage.setItem('needWebsiteVisible', new Date().getTime().toString());
+				localStorage.setItem('signamathdonation', new Date().getTime().toString());
 			}}
 		>
 			<svg

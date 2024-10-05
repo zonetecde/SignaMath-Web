@@ -8,7 +8,6 @@
 	import { onMount } from 'svelte';
 
 	let isInfoShown = false;
-	let isSendCommentShown = false;
 
 	onMount(() => {
 		const visited = window.localStorage.getItem('visited') !== null;
@@ -20,13 +19,6 @@
 
 		window.localStorage.setItem('visited', true);
 	});
-
-	/**
-	 * Toggle the visibility of the send comment
-	 */
-	function toggleSendComment() {
-		isSendCommentShown = !isSendCommentShown;
-	}
 
 	/**
 	 * Toggle the visibility of the infos
@@ -65,61 +57,43 @@
 				</div>
 				<h2 class="text-lg text-center mt-2">Le générateur de tableaux incontournable</h2>
 
-				{#if !isSendCommentShown}
-					<p class="mt-10 leading-6">
-						SignaMath est un site internet permettant de dresser des tableaux de signes et de
-						variations afin d'étudier les signes ou les variations d'une fonction.<br />
-						Entrez une formule dans la zone de saisie prévue à cet effet pour qu'elle soit automatiquement
-						dérivée et que son tableau de variations ou de signes soit dressé.<br /> Pour passer du
-						tableau de variations au tableau de signes, il faut appuyer sur le bouton radio prévu à
-						cet effet.<br />
-						Le site étant gratuit,
-						<a
-							href="https://www.buymeacoffee.com/zonetecde"
-							target="_blank"
-							class="italic underline">un petit café</a
-						>
-						ne serait pas de refus...
-						<br />
-						Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit
-						cloner
-						<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
-							>le repo GitHub</a
-						>, ou télécharger
-						<a
-							href="https://github.com/zonetecde/signamath"
-							target="_blank"
-							download
-							class="underline"
-							>la version logicielle
-						</a>
-						(dépréciée) du site.
-						<br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
-						<i>"Envoyer un commentaire"</i>
-						ci-dessous.
-						<br /><br />
-					</p>
-				{:else}
-					<div class="my-7">
-						<CommentForm />
-					</div>
-				{/if}
+				<p class="mt-10 leading-6">
+					SignaMath est un site internet permettant de dresser des tableaux de signes et de
+					variations afin d'étudier les signes ou les variations d'une fonction.<br />
+					Entrez une formule dans la zone de saisie prévue à cet effet pour qu'elle soit automatiquement
+					dérivée et que son tableau de variations ou de signes soit dressé.<br /> Pour passer du
+					tableau de variations au tableau de signes, il faut appuyer sur le bouton radio prévu à
+					cet effet.<br />
+					Le site étant gratuit,
+					<a href="https://www.buymeacoffee.com/zonetecde" target="_blank" class="italic underline"
+						>un petit café</a
+					>
+					ne serait pas de refus...
+					<br />
+					Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit cloner
+					<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
+						>le repo GitHub</a
+					>, ou télécharger
+					<a
+						href="https://github.com/zonetecde/signamath"
+						target="_blank"
+						download
+						class="underline"
+						>la version logicielle
+					</a>
+					(dépréciée) du site.
+					<br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
+					<i>"Envoyer un commentaire"</i>
+					ci-dessous.
+					<br /><br />
+				</p>
 
 				<div class="w-full flex mt-2 mb-5 justify-center gap-5">
-					{#if !isSendCommentShown}
-						<button
-							on:click={toggleShowInfo}
-							class=" w-64 py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500"
-						>
-							Accéder au site
-						</button>
-					{/if}
 					<button
-						on:click={toggleSendComment}
-						class={' py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500 ' +
-							(isSendCommentShown ? ' w-32' : ' w-64')}
+						on:click={toggleShowInfo}
+						class=" w-64 py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500"
 					>
-						{isSendCommentShown ? 'Retour' : 'Envoyer un commentaire'}
+						Accéder au site
 					</button>
 				</div>
 
