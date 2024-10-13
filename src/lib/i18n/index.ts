@@ -12,5 +12,5 @@ register('cn', () => import('./locales/cn.json'));
 
 init({
 	fallbackLocale: defaultLocale,
-	initialLocale: browser ? 'es' : defaultLocale
+	initialLocale: browser ? window.navigator.language : defaultLocale
 });
