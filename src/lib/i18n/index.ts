@@ -8,7 +8,7 @@ register('fr', () => import('./locales/fr.json'));
 register('en', () => import('./locales/en.json'));
 register('de', () => import('./locales/de.json'));
 register('es', () => import('./locales/es.json'));
-register('cn', () => import('./locales/cn.json'));
+register('zh-CN', () => import('./locales/cn.json'));
 
 init({
 	fallbackLocale: defaultLocale,
