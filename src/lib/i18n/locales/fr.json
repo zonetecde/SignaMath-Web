@@ -1,0 +1,46 @@
+{
+	"page": {
+		"page_info": {
+			"title": "SignaMath | Générateur de tableau de signes et de variations",
+			"description": "Générer des tableaux de signes et de variations avec SignaMath en toute simplicité",
+			"keywords": "SignaMath, générateur de tableaux, tableau, tableaux, signes, variations, fonction, formule, dérivée, utilisation gratuite, repo GitHub, version en ligne, contacter, zonedetec, zonetecde, Rayane Staszewski"
+		},
+		"home": {
+			"title": "SignaMath",
+			"warning": "SignaMath risque de bientôt fermer !",
+			"warning2": "Développer ce site internet et payer l'hébergement devient compliqué pour moi, qui ne suis qu'un étudiant. Pour permettre à SignaMath de continuer à exister, faites un don sur",
+			"subtitle": "Le générateur de tableaux incontournable",
+			"desc1": "SignaMath est un site internet permettant de dresser des tableaux de signes et de variations afin d'étudier les signes ou les variations d'une fonction.",
+			"desc2": "Entrez une formule dans la zone de saisie prévue à cet effet pour qu'elle soit automatiquement dérivée et que son tableau de variations ou de signes soit dressé.",
+			"desc3": "Pour passer du tableau de variations au tableau de signes, il faut appuyer sur le bouton radio prévu à cet effet.",
+			"desc4": "Le site étant gratuit,",
+			"desc5": "une donation",
+			"desc6": "serait la bienvenue pour m'aider à payer l'hébergement et à continuer à développer le site.",
+			"desc7": "Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit cloner",
+			"desc8": "le dépôt GitHub",
+			"desc9": ", ou télécharger",
+			"desc10": "la version logicielle",
+			"desc11": "(dépréciée) du site.",
+			"desc12": "Pour tout commentaire ou suggestion, merci de passer par les moyens de contact trouvable sur mon profil GitHub.",
+			"button_access": "Accéder au site"
+		},
+		"options": {
+			"opt1": "Étude de la convexité d'une fonction",
+			"opt2": "Étude des variations d'une fonction",
+			"opt3": "Tableau de signe d'une fonction",
+			"opt4": "Ne pas utiliser la dérivée",
+			"opt5": "Taille du tableau",
+			"opt6": "Enregistrer en tant qu'image",
+			"opt7": "Ajouter une ligne",
+			"opt8": "Ajouter une ligne de valeur interdite",
+			"opt9": "Supprimer"
+		},
+		"toast": {
+			"toast1": "Le nom de variable 'i' est réservé à l'imaginaire",
+			"toast2": "Le nom de variable 'e' est réservé à l'exponentielle",
+			"toast3": "Le nom de variable saisi n'est pas autorisé.",
+			"toast4": "Uniquement les lettres sont autorisées.",
+			"toast5": "Veuillez saisir une formule valide."
+		}
+	}
+}

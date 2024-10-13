@@ -7,6 +7,7 @@
 	import Solver from '../../../api/solver';
 	import RowSigns from './RowSigns.svelte';
 	import AddRowHover from './AddRowHover.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let expression: ExpressionElement;
 	export let variableName: string = 'x';
@@ -141,7 +142,7 @@
 	{#if showAddsButton}
 		<button
 			class="absolute right-1 bottom-1 text-xs md:text-base bg-red-200 px-4 py-0.5 rounded-md hover:bg-red-300 duration-100"
-			on:click={handleDeleteLine}>Supprimer</button
+			on:click={handleDeleteLine}>{$_('page.options.opt9')}</button
 		>
 
 		<AddRowHover index={index + 1} on:createNewRow isTop={false} />

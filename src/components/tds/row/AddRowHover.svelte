@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let index: number;
 	export let isTop: boolean;
@@ -28,12 +29,12 @@
 			(isTop ? 'border-b rounded-br-md -mt-2' : 'border-t rounded-tr-md -mb-2')}
 	>
 		<button class="px-3 py-1 bg-green-200 cursor-pointer" on:click={() => handleCreateNewRow(false)}
-			>Ajouter une ligne</button
+			>{$_('page.options.opt7')}</button
 		>
 		<button
 			class={'px-3 py-1 bg-red-200 border-r cursor-pointer z-50 border-black ' +
 				(isTop ? 'rounded-br-md' : 'rounded-tr-md')}
-			on:click={() => handleCreateNewRow(true)}>Ajouter une ligne de valeur interdite</button
+			on:click={() => handleCreateNewRow(true)}>{$_('page.options.opt8')}</button
 		>
 	</div>
 </div>

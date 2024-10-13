@@ -3,6 +3,7 @@
 	import Katex from 'svelte-katex';
 	import { parse } from 'mathjs';
 	import { toast } from 'svelte-sonner';
+	import { _ } from 'svelte-i18n';
 
 	// Style
 	export let classes = '';
@@ -95,21 +96,21 @@
 		} else if (forbidden.includes(value.trim())) {
 			switch (value.trim()) {
 				case 'i':
-					toast.error("Le nom de variable 'i' est réservé à l'imaginaire");
+					toast.error($_('page.toast.toast1'));
 					break;
 				case 'e':
-					toast.error("Le nom de variable 'e' est réservé à l'exponentielle");
+					toast.error($_('page.toast.toast2'));
 					break;
 				default:
-					toast.error("Le nom de variable saisi n'est pas autorisé.");
+					toast.error($_('page.toast.toast3'));
 					break;
 			}
 		} else if (onlyAllowLetter && /^[a-zA-Z']+$/.test(value)) {
-			toast.error('Uniquement les lettres sont autorisées.');
+			toast.error($_('page.toast.toast4'));
 		} else {
 			// else : le placeholder est affiché vu qu'il n'y a pas de texte
 			// dans l'input
-			toast.error('Veuillez saisir une formule valide.');
+			toast.error($_('page.toast.toast5'));
 		}
 	};
 

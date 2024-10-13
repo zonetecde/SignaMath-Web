@@ -1,0 +1,49 @@
+{
+	"page": {
+		"page_info": {
+			"title": "SignaMath | Generador de tablas de signos y variaciones",
+			"description": "Genera tablas de signos y variaciones fácilmente con SignaMath",
+			"keywords": "SignaMath, generador de tablas, tabla, tablas, signos, variaciones, función, fórmula, derivada, uso gratuito, repositorio de GitHub, versión en línea, contacto, zonedetec, zonetecde, Rayane Staszewski"
+		},
+		"home": {
+			"title": "SignaMath",
+			"warning": "¡SignaMath está en riesgo de cerrar pronto!",
+			"warning2": "Desarrollar este sitio web y pagar el alojamiento se está volviendo complicado para mí como estudiante. Para mantener vivo SignaMath, considere hacer una donación en",
+			"subtitle": "El generador de tablas esencial",
+			"desc1": "SignaMath es un sitio web para crear tablas de signos y variaciones y estudiar así los signos o variaciones de una función.",
+			"desc2": "Ingrese una fórmula en el área de entrada para derivarla automáticamente y generar su tabla de variaciones o signos.",
+			"desc3": "Para cambiar de la tabla de variaciones a la tabla de signos, use el botón de opción proporcionado.",
+			"desc4": "Como el sitio es gratuito,",
+			"desc5": "las donaciones",
+			"desc6": "son bienvenidas para ayudarme a pagar el alojamiento y continuar desarrollando el sitio.",
+			"desc7": "Si necesita usar SignaMath sin conexión a Internet, puede clonar",
+			"desc8": "el repositorio de GitHub",
+			"desc9": "o descargar",
+			"desc10": "la versión de software",
+			"desc11": "(obsoleta) del sitio.",
+			"desc12": "Para cualquier comentario o sugerencia, utilice los métodos de contacto disponibles en mi perfil de GitHub.",
+			"button_access": "Acceder al sitio"
+		},
+		"options": {
+			"opt1": "Estudio de la convexidad de una función",
+			"opt2": "Estudio de las variaciones de una función",
+			"opt3": "Tabla de signos de una función",
+			"opt4": "No utilizar la derivada",
+			"opt5": "Tamaño de la tabla",
+			"opt6": "Guardar como imagen",
+			"opt7": "Agregar una fila",
+			"opt8": "Agregar una fila de valor prohibido",
+			"opt9": "Eliminar"
+		},
+		"toast": {
+			"toast1": "El nombre de variable 'i' está reservado para el imaginario",
+			"toast2": "El nombre de variable 'e' está reservado para la constante exponencial",
+			"toast3": "El nombre de variable ingresado no está permitido.",
+			"toast4": "Solo se permiten letras.",
+			"toast5": "Por favor, ingrese una fórmula válida."
+		},
+		"page_info": {
+			"title": ""
+		}
+	}
+}

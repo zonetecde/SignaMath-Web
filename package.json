@@ -44,6 +44,7 @@
 		"mathjs": "^11.11.2",
 		"nerdamer": "^1.1.13",
 		"nodemailer": "^6.9.13",
+		"svelte-i18n": "^4.0.0",
 		"svelte-katex": "^0.1.2",
 		"svelte-sonner": "^0.3.0"
 	}

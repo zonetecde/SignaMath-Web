@@ -5,6 +5,7 @@
 	import SaisieFormule from './saisie/SaisieFormule.svelte';
 	import TableauDeSigne from './tds/Tableau.svelte';
 	import { isFetching, resultatDirect } from '$lib';
+	import { _ } from 'svelte-i18n';
 
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
@@ -149,21 +150,25 @@
 
 	function showGraph() {
 		// Update le graph
-		//@ts-ignore
-		functionPlot({
-			target: '#graph',
-			width: 300,
-			height: 200,
-			data: [
-				{
-					fn: formula,
-					derivative: {
-						fn: formuleTableau,
-						updateOnMouseMove: true
+		try {
+			//@ts-ignore
+			functionPlot({
+				target: '#graph',
+				width: 300,
+				height: 200,
+				data: [
+					{
+						fn: formula,
+						derivative: {
+							fn: formuleTableau,
+							updateOnMouseMove: true
+						}
 					}
-				}
-			]
-		});
+				]
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	/**
@@ -229,8 +234,10 @@
 							class="text-md lg:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('convexité')?.click();
-							}}>Étude de la convexité d'une fonction</label
+							}}
 						>
+							{$_('page.options.opt1')}
+						</label>
 						<br />
 						<input
 							class="mt-2.5"
@@ -246,8 +253,10 @@
 							class="text-md lg:text-xl pr-10"
 							on:mousedown={() => {
 								document.getElementById('variations')?.click();
-							}}>Étude des variations d'une fonction</label
+							}}
 						>
+							{$_('page.options.opt2')}
+						</label>
 
 						<br />
 						<input
@@ -263,7 +272,9 @@
 							class="text-md lg:text-xl"
 							on:mousedown={() => {
 								document.getElementById('tableau')?.click();
-							}}>Tableau de signe d'une fonction</label
+							}}
+						>
+							{$_('page.options.opt3')}</label
 						>
 					</div>
 
@@ -279,9 +290,9 @@
 							/>
 
 							<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-							<label for="resultatsdirect" class="text-sm lg:text-lg pr-10"
-								>Ne pas utiliser la dérivée</label
-							>
+							<label for="resultatsdirect" class="text-sm lg:text-lg pr-10">
+								{$_('page.options.opt4')}
+							</label>
 						{/if}
 
 						<div class="md:max-w-[270px]">
@@ -341,7 +352,7 @@
 			</fieldset>
 		</form>
 
-		<label class="mx-5 mt-3 mb-1 md:mb-2" for="scale"> Taille du tableau </label>
+		<label class="mx-5 mt-3 mb-1 md:mb-2" for="scale"> {$_('page.options.opt5')} </label>
 
 		<input type="range" class="mx-5" bind:value={scale} min="0.5" max="3" step="0.05" id="scale" />
 
@@ -365,8 +376,10 @@
 		</section>
 		<button
 			class="self-center w-10/12 mt-2 md:mt-3 text-sm md:text-lg mb-2 md:mb-5 bg-violet-200 px-8 py-1 md:py-3 border-2 border-violet-600 rounded-xl hover:scale-105 duration-100 hover:bg-violet-400"
-			on:click={downloadTab}>Enregistrer en tant qu'image</button
+			on:click={downloadTab}
 		>
+			{$_('page.options.opt6')}
+		</button>
 	</div>
 
 	<!-- svelte-ignore a11y-no-static-element-interactions -->

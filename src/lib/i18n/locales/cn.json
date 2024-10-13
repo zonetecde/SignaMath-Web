@@ -1,0 +1,49 @@
+{
+	"page": {
+		"page_info": {
+			"title": "SignaMath | 符号与变化表生成器",
+			"description": "使用 SignaMath 轻松生成符号和变化表",
+			"keywords": "SignaMath, 表格生成器, 表, 符号, 变化, 函数, 公式, 导数, 免费使用, GitHub 存储库, 在线版本, 联系, zonedetec, zonetecde, Rayane Staszewski"
+		},
+		"home": {
+			"title": "SignaMath",
+			"warning": "SignaMath 即将关闭！",
+			"warning2": "作为一名学生，开发这个网站并支付其托管费用变得困难。为了让 SignaMath 继续存在，请考虑捐赠至",
+			"subtitle": "不可或缺的表格生成器",
+			"desc1": "SignaMath 是一个网站，用于创建函数的符号和变化表以研究函数的符号或变化。",
+			"desc2": "在输入区域输入一个公式，它将自动导出并生成其变化或符号表。",
+			"desc3": "要从变化表切换到符号表，请使用提供的单选按钮。",
+			"desc4": "由于该网站免费，",
+			"desc5": "捐赠",
+			"desc6": "将有助于我支付托管费用并继续开发该网站。",
+			"desc7": "如果您需要离线使用 SignaMath，您可以克隆",
+			"desc8": "GitHub 存储库",
+			"desc9": "或下载",
+			"desc10": "该网站的软件版本",
+			"desc11": "（已弃用）。",
+			"desc12": "如有任何意见或建议，请使用我 GitHub 个人资料上提供的联系方式。",
+			"button_access": "访问该网站"
+		},
+		"options": {
+			"opt1": "研究函数的凸性",
+			"opt2": "研究函数的变化",
+			"opt3": "函数的符号表",
+			"opt4": "不使用导数",
+			"opt5": "表格大小",
+			"opt6": "保存为图片",
+			"opt7": "添加一行",
+			"opt8": "添加一行禁止值",
+			"opt9": "删除"
+		},
+		"toast": {
+			"toast1": "变量名 'i' 已保留给虚数单位",
+			"toast2": "变量名 'e' 已保留给指数常数",
+			"toast3": "输入的变量名不允许。",
+			"toast4": "只允许使用字母。",
+			"toast5": "请输入有效的公式。"
+		},
+		"page_info": {
+			"title": ""
+		}
+	}
+}

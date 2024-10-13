@@ -6,6 +6,7 @@
 	import Icon from '$lib/assets/icon.png';
 	import CommentForm from '../components/about/CommentForm.svelte';
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
 	let isInfoShown = false;
 
@@ -55,36 +56,42 @@
 						>SignaMath</span
 					>
 				</div>
-				<h2 class="text-lg text-center mt-2">Le générateur de tableaux incontournable</h2>
+				<h2 class="text-lg text-center mt-2">
+					{$_('page.home.subtitle')}
+				</h2>
 
 				<p class="mt-10 leading-6">
-					SignaMath est un site internet permettant de dresser des tableaux de signes et de
-					variations afin d'étudier les signes ou les variations d'une fonction.<br />
-					Entrez une formule dans la zone de saisie prévue à cet effet pour qu'elle soit automatiquement
-					dérivée et que son tableau de variations ou de signes soit dressé.<br /> Pour passer du
-					tableau de variations au tableau de signes, il faut appuyer sur le bouton radio prévu à
-					cet effet.<br />
-					Le site étant gratuit,
-					<a href="https://www.buymeacoffee.com/zonetecde" target="_blank" class="italic underline"
-						>un petit café</a
-					>
-					ne serait pas de refus...
+					{$_('page.home.desc1')}
 					<br />
-					Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit cloner
+					{$_('page.home.desc2')}
+
+					<br />
+					{$_('page.home.desc3')}
+					<br />
+					{$_('page.home.desc4')}
+
+					<a href="https://www.buymeacoffee.com/zonetecde" target="_blank" class="italic underline">
+						{$_('page.home.desc5')}
+					</a>
+					{$_('page.home.desc6')}
+
+					<br />
+					{$_('page.home.desc7')}
 					<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
-						>le repo GitHub</a
-					>, ou télécharger
+						>{$_('page.home.desc8')}</a
+					>
+					{$_('page.home.desc9')}
 					<a
 						href="https://github.com/zonetecde/signamath"
 						target="_blank"
 						download
 						class="underline"
-						>la version logicielle
+						>{$_('page.home.desc10')}
 					</a>
-					(dépréciée) du site.
-					<br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
-					<i>"Envoyer un commentaire"</i>
-					ci-dessous.
+					{$_('page.home.desc11')}
+					<br />
+					{$_('page.home.desc12')}
+
 					<br /><br />
 				</p>
 
@@ -93,7 +100,7 @@
 						on:click={toggleShowInfo}
 						class=" w-64 py-1 bg-blue-300 hover:bg-blue-400 duration-75 rounded-lg shadow-lg border-2 border-slate-600 shadow-gray-500"
 					>
-						Accéder au site
+						{$_('page.home.button_access')}
 					</button>
 				</div>
 

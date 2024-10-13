@@ -1,0 +1,46 @@
+{
+	"page": {
+		"page_info": {
+			"title": "SignaMath | Sign and Variation Table Generator",
+			"description": "Easily generate sign and variation tables with SignaMath",
+			"keywords": "SignaMath, table generator, table, tables, signs, variations, function, formula, derivative, free use, GitHub repo, online version, contact, zonedetec, zonetecde, Rayane Staszewski"
+		},
+		"home": {
+			"title": "SignaMath",
+			"warning": "SignaMath is at risk of closing soon!",
+			"warning2": "Developing this website and paying for hosting is becoming difficult for me as a student. To keep SignaMath alive, please consider donating at",
+			"subtitle": "The essential table generator",
+			"desc1": "SignaMath is a website for creating sign and variation tables to study the signs or variations of a function.",
+			"desc2": "Enter a formula in the input area to automatically derive it and generate its variation or sign table.",
+			"desc3": "To switch from the variation table to the sign table, use the provided radio button.",
+			"desc4": "Since the site is free,",
+			"desc5": "donations",
+			"desc6": "are welcome to help me pay for hosting and continue developing the site.",
+			"desc7": "If you need to use SignaMath offline, you can either clone",
+			"desc8": "the GitHub repository",
+			"desc9": "or download",
+			"desc10": "the software version",
+			"desc11": "(deprecated) of the site.",
+			"desc12": "For any comments or suggestions, please use the contact methods available on my GitHub profile.",
+			"button_access": "Access the site"
+		},
+		"options": {
+			"opt1": "Study of the convexity of a function",
+			"opt2": "Study of the variations of a function",
+			"opt3": "Sign table of a function",
+			"opt4": "Do not use the derivative",
+			"opt5": "Table size",
+			"opt6": "Save as image",
+			"opt7": "Add a row",
+			"opt8": "Add a row of forbidden value",
+			"opt9": "Delete"
+		},
+		"toast": {
+			"toast1": "The variable name 'i' is reserved for the imaginary unit",
+			"toast2": "The variable name 'e' is reserved for the exponential constant",
+			"toast3": "The entered variable name is not allowed.",
+			"toast4": "Only letters are allowed.",
+			"toast5": "Please enter a valid formula."
+		}
+	}
+}

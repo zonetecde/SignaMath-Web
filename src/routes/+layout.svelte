@@ -5,6 +5,19 @@
 	import { toast } from 'svelte-sonner';
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
+
+	import { browser } from '$app/environment';
+	import '$lib/i18n';
+	import { locale, waitLocale } from 'svelte-i18n';
+	import type { LayoutLoad } from './$types';
+
+	export const load: LayoutLoad = async () => {
+		if (browser) {
+			locale.set(window.navigator.language);
+		}
+		await waitLocale();
+	};
 
 	function handleError(event: any) {
 		toast.error('Une erreur est survenue, désolé !');
@@ -30,6 +43,16 @@
 	let signamathdonation = false;
 </script>
 
+<svelte:head>
+	<meta property="og:title" content={$_('page.page_info.title')} />
+	<meta property="og:description" content={$_('page.page_info.description')} />
+
+	<meta name="description" content={$_('page.page_info.description')} />
+	<title>{$_('page.page_info.title')}</title>
+
+	<meta name="keywords" content={$_('page.page_info.keywords')} />
+</svelte:head>
+
 <svelte:window on:error={handleError} />
 
 <div class="h-screen w-screen">
@@ -53,7 +76,7 @@
 				class="text-black md:font-bold text-2xl md:text-3xl select-none cursor-pointer text-center leading-5"
 				on:click={() => window.location.reload()}
 			>
-				SignaMath
+				{$_('page.home.title')}
 			</p>
 
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -89,9 +112,10 @@
 	>
 		<div class="flex items-center justify-center h-full w-full relative text-center">
 			<p>
-				<strong>SignaMath risque de bientôt fermer !</strong><br />Développer ce site internet et
-				payer l'hébergement devient compliqué pour moi, qui ne suis qu'un étudiant. Pour permettre à
-				SignaMath de continuer à exister, faites un don sur
+				<strong>
+					{$_('page.home.warning')}
+				</strong><br />
+				{$_('page.home.warning2')}
 				<a href="https://ko-fi.com/I2I6ZLAM3" class="text-blue-800 underline">Ko-fi</a> !
 			</p>
 		</div>

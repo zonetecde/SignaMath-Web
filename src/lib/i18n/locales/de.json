@@ -1,0 +1,49 @@
+{
+	"page": {
+		"page_info": {
+			"title": "SignaMath | Vorzeichen- und Variationstabellengenerator",
+			"description": "Erstellen Sie ganz einfach Vorzeichen- und Variationstabellen mit SignaMath",
+			"keywords": "SignaMath, Tabellengenerator, Tabelle, Tabellen, Vorzeichen, Variationen, Funktion, Formel, Ableitung, kostenlose Nutzung, GitHub-Repo, Online-Version, Kontakt, zonedetec, zonetecde, Rayane Staszewski"
+		},
+		"home": {
+			"title": "SignaMath",
+			"warning": "SignaMath könnte bald geschlossen werden!",
+			"warning2": "Die Entwicklung dieser Website und das Bezahlen des Hostings wird für mich als Student immer schwieriger. Um SignaMath am Leben zu erhalten, spenden Sie bitte auf",
+			"subtitle": "Der unverzichtbare Tabellengenerator",
+			"desc1": "SignaMath ist eine Website, die es ermöglicht, Vorzeichen- und Variationstabellen zu erstellen, um die Vorzeichen oder Variationen einer Funktion zu untersuchen.",
+			"desc2": "Geben Sie eine Formel in das dafür vorgesehene Eingabefeld ein, damit sie automatisch abgeleitet wird und ihre Vorzeichen- oder Variationstabelle erstellt wird.",
+			"desc3": "Um von der Variationstabelle zur Vorzeichentabelle zu wechseln, drücken Sie den dafür vorgesehenen Radio-Button.",
+			"desc4": "Da die Website kostenlos ist,",
+			"desc5": "wäre eine Spende",
+			"desc6": "willkommen, um mir zu helfen, das Hosting zu bezahlen und die Website weiterzuentwickeln.",
+			"desc7": "Wenn Sie SignaMath ohne Internetverbindung verwenden müssen, können Sie entweder",
+			"desc8": "das GitHub-Repository",
+			"desc9": "klonen oder",
+			"desc10": "die Softwareversion",
+			"desc11": "(veraltet) der Website herunterladen.",
+			"desc12": "Für Kommentare oder Vorschläge nutzen Sie bitte die Kontaktmöglichkeiten auf meinem GitHub-Profil.",
+			"button_access": "Zur Website"
+		},
+		"options": {
+			"opt1": "Untersuchung der Konvexität einer Funktion",
+			"opt2": "Untersuchung der Variationen einer Funktion",
+			"opt3": "Vorzeichentabelle einer Funktion",
+			"opt4": "Die Ableitung nicht verwenden",
+			"opt5": "Tabellengröße",
+			"opt6": "Als Bild speichern",
+			"opt7": "Eine Zeile hinzufügen",
+			"opt8": "Eine Zeile mit verbotenen Werten hinzufügen",
+			"opt9": "Löschen"
+		},
+		"toast": {
+			"toast1": "Der Variablenname 'i' ist für die imaginäre Einheit reserviert",
+			"toast2": "Der Variablenname 'e' ist für die Exponentialkonstante reserviert",
+			"toast3": "Der eingegebene Variablenname ist nicht erlaubt.",
+			"toast4": "Es sind nur Buchstaben erlaubt.",
+			"toast5": "Bitte geben Sie eine gültige Formel ein."
+		},
+		"page_info": {
+			"title": ""
+		}
+	}
+}
