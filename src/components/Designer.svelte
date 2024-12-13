@@ -149,21 +149,25 @@
 
 	function showGraph() {
 		// Update le graph
-		//@ts-ignore
-		functionPlot({
-			target: '#graph',
-			width: 300,
-			height: 200,
-			data: [
-				{
-					fn: formula,
-					derivative: {
-						fn: formuleTableau,
-						updateOnMouseMove: true
+		try {
+			//@ts-ignore
+			functionPlot({
+				target: '#graph',
+				width: 300,
+				height: 200,
+				data: [
+					{
+						fn: formula,
+						derivative: {
+							fn: formuleTableau,
+							updateOnMouseMove: true
+						}
 					}
-				}
-			]
-		});
+				]
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	/**
