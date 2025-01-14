@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import { dev } from '$app/environment';
 	import { onMount } from 'svelte';
+	import KofiButton from '../components/KofiButton.svelte';
 
 	function handleError(event: any) {
 		toast.error('Une erreur est survenue, désolé !');
@@ -89,6 +90,7 @@
 
 	<div class="h-full -mt-12 pt-12 md:-mt-20 md:pt-20">
 		<slot />
+		<KofiButton />
 	</div>
 </div>
 
