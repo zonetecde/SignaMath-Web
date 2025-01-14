@@ -5,24 +5,27 @@
 -->
 
 <script lang="ts">
-	export let value: number = 0;
-	export let sign: string = '+';
-	export let position: 'borneMax' | 'borneMin' | 'centre' = 'centre';
+    export let value: number | undefined = undefined;
+    export let sign: string = '+';
+    export let position: 'borneMax' | 'borneMin' | 'centre' = 'centre';
+
+    const getPositionClass = (pos: typeof position) => {
+        const positions = {
+            borneMax: 'right-0',
+            centre: '-left-0.5 transform -translate-x-1/2',
+            borneMin: 'left-0'
+        };
+        return positions[pos];
+    };
 </script>
 
 <div
-	class={'absolute ' +
-		(sign.includes('+') ? ' top-2 lg:top-4 ' : ' bottom-2 lg:bottom-4 ') +
-		' ' +
-		(position === 'borneMax'
-			? 'right-0'
-			: position === 'centre'
-			? '-left-0.5 transform -translate-x-1/2 '
-			: 'left-0')}
+    class="absolute {sign.includes('+') ? 'top-2 lg:top-4' : 'bottom-2 lg:bottom-4'} {getPositionClass(position)}"
+    aria-label="Calculated value {value}"
 >
-	{#if value !== undefined}
-		<p class="w-fit bg-white px-3 bg-opacity-50 rounded-full text-xs md:text-xs lg:text-xl">
-			{value}
-		</p>
-	{/if}
+    {#if value !== undefined}
+        <p class="w-fit bg-white/50 px-3 rounded-full text-xs md:text-xs lg:text-xl">
+            {value}
+        </p>
+    {/if}
 </div>
