@@ -4,7 +4,7 @@
 	import Choix from '../models/choix';
 	import SaisieFormule from './saisie/SaisieFormule.svelte';
 	import TableauDeSigne from './tds/Tableau.svelte';
-	import { isFetching, resultatDirect } from '$lib';
+	import { isFetching, resultatDirect, functionNameHook, variableNameHook } from '$lib';
 
 	//@ts-ignore
 	import DomToImage from 'dom-to-image';
@@ -18,6 +18,9 @@
 	let functionName: string = 'f';
 	// Nom de la variable
 	let variableName: string = 'x';
+
+	$: if (functionName) functionNameHook.set(functionName);
+	$: if (variableName) variableNameHook.set(variableName);
 
 	// L'intervalle de définition de la fonction
 	let borneMin: string = '-inf';
@@ -149,21 +152,25 @@
 
 	function showGraph() {
 		// Update le graph
-		//@ts-ignore
-		functionPlot({
-			target: '#graph',
-			width: 300,
-			height: 200,
-			data: [
-				{
-					fn: formula,
-					derivative: {
-						fn: formuleTableau,
-						updateOnMouseMove: true
+		try {
+			//@ts-ignore
+			functionPlot({
+				target: '#graph',
+				width: 300,
+				height: 200,
+				data: [
+					{
+						fn: formula,
+						derivative: {
+							fn: formuleTableau,
+							updateOnMouseMove: true
+						}
 					}
-				}
-			]
-		});
+				]
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	}
 
 	/**

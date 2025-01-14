@@ -17,13 +17,22 @@
 			const date = parseInt(localStorage.getItem('signamathdonation') as string);
 
 			// Vérifie si la date est inférieure à 24h
-			if (new Date().getTime() - date < 86400000) {
-				// Si oui, on cache le message
+			if (new Date().getTime() - date < 24 * 60 * 60 * 1000) {
+				// Si oui, on ne fait rien
 				signamathdonation = false;
+			} else {
+				// Si non, on affiche le message
+				signamathdonation = true;
+
+				// Store pendant 24h dans le localStorage
+				localStorage.setItem('signamathdonation', new Date().getTime().toString());
 			}
 		} else {
 			// Si non, on affiche le message
 			signamathdonation = true;
+
+			// Store pendant 24h dans le localStorage
+			localStorage.setItem('signamathdonation', new Date().getTime().toString());
 		}
 	});
 
@@ -85,7 +94,7 @@
 
 {#if signamathdonation}
 	<div
-		class="bg-[#c9aa9f] bg-opacity-90 border-[#5f4523] border-y-2 py-20 w-full h-16 absolute bottom-1/2"
+		class="bg-[#c9aa9f] bg-opacity-90 border-[#5f4523] border-y-2 py-10 w-full h-16 absolute bottom-0"
 	>
 		<div class="flex items-center justify-center h-full w-full relative text-center">
 			<p>

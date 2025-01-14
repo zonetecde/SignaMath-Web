@@ -3,6 +3,7 @@
 	import Katex from 'svelte-katex';
 	import { parse } from 'mathjs';
 	import { toast } from 'svelte-sonner';
+	import { functionNameHook, variableNameHook } from '$lib';
 
 	// Style
 	export let classes = '';
@@ -116,17 +117,26 @@
 	function handleUserClickOnFormula(
 		event: MouseEvent & { currentTarget: EventTarget & HTMLDivElement }
 	) {
-		if (!isDisabled) {
-			isEditing = true;
-			// reset la variable hasFormulaInputChanged
-			// dès qu'elle passera en true ça voudrait dire que
-			// l'utilisateur a changé la formule
-			hasFormulaInputChanged = false;
+		if (event.button === 0) {
+			if (!isDisabled) {
+				isEditing = true;
+				// reset la variable hasFormulaInputChanged
+				// dès qu'elle passera en true ça voudrait dire que
+				// l'utilisateur a changé la formule
+				hasFormulaInputChanged = false;
 
-			// Attend 20ms le temps que l'input se créé, puis lui bring le focus
-			setTimeout(() => {
-				if (ref) ref.focus();
-			}, 20);
+				// Attend 20ms le temps que l'input se créé, puis lui bring le focus
+				setTimeout(() => {
+					if (ref) ref.focus();
+				}, 20);
+			}
+		} else if (event.button === 2) {
+			event.preventDefault();
+
+			const clipboard = navigator.clipboard;
+			clipboard.writeText($functionNameHook + '(' + $variableNameHook + ') = ' + katexFormula);
+
+			toast.success('Formule LaTex copiée dans le presse-papier');
 		}
 	}
 </script>
