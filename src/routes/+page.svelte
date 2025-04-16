@@ -73,7 +73,7 @@
 					Si vous avez besoin de vous servir de SignaMath sans connexion internet, vous pouvez soit cloner
 					<a href="https://github.com/zonetecde/signamath-web" target="_blank" class="underline"
 						>le repo GitHub</a
-					>, ou télécharger
+					>, soit télécharger
 					<a
 						href="https://github.com/zonetecde/signamath"
 						target="_blank"
@@ -82,9 +82,9 @@
 						>la version logicielle
 					</a>
 					(dépréciée) du site.
-					<br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
+					<!-- <br />Pour tout commentaire ou suggestion, merci de vous référer au bouton
 					<i>"Envoyer un commentaire"</i>
-					ci-dessous.
+					ci-dessous. -->
 					<br /><br />
 				</p>
 
@@ -97,7 +97,7 @@
 					</button>
 				</div>
 
-				<p class="text-center font-bold">SignaMath 2024 - Rayane Staszewski</p>
+				<p class="text-center font-bold">SignaMath 2025 - Rayane Staszewski</p>
 
 				<!-- svelte-ignore a11y-click-events-have-key-events -->
 				<!-- svelte-ignore a11y-no-static-element-interactions -->
